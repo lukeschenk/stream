@@ -12,6 +12,10 @@ struct SettingsView: View {
             JellyfinSettingsView(connection: model.jellyfin, profile: model.profile)
                 .frame(width: 560, height: 360)
                 .tabItem { Label("Jellyfin", systemImage: "server.rack") }
+
+            ICloudSettingsView(model: model)
+                .frame(width: 560, height: 240)
+                .tabItem { Label("iCloud", systemImage: "icloud") }
         }
         .onAppear {
             model.settingsOpened()
@@ -35,6 +39,35 @@ private struct GeneralSettingsView: View {
                     + "A random installation ID links repeat visits. "
                     + "Searches, titles, URLs, providers, and personal "
                     + "identifiers are never included."
+            )
+            .font(.callout)
+            .foregroundStyle(.secondary)
+        }
+        .formStyle(.grouped)
+        .padding()
+    }
+}
+
+private struct ICloudSettingsView: View {
+    let model: AppModel
+
+    var body: some View {
+        Form {
+            Toggle(
+                "Sync Watchlist with iCloud",
+                isOn: Binding(
+                    get: { model.isSyncingWithICloud },
+                    set: { model.setICloudSyncEnabled($0) }
+                )
+            )
+            .disabled(!model.canSyncWithICloud)
+
+            Text(
+                model.canSyncWithICloud
+                    ? "Keeps the \(model.profile.displayName) profile’s watchlist the same on every "
+                    + "device signed in to your iCloud account."
+                    : "This build doesn’t have the iCloud capability. Add iCloud with CloudKit under "
+                    + "Signing & Capabilities in Xcode to turn on sync."
             )
             .font(.callout)
             .foregroundStyle(.secondary)

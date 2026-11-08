@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1A47C132CAE281544DB9184D /* WatchlistSyncTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB31F2417B0A0550C0B8F9D8 /* WatchlistSyncTests.swift */; };
+		4A4F06C44548018814EE7532 /* WatchlistCloudSync.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34D6C88550569D277B23FA98 /* WatchlistCloudSync.swift */; };
 		7CF8AD48FB855957F49FBAEF /* ServicesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 387F40465E921FDCA64F8768 /* ServicesTests.swift */; };
 		6B549721223198233B71EB8C /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEEE2083FFB3FEC63C350382 /* OnboardingView.swift */; };
 		9413DB11B1A01CB845D069F8 /* StreamingServiceCatalog.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECE5757DDBA9C5466F1D028A /* StreamingServiceCatalog.swift */; };
@@ -113,6 +115,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		AB31F2417B0A0550C0B8F9D8 /* WatchlistSyncTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchlistSyncTests.swift; sourceTree = "<group>"; };
+		34D6C88550569D277B23FA98 /* WatchlistCloudSync.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchlistCloudSync.swift; sourceTree = "<group>"; };
 		387F40465E921FDCA64F8768 /* ServicesTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServicesTests.swift; sourceTree = "<group>"; };
 		FEEE2083FFB3FEC63C350382 /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
 		ECE5757DDBA9C5466F1D028A /* StreamingServiceCatalog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StreamingServiceCatalog.swift; sourceTree = "<group>"; };
@@ -235,6 +239,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		3EAF23C5E121D0C594B8E98D /* Cloud */ = {
+			isa = PBXGroup;
+			children = (
+				34D6C88550569D277B23FA98 /* WatchlistCloudSync.swift */,
+			);
+			path = Cloud;
+			sourceTree = "<group>";
+		};
 		EE7C85688D75CF814F914864 /* Onboarding */ = {
 			isa = PBXGroup;
 			children = (
@@ -475,6 +487,7 @@
 		D1B972603015341900B64B10 /* Infrastructure */ = {
 			isa = PBXGroup;
 			children = (
+				3EAF23C5E121D0C594B8E98D /* Cloud */,
 				D1A100053060000000000005 /* Analytics */,
 				D13E65EC3018F6B400E58017 /* Updates */,
 				D1B9725F3015341900B64B10 /* Persistence */,
@@ -527,6 +540,7 @@
 		D1C100043020000000000104 /* Tests */ = {
 			isa = PBXGroup;
 			children = (
+				AB31F2417B0A0550C0B8F9D8 /* WatchlistSyncTests.swift */,
 				387F40465E921FDCA64F8768 /* ServicesTests.swift */,
 				88FA7DD04D67D77B5FD79163 /* JellyfinClientTests.swift */,
 				7E1C8BC3BE1F06774A417B24 /* MediaIdentificationPersistenceTests.swift */,
@@ -663,6 +677,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4A4F06C44548018814EE7532 /* WatchlistCloudSync.swift in Sources */,
 				6B549721223198233B71EB8C /* OnboardingView.swift in Sources */,
 				9413DB11B1A01CB845D069F8 /* StreamingServiceCatalog.swift in Sources */,
 				76EE780FE4136543D8F3A3A9 /* ServiceAvailability.swift in Sources */,
@@ -745,6 +760,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1A47C132CAE281544DB9184D /* WatchlistSyncTests.swift in Sources */,
 				7CF8AD48FB855957F49FBAEF /* ServicesTests.swift in Sources */,
 				09E07C9A76B0DB5F539FC54C /* JellyfinClientTests.swift in Sources */,
 				7A4E303EB388AE9949E944FA /* MediaIdentificationPersistenceTests.swift in Sources */,

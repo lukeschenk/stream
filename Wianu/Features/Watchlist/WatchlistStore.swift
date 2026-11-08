@@ -10,6 +10,14 @@ final class WatchlistStore {
     @ObservationIgnored
     private let fileStore: JSONFileStore<[WatchlistItem]>
 
+    /// Called after local edits with the IDs saved and deleted, so iCloud sync
+    /// can upload them. Changes applied from iCloud don't trigger it.
+    @ObservationIgnored
+    var changeHandler: ((_ saved: [WatchlistItem.ID], _ deleted: [WatchlistItem.ID]) -> Void)?
+
+    @ObservationIgnored
+    private var snapshot: [WatchlistItem.ID: WatchlistItem] = [:]
+
     init(
         fileStore: JSONFileStore<[WatchlistItem]> = JSONFileStore(
             fileName: "letterboxd-watchlist.json",
@@ -133,23 +141,69 @@ final class WatchlistStore {
         persist()
     }
 
+    /// Applies changes that came from iCloud without echoing them back.
+    func applyRemoteChanges(upserts: [WatchlistItem], deletions: [WatchlistItem.ID]) {
+        guard !upserts.isEmpty || !deletions.isEmpty else { return }
+
+        let removed = Set(deletions)
+        var byID = Dictionary(items.map { ($0.id, $0) }, uniquingKeysWith: { first, _ in first })
+        for id in removed {
+            byID[id] = nil
+        }
+        for item in upserts where !removed.contains(item.id) {
+            byID[item.id] = item
+        }
+
+        items = Self.ordered(Array(byID.values))
+        write()
+        takeSnapshot()
+    }
+
     private func load() {
         do {
-            items = try fileStore.load(defaultValue: [])
-                .sorted { $0.sourceOrder < $1.sourceOrder }
+            items = try Self.ordered(fileStore.load(defaultValue: []))
             persistenceError = nil
         } catch {
             items = []
             persistenceError = error.localizedDescription
         }
+        takeSnapshot()
     }
 
     private func persist() {
+        write()
+
+        let current = Dictionary(items.map { ($0.id, $0) }, uniquingKeysWith: { first, _ in first })
+        let saved = items.filter { snapshot[$0.id] != $0 }.map(\.id)
+        let deleted = snapshot.keys.filter { current[$0] == nil }
+        snapshot = current
+
+        if !saved.isEmpty || !deleted.isEmpty {
+            changeHandler?(saved, Array(deleted))
+        }
+    }
+
+    private func write() {
         do {
             try fileStore.save(items)
             persistenceError = nil
         } catch {
             persistenceError = error.localizedDescription
+        }
+    }
+
+    private func takeSnapshot() {
+        snapshot = Dictionary(items.map { ($0.id, $0) }, uniquingKeysWith: { first, _ in first })
+    }
+
+    /// Watchlist order, with the date added breaking ties between items
+    /// numbered on different devices.
+    private static func ordered(_ items: [WatchlistItem]) -> [WatchlistItem] {
+        items.sorted {
+            if $0.sourceOrder != $1.sourceOrder {
+                return $0.sourceOrder < $1.sourceOrder
+            }
+            return ($0.addedAt ?? .distantPast) < ($1.addedAt ?? .distantPast)
         }
     }
 }

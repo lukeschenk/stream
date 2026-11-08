@@ -16,6 +16,7 @@ final class AppModel {
     let mediaIdentification: MediaIdentificationCoordinator
     let jellyfin: JellyfinConnection
     let serviceAvailability: ServiceAvailabilityModel
+    private(set) var watchlistSync: WatchlistCloudSync?
     private(set) var tmdbClient: TMDBClient
     private(set) var tmdbSearch: TMDBSearchModel
     private(set) var isCommandPalettePresented = false
@@ -64,6 +65,9 @@ final class AppModel {
             userDefaults: userDefaults
         )
         restoreSelection()
+        if userDefaults.object(forKey: profile.defaultsKey(Self.iCloudSyncKey)) as? Bool ?? true {
+            watchlistSync = WatchlistCloudSync(store: watchlistStore, profile: profile)
+        }
         analytics.track(.appLaunched)
     }
 
@@ -168,6 +172,30 @@ extension AppModel {
         guard draft.validatedValues != nil else { return }
         siteStore.updateSite(id: site.id, with: draft)
         analytics.track(.siteEdited)
+    }
+
+    // MARK: iCloud
+
+    static let iCloudSyncKey = "syncWatchlistWithICloud"
+
+    /// Whether this build has the iCloud capability at all.
+    var canSyncWithICloud: Bool {
+        WatchlistCloudSync.containerIdentifier != nil
+    }
+
+    var isSyncingWithICloud: Bool {
+        watchlistSync != nil
+    }
+
+    func setICloudSyncEnabled(_ enabled: Bool) {
+        userDefaults.set(enabled, forKey: profile.defaultsKey(Self.iCloudSyncKey))
+
+        if enabled, watchlistSync == nil {
+            watchlistSync = WatchlistCloudSync(store: watchlistStore, profile: profile)
+        } else if !enabled {
+            watchlistSync?.stop()
+            watchlistSync = nil
+        }
     }
 
     // MARK: Onboarding
