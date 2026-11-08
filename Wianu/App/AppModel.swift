@@ -15,6 +15,7 @@ final class AppModel {
     let watchlistStore: WatchlistStore
     let mediaIdentification: MediaIdentificationCoordinator
     let jellyfin: JellyfinConnection
+    let serviceAvailability: ServiceAvailabilityModel
     private(set) var tmdbClient: TMDBClient
     private(set) var tmdbSearch: TMDBSearchModel
     private(set) var isCommandPalettePresented = false
@@ -57,6 +58,7 @@ final class AppModel {
             client: client
         )
         tmdbClient = client
+        serviceAvailability = ServiceAvailabilityModel(client: client)
         tmdbSearch = TMDBSearchModel(
             client: client,
             userDefaults: userDefaults
@@ -93,6 +95,7 @@ final class AppModel {
             client: tmdbClient
         )
         self.tmdbClient = tmdbClient
+        serviceAvailability = ServiceAvailabilityModel(client: tmdbClient)
         tmdbSearch = TMDBSearchModel(
             client: tmdbClient,
             userDefaults: userDefaults
@@ -165,6 +168,36 @@ extension AppModel {
         guard draft.validatedValues != nil else { return }
         siteStore.updateSite(id: site.id, with: draft)
         analytics.track(.siteEdited)
+    }
+
+    // MARK: Onboarding
+
+    private var onboardingKey: String {
+        profile.defaultsKey("hasCompletedOnboarding")
+    }
+
+    /// First launch of a profile that has no sites yet.
+    var needsOnboarding: Bool {
+        !userDefaults.bool(forKey: onboardingKey) && siteStore.sites.isEmpty
+    }
+
+    func completeOnboarding() {
+        userDefaults.set(true, forKey: onboardingKey)
+    }
+
+    func hasSite(for service: StreamingService) -> Bool {
+        guard let host = service.host else { return false }
+        return siteStore.sites.contains { $0.url?.host()?.lowercased() == host }
+    }
+
+    func addServices(_ options: [ServiceOption]) {
+        for option in options where !hasSite(for: option.service) {
+            addSite(option.siteDraft())
+        }
+
+        if selection == nil, let first = siteStore.sites.first {
+            select(.site(first.id))
+        }
     }
 
     func dismissCommandPalette() {

@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		7CF8AD48FB855957F49FBAEF /* ServicesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 387F40465E921FDCA64F8768 /* ServicesTests.swift */; };
+		6B549721223198233B71EB8C /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEEE2083FFB3FEC63C350382 /* OnboardingView.swift */; };
+		9413DB11B1A01CB845D069F8 /* StreamingServiceCatalog.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECE5757DDBA9C5466F1D028A /* StreamingServiceCatalog.swift */; };
+		76EE780FE4136543D8F3A3A9 /* ServiceAvailability.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FF538621FB0FB49FF1189BC /* ServiceAvailability.swift */; };
 		09E07C9A76B0DB5F539FC54C /* JellyfinClientTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88FA7DD04D67D77B5FD79163 /* JellyfinClientTests.swift */; };
 		74EA975EEC487BCCCCA82432 /* ProfileSwitcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91412C06456FA5A69D819461 /* ProfileSwitcher.swift */; };
 		5B0FEFE241461D79E3E14E0B /* ProfileController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 968F0EB12CAB6B304159F4B7 /* ProfileController.swift */; };
@@ -109,6 +113,10 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		387F40465E921FDCA64F8768 /* ServicesTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServicesTests.swift; sourceTree = "<group>"; };
+		FEEE2083FFB3FEC63C350382 /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
+		ECE5757DDBA9C5466F1D028A /* StreamingServiceCatalog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StreamingServiceCatalog.swift; sourceTree = "<group>"; };
+		4FF538621FB0FB49FF1189BC /* ServiceAvailability.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceAvailability.swift; sourceTree = "<group>"; };
 		88FA7DD04D67D77B5FD79163 /* JellyfinClientTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JellyfinClientTests.swift; sourceTree = "<group>"; };
 		91412C06456FA5A69D819461 /* ProfileSwitcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileSwitcher.swift; sourceTree = "<group>"; };
 		968F0EB12CAB6B304159F4B7 /* ProfileController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileController.swift; sourceTree = "<group>"; };
@@ -227,6 +235,23 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		EE7C85688D75CF814F914864 /* Onboarding */ = {
+			isa = PBXGroup;
+			children = (
+				FEEE2083FFB3FEC63C350382 /* OnboardingView.swift */,
+			);
+			path = Onboarding;
+			sourceTree = "<group>";
+		};
+		3AE995591A336ED8FC9C20C9 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				ECE5757DDBA9C5466F1D028A /* StreamingServiceCatalog.swift */,
+				4FF538621FB0FB49FF1189BC /* ServiceAvailability.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
 		CC892AAAB21013A5549488DA /* Profiles */ = {
 			isa = PBXGroup;
 			children = (
@@ -424,6 +449,8 @@
 		D1B9725D3015341900B64B10 /* Features */ = {
 			isa = PBXGroup;
 			children = (
+				EE7C85688D75CF814F914864 /* Onboarding */,
+				3AE995591A336ED8FC9C20C9 /* Services */,
 				CC892AAAB21013A5549488DA /* Profiles */,
 				9414F66542D60F5575775B78 /* Jellyfin */,
 				1CC97F7F9472654E509E2D4D /* MediaIdentification */,
@@ -500,6 +527,7 @@
 		D1C100043020000000000104 /* Tests */ = {
 			isa = PBXGroup;
 			children = (
+				387F40465E921FDCA64F8768 /* ServicesTests.swift */,
 				88FA7DD04D67D77B5FD79163 /* JellyfinClientTests.swift */,
 				7E1C8BC3BE1F06774A417B24 /* MediaIdentificationPersistenceTests.swift */,
 				D96A377CC9548C46D1AD9057 /* MediaIdentificationCoordinatorTests.swift */,
@@ -635,6 +663,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6B549721223198233B71EB8C /* OnboardingView.swift in Sources */,
+				9413DB11B1A01CB845D069F8 /* StreamingServiceCatalog.swift in Sources */,
+				76EE780FE4136543D8F3A3A9 /* ServiceAvailability.swift in Sources */,
 				74EA975EEC487BCCCCA82432 /* ProfileSwitcher.swift in Sources */,
 				5B0FEFE241461D79E3E14E0B /* ProfileController.swift in Sources */,
 				98CEB47D6C25C81451A3CD27 /* AppProfile.swift in Sources */,
@@ -714,6 +745,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7CF8AD48FB855957F49FBAEF /* ServicesTests.swift in Sources */,
 				09E07C9A76B0DB5F539FC54C /* JellyfinClientTests.swift in Sources */,
 				7A4E303EB388AE9949E944FA /* MediaIdentificationPersistenceTests.swift in Sources */,
 				9F7B9262E1006687B0D87591 /* MediaIdentificationCoordinatorTests.swift in Sources */,

@@ -5,13 +5,15 @@ struct ContentView: View {
     var switchProfile: (AppProfile) -> Void = { _ in }
     @Environment(\.openSettings) private var openSettings
     @State private var showingAddSite = false
+    @State private var showingOnboarding = false
 
     var body: some View {
         NavigationSplitView {
             SidebarView(
                 model: model,
                 showingAddSite: $showingAddSite,
-                switchProfile: switchProfile
+                switchProfile: switchProfile,
+                setUpServices: { showingOnboarding = true }
             )
         } detail: {
             ZStack {
@@ -38,6 +40,16 @@ struct ContentView: View {
         }
         .navigationTitle(model.selection == .home ? "Home" : "Wianu")
         .navigationSubtitle(model.profile == .main ? "" : "\(model.profile.displayName) Profile")
+        .sheet(isPresented: $showingOnboarding) {
+            OnboardingView(model: model) {
+                showingOnboarding = false
+            }
+        }
+        .task {
+            if model.needsOnboarding {
+                showingOnboarding = true
+            }
+        }
         .sheet(isPresented: $showingAddSite) {
             SiteEditorView(
                 model: model,

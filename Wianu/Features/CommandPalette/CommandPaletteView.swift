@@ -9,6 +9,7 @@ struct CommandPaletteView: View {
 
     @State private var selectedResult: ResultID?
     @State private var scrollTarget: ResultID?
+    @AppStorage("searchOnlyMyServices") private var onlyMyServices = false
 
     private enum ResultID: Hashable {
         case command(CommandPaletteAction)
@@ -30,8 +31,40 @@ struct CommandPaletteView: View {
     private var visibleResultIDs: [ResultID] {
         commands.map { .command($0.action) }
             + (canSelectMediaResults
-                ? search.results.map { .media($0.id) }
+                ? displayedResults.map { .media($0.id) }
                 : [])
+    }
+
+    private var availability: ServiceAvailabilityModel {
+        model.serviceAvailability
+    }
+
+    private var hasLinkedServices: Bool {
+        MyServices.hasLinkedServices(model.siteStore.sites)
+    }
+
+    private var filtersToMyServices: Bool {
+        onlyMyServices && hasLinkedServices
+    }
+
+    /// Saved sites that stream the title, or `nil` while that's unknown.
+    private func myServices(for media: TMDBMediaResult) -> [SavedSite]? {
+        availability
+            .streamingProviders(for: media, region: search.selectedRegion)
+            .map { MyServices.sites(streaming: $0, from: model.siteStore.sites) }
+    }
+
+    private var displayedResults: [TMDBMediaResult] {
+        guard filtersToMyServices else { return search.results }
+        return search.results.filter { myServices(for: $0)?.isEmpty == false }
+    }
+
+    private var prefetchID: PrefetchID {
+        PrefetchID(
+            resultIDs: search.results.map(\.id),
+            region: search.selectedRegion,
+            isFiltering: filtersToMyServices
+        )
     }
 
     private var canSelectMediaResults: Bool {
@@ -57,6 +90,13 @@ struct CommandPaletteView: View {
         .onAppear {
             searchFieldIsFocused = true
             selectedResult = visibleResultIDs.first
+        }
+        .task(id: prefetchID) {
+            if prefetchID.isFiltering {
+                availability.prefetch(search.results, region: search.selectedRegion)
+            } else {
+                availability.cancelPending()
+            }
         }
         .onChange(of: search.focusRequest) {
             searchFieldIsFocused = true
@@ -148,7 +188,19 @@ struct CommandPaletteView: View {
     @ViewBuilder
     private var searchResultsSection: some View {
         if !trimmedQuery.isEmpty {
-            sectionHeader("Movies & TV")
+            HStack {
+                sectionHeader("Movies & TV")
+                Spacer()
+                if hasLinkedServices {
+                    Toggle(isOn: $onlyMyServices) {
+                        Label("On My Services", systemImage: "line.3.horizontal.decrease")
+                    }
+                    .toggleStyle(.button)
+                    .controlSize(.small)
+                    .help("Only show titles included with the services in your sidebar")
+                    .padding(.trailing, 10)
+                }
+            }
             mediaResults
         } else if commands.isEmpty {
             compactMessage(
@@ -183,19 +235,54 @@ struct CommandPaletteView: View {
 
     @ViewBuilder
     private var mediaResultRows: some View {
-        ForEach(search.results) { item in
+        ForEach(displayedResults) { item in
             resultButton(id: .media(item.id), action: { search.select(item) }, content: {
                 paletteMediaRow(
                     item: item,
-                    posterURL: search.imageConfiguration?.posterURL(path: item.posterPath)
+                    posterURL: search.imageConfiguration?.posterURL(path: item.posterPath),
+                    services: myServices(for: item)
                 )
             })
             .onAppear {
-                search.loadMoreIfNeeded(after: item)
+                if !filtersToMyServices {
+                    search.loadMoreIfNeeded(after: item)
+                }
             }
         }
         if search.isLoadingMore {
             ProgressView().padding()
+        } else if filtersToMyServices {
+            myServicesFooter
+        }
+    }
+
+    @ViewBuilder
+    private var myServicesFooter: some View {
+        if availability.pendingCount > 0 {
+            HStack(spacing: 8) {
+                ProgressView().controlSize(.small)
+                Text("Checking your services…")
+                    .font(.system(size: 12))
+                    .foregroundStyle(.secondary)
+            }
+            .frame(maxWidth: .infinity)
+            .padding()
+        } else {
+            VStack(spacing: 8) {
+                if displayedResults.isEmpty {
+                    Text("None of these are included with your services.")
+                        .font(.system(size: 12))
+                        .foregroundStyle(.secondary)
+                }
+                if search.canLoadMore, let last = search.results.last {
+                    Button("Search More Titles") {
+                        search.loadMoreIfNeeded(after: last)
+                    }
+                    .controlSize(.small)
+                }
+            }
+            .frame(maxWidth: .infinity)
+            .padding()
         }
     }
 
@@ -309,7 +396,11 @@ private extension CommandPaletteView {
         }
     }
 
-    private func paletteMediaRow(item: TMDBMediaResult, posterURL: URL?) -> some View {
+    private func paletteMediaRow(
+        item: TMDBMediaResult,
+        posterURL: URL?,
+        services: [SavedSite]?
+    ) -> some View {
         HStack(spacing: 12) {
             AsyncImage(url: posterURL) { image in
                 image.resizable().scaledToFill()
@@ -329,6 +420,15 @@ private extension CommandPaletteView {
                     .compactMap(\.self).joined(separator: " · "))
                     .font(.system(size: 12))
                     .opacity(0.7)
+                if let services, !services.isEmpty {
+                    Label(
+                        services.map(\.name).joined(separator: " · "),
+                        systemImage: "play.tv"
+                    )
+                    .font(.system(size: 11, weight: .medium))
+                    .foregroundStyle(Color.accentColor)
+                    .lineLimit(1)
+                }
             }
             Spacer(minLength: 8)
             Image(systemName: "chevron.right")
@@ -339,4 +439,10 @@ private extension CommandPaletteView {
         .padding(.vertical, 6)
         .contentShape(Rectangle())
     }
+}
+
+private struct PrefetchID: Hashable {
+    let resultIDs: [TMDBMediaResult.ID]
+    let region: String
+    let isFiltering: Bool
 }

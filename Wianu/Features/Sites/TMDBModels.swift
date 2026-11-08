@@ -112,11 +112,26 @@ struct TMDBProvider: Identifiable, Codable, Hashable, Sendable {
     let id: Int
     let name: String
     let logoPath: String?
+    /// Region code to TMDB's display order there. Only present in the
+    /// provider list, not in a title's availability.
+    var displayPriorities: [String: Int]?
+
+    init(id: Int, name: String, logoPath: String?, displayPriorities: [String: Int]? = nil) {
+        self.id = id
+        self.name = name
+        self.logoPath = logoPath
+        self.displayPriorities = displayPriorities
+    }
+
+    func displayPriority(in region: String) -> Int? {
+        displayPriorities?[region.uppercased()]
+    }
 
     private enum CodingKeys: String, CodingKey {
         case id = "provider_id"
         case name = "provider_name"
         case logoPath = "logo_path"
+        case displayPriorities = "display_priorities"
     }
 }
 

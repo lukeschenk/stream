@@ -5,6 +5,7 @@ struct SidebarView: View {
     @Bindable var model: AppModel
     @Binding var showingAddSite: Bool
     var switchProfile: (AppProfile) -> Void = { _ in }
+    var setUpServices: () -> Void = {}
 
     @State private var editingSite: SavedSite?
     @State private var renamingItem: ContinueWatchingItem?
@@ -159,6 +160,12 @@ struct SidebarView: View {
                 showingAddSite = true
             } label: {
                 Label("Add Site", systemImage: "plus")
+                    .foregroundStyle(.secondary)
+            }
+            .buttonStyle(.plain)
+
+            Button(action: setUpServices) {
+                Label("Set Up Services…", systemImage: "square.grid.2x2")
                     .foregroundStyle(.secondary)
             }
             .buttonStyle(.plain)
