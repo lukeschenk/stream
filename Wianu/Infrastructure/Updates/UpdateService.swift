@@ -8,8 +8,11 @@ final class UpdateService: ObservableObject {
     private let controller: SPUStandardUpdaterController
 
     init() {
+        // This fork has no update feed of its own. Without one, Sparkle stays
+        // off rather than offering upstream builds that would replace it.
+        let hasFeed = Bundle.main.object(forInfoDictionaryKey: "SUFeedURL") != nil
         controller = SPUStandardUpdaterController(
-            startingUpdater: true,
+            startingUpdater: hasFeed,
             updaterDelegate: nil,
             userDriverDelegate: nil
         )

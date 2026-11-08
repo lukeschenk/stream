@@ -4,16 +4,32 @@ import SwiftUI
 struct WianuApp: App {
     @Environment(\.openWindow) private var openWindow
     @StateObject private var updateService = UpdateService()
-    @State private var model = AppModel()
+    @State private var profiles = ProfileController()
+
+    private var model: AppModel {
+        profiles.model
+    }
 
     var body: some Scene {
         WindowGroup {
-            ContentView(model: model)
+            ContentView(model: profiles.model, switchProfile: profiles.switchTo)
+                // A fresh view tree per profile, so the browser picks up that
+                // profile's sign-ins.
+                .id(profiles.current)
         }
         .windowToolbarStyle(.unified(showsTitle: true))
         .defaultSize(width: 1200, height: 800)
         .commands {
             VideoInformationCommands()
+
+            CommandMenu("Profile") {
+                Button("Main Profile") { profiles.switchTo(.main) }
+                    .keyboardShortcut("1", modifiers: [.command, .control])
+                    .disabled(profiles.current == .main)
+                Button("Kids Profile") { profiles.switchTo(.kids) }
+                    .keyboardShortcut("2", modifiers: [.command, .control])
+                    .disabled(profiles.current == .kids)
+            }
 
             CommandGroup(replacing: .appInfo) {
                 Button("About Wianu") {

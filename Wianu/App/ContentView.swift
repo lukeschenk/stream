@@ -2,6 +2,7 @@ import SwiftUI
 
 struct ContentView: View {
     @Bindable var model: AppModel
+    var switchProfile: (AppProfile) -> Void = { _ in }
     @Environment(\.openSettings) private var openSettings
     @State private var showingAddSite = false
 
@@ -9,7 +10,8 @@ struct ContentView: View {
         NavigationSplitView {
             SidebarView(
                 model: model,
-                showingAddSite: $showingAddSite
+                showingAddSite: $showingAddSite,
+                switchProfile: switchProfile
             )
         } detail: {
             ZStack {
@@ -35,6 +37,7 @@ struct ContentView: View {
             }
         }
         .navigationTitle(model.selection == .home ? "Home" : "Wianu")
+        .navigationSubtitle(model.profile == .main ? "" : "\(model.profile.displayName) Profile")
         .sheet(isPresented: $showingAddSite) {
             SiteEditorView(
                 model: model,

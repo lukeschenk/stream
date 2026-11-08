@@ -9,10 +9,12 @@ final class AppModel {
         let url: URL
     }
 
+    let profile: AppProfile
     let siteStore: SiteStore
     let continueWatchingStore: ContinueWatchingStore
     let watchlistStore: WatchlistStore
     let mediaIdentification: MediaIdentificationCoordinator
+    let jellyfin: JellyfinConnection
     private(set) var tmdbClient: TMDBClient
     private(set) var tmdbSearch: TMDBSearchModel
     private(set) var isCommandPalettePresented = false
@@ -24,16 +26,27 @@ final class AppModel {
     @ObservationIgnored
     private let analytics: any AnalyticsTracking
 
-    private static let lastSelectedSiteKey = "lastSelectedSiteID"
+    private var lastSelectedSiteKey: String {
+        profile.defaultsKey("lastSelectedSiteID")
+    }
 
     var destinationURL: URL? {
         navigationRequest?.url
     }
 
-    init() {
-        siteStore = SiteStore()
-        continueWatchingStore = ContinueWatchingStore()
-        watchlistStore = WatchlistStore()
+    init(profile: AppProfile = .main) {
+        self.profile = profile
+        let folder = profile.storageFolderName
+        siteStore = SiteStore(
+            fileStore: JSONFileStore(fileName: "sites.json", folderName: folder)
+        )
+        continueWatchingStore = ContinueWatchingStore(
+            fileStore: JSONFileStore(fileName: "continue-watching.json", folderName: folder)
+        )
+        watchlistStore = WatchlistStore(
+            fileStore: JSONFileStore(fileName: "letterboxd-watchlist.json", folderName: folder)
+        )
+        jellyfin = JellyfinConnection(profile: profile)
         userDefaults = .standard
         let analytics = AnalyticsClient(userDefaults: userDefaults)
         self.analytics = analytics
@@ -58,8 +71,16 @@ final class AppModel {
         watchlistStore: WatchlistStore,
         userDefaults: UserDefaults,
         tmdbClient: TMDBClient,
-        analytics: (any AnalyticsTracking)? = nil
+        analytics: (any AnalyticsTracking)? = nil,
+        profile: AppProfile = .main,
+        jellyfin: JellyfinConnection? = nil
     ) {
+        self.profile = profile
+        self.jellyfin = jellyfin ?? JellyfinConnection(
+            profile: profile,
+            userDefaults: userDefaults,
+            tokenStorage: EphemeralTokenStorage()
+        )
         self.siteStore = siteStore
         self.continueWatchingStore = continueWatchingStore
         self.watchlistStore = watchlistStore
@@ -100,7 +121,7 @@ extension AppModel {
             continueWatchingStore.item(id: itemID)?.url
         case let .watchlistItem(itemID):
             watchlistStore.item(id: itemID)?.url
-        case .home, nil:
+        case .home, .jellyfin, nil:
             nil
         }
     }
@@ -195,7 +216,7 @@ extension AppModel {
         if let selectedSiteID {
             userDefaults.set(
                 selectedSiteID.uuidString,
-                forKey: Self.lastSelectedSiteKey
+                forKey: lastSelectedSiteKey
             )
         }
     }
@@ -210,10 +231,10 @@ extension AppModel {
         siteStore.deleteSite(id: site.id)
         analytics.track(.siteDeleted)
 
-        if userDefaults.string(forKey: Self.lastSelectedSiteKey)
+        if userDefaults.string(forKey: lastSelectedSiteKey)
             == site.id.uuidString
         {
-            userDefaults.removeObject(forKey: Self.lastSelectedSiteKey)
+            userDefaults.removeObject(forKey: lastSelectedSiteKey)
         }
     }
 
@@ -286,7 +307,7 @@ extension AppModel {
     }
 
     func activateSite(matching url: URL?) {
-        guard selection != .home,
+        guard selection?.showsNativeContent != true,
               let url,
               let host = normalizedHost(for: url),
               let site = siteStore.sites.first(where: {
@@ -298,7 +319,7 @@ extension AppModel {
         selection = .site(site.id)
         userDefaults.set(
             site.id.uuidString,
-            forKey: Self.lastSelectedSiteKey
+            forKey: lastSelectedSiteKey
         )
     }
 
@@ -369,7 +390,7 @@ extension AppModel {
             continueWatchingStore.item(id: itemID)?.siteID
         case .watchlistItem:
             nil
-        case .home, nil:
+        case .home, .jellyfin, nil:
             nil
         }
     }
@@ -377,7 +398,7 @@ extension AppModel {
     private func restoreSelection() {
         let savedID =
             userDefaults
-                .string(forKey: Self.lastSelectedSiteKey)
+                .string(forKey: lastSelectedSiteKey)
                 .flatMap(UUID.init(uuidString:))
 
         if let savedID, siteStore.sites.contains(where: { $0.id == savedID }) {

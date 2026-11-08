@@ -4,6 +4,7 @@ import UniformTypeIdentifiers
 struct SidebarView: View {
     @Bindable var model: AppModel
     @Binding var showingAddSite: Bool
+    var switchProfile: (AppProfile) -> Void = { _ in }
 
     @State private var editingSite: SavedSite?
     @State private var renamingItem: ContinueWatchingItem?
@@ -17,6 +18,7 @@ struct SidebarView: View {
     @State private var sitesExpanded = true
     @State private var continueWatchingExpanded = true
     @State private var watchlistExpanded = true
+    @State private var jellyfinExpanded = true
 
     var body: some View {
         List(selection: selectionBinding) {
@@ -24,11 +26,18 @@ struct SidebarView: View {
             Label("Home", systemImage: "house")
                 .tag(SidebarSelection.home)
             sitesSection
+            jellyfinSection
             continueWatchingSection
             watchlistSection
         }
         .listStyle(.sidebar)
         .frame(minWidth: 240)
+        .safeAreaInset(edge: .bottom, spacing: 0) {
+            ProfileSwitcher(current: model.profile, onSwitch: switchProfile)
+        }
+        .task(id: model.jellyfin.account) {
+            await model.jellyfin.refreshLibraries()
+        }
         .sheet(item: $editingSite) { site in
             SiteEditorView(
                 model: model,
@@ -153,6 +162,33 @@ struct SidebarView: View {
                     .foregroundStyle(.secondary)
             }
             .buttonStyle(.plain)
+        }
+    }
+
+    @ViewBuilder
+    private var jellyfinSection: some View {
+        if let account = model.jellyfin.account {
+            Section(account.serverName ?? "Jellyfin", isExpanded: $jellyfinExpanded) {
+                Label("Continue Watching", systemImage: "play.circle")
+                    .tag(SidebarSelection.jellyfin(.watching))
+
+                ForEach(model.jellyfin.libraries) { library in
+                    Label(library.displayTitle, systemImage: library.librarySystemImage)
+                        .tag(SidebarSelection.jellyfin(.library(id: library.id)))
+                }
+
+                if let error = model.jellyfin.librariesError {
+                    Button {
+                        Task { await model.jellyfin.refreshLibraries() }
+                    } label: {
+                        Label(error, systemImage: "exclamationmark.triangle")
+                            .foregroundStyle(.secondary)
+                            .lineLimit(2)
+                    }
+                    .buttonStyle(.plain)
+                    .help("Try again")
+                }
+            }
         }
     }
 

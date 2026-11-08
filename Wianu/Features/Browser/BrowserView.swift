@@ -9,7 +9,7 @@ struct BrowserView: View {
 
     init(model: AppModel) {
         self.model = model
-        _session = State(initialValue: BrowserSession())
+        _session = State(initialValue: BrowserSession(profile: model.profile))
     }
 
     var body: some View {
@@ -26,7 +26,7 @@ struct BrowserView: View {
             }
             .task(id: pageInteractionID) {
                 await session.setPageInteractionBlocked(
-                    model.isCommandPalettePresented || model.selection == .home
+                    model.isCommandPalettePresented || showsNativeContent
                 )
             }
             .onChange(of: session.page.url) { _, url in
@@ -43,7 +43,7 @@ struct BrowserView: View {
                 await updateLoadingIndicator()
             }
             .toolbar {
-                if !model.isCommandPalettePresented, model.selection != .home {
+                if !model.isCommandPalettePresented, !showsNativeContent {
                     BrowserToolbar(
                         model: model,
                         session: session,
@@ -67,6 +67,8 @@ private extension BrowserView {
     var browserContent: some View {
         if model.selection == .home {
             HomeView(model: model)
+        } else if case let .jellyfin(destination) = model.selection {
+            JellyfinBrowseView(connection: model.jellyfin, destination: destination)
         } else if model.navigationRequest != nil {
             BrowserPaneView(page: session.page)
         } else {
@@ -78,9 +80,13 @@ private extension BrowserView {
         }
     }
 
+    var showsNativeContent: Bool {
+        model.selection?.showsNativeContent == true
+    }
+
     var pageInteractionID: PageInteractionID {
         PageInteractionID(
-            isBlocked: model.isCommandPalettePresented || model.selection == .home,
+            isBlocked: model.isCommandPalettePresented || showsNativeContent,
             url: session.page.url
         )
     }

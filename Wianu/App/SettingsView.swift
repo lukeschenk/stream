@@ -4,11 +4,18 @@ struct SettingsView: View {
     @Bindable var model: AppModel
 
     var body: some View {
-        GeneralSettingsView()
-            .frame(width: 560, height: 240)
-            .onAppear {
-                model.settingsOpened()
-            }
+        TabView {
+            GeneralSettingsView()
+                .frame(width: 560, height: 240)
+                .tabItem { Label("General", systemImage: "gearshape") }
+
+            JellyfinSettingsView(connection: model.jellyfin, profile: model.profile)
+                .frame(width: 560, height: 360)
+                .tabItem { Label("Jellyfin", systemImage: "server.rack") }
+        }
+        .onAppear {
+            model.settingsOpened()
+        }
     }
 }
 

@@ -13,10 +13,15 @@ final class BrowserSession {
     private var navigationTask: Task<Void, Never>?
     private var handledNavigationRequestID: UUID?
 
-    init() {
+    init(profile: AppProfile = .main) {
         let router = BrowserNavigationRouter()
         let videoDiagnostics = VideoDiagnosticsController()
-        let configuration = WebPage.Configuration()
+        var configuration = WebPage.Configuration()
+        // Each profile keeps its own cookies, so streaming sign-ins and
+        // provider profile choices stay separate.
+        if let identifier = profile.websiteDataStoreIdentifier {
+            configuration.websiteDataStore = WKWebsiteDataStore(forIdentifier: identifier)
+        }
         videoDiagnostics.install(in: configuration.userContentController)
 
         let page = WebPage(
