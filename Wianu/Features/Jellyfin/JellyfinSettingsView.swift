@@ -68,12 +68,17 @@ struct JellyfinSettingsView: View {
                 }
                 Spacer()
                 if isWorking {
-                    ProgressView().controlSize(.small)
+                    ProgressView()
+                    #if os(macOS)
+                        .controlSize(.small)
+                    #endif
                 }
                 Button("Sign In") {
                     Task { await signIn() }
                 }
+                #if !os(tvOS)
                 .keyboardShortcut(.defaultAction)
+                #endif
                 .disabled(!canSignIn)
             }
         }

@@ -1,7 +1,9 @@
 import CloudKit
 import Foundation
 import OSLog
-import Security
+#if os(macOS)
+    import Security
+#endif
 
 /// Sync bookkeeping kept next to the watchlist file.
 struct WatchlistCloudMetadata: Codable {
@@ -19,6 +21,9 @@ struct WatchlistCloudMetadata: Codable {
 final class WatchlistCloudSync {
     static let recordType = "WatchlistItem"
 
+    /// Per-profile UserDefaults key for the sync toggle (on by default).
+    static let preferenceKey = "syncWatchlistWithICloud"
+
     private enum Field {
         static let payload = "payload"
         static let title = "title"
@@ -29,16 +34,25 @@ final class WatchlistCloudSync {
 
     /// The CloudKit container this build is entitled to, or `nil` when the
     /// iCloud capability hasn't been added in Xcode.
+    ///
+    /// The Mac reads its own entitlements. iOS and tvOS can't, so there the
+    /// container is named by the `StreamCloudKitContainer` Info.plist key,
+    /// which should be filled in only once the capability is added.
     static var containerIdentifier: String? {
-        guard let task = SecTaskCreateFromSelf(nil),
-              let value = SecTaskCopyValueForEntitlement(
-                  task,
-                  "com.apple.developer.icloud-container-identifiers" as CFString,
-                  nil
-              )
-        else { return nil }
+        #if os(macOS)
+            guard let task = SecTaskCreateFromSelf(nil),
+                  let value = SecTaskCopyValueForEntitlement(
+                      task,
+                      "com.apple.developer.icloud-container-identifiers" as CFString,
+                      nil
+                  )
+            else { return nil }
 
-        return (value as? [String])?.first
+            return (value as? [String])?.first
+        #else
+            let identifier = Bundle.main.object(forInfoDictionaryKey: "StreamCloudKitContainer") as? String
+            return identifier?.isEmpty == false ? identifier : nil
+        #endif
     }
 
     private let store: WatchlistStore

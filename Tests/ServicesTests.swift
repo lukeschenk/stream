@@ -87,3 +87,28 @@ struct MyServicesTests {
         #expect(!MyServices.hasLinkedServices([sites[1]]))
     }
 }
+
+@Suite("Service launcher")
+@MainActor
+struct ServiceLauncherTests {
+    private func service(_ name: String) -> StreamingService {
+        StreamingServiceCatalog.services.first { $0.name == name }!
+    }
+
+    @Test func `known search formats search for the title`() {
+        let url = ServiceLauncher.webURL(for: service("Netflix"), title: "The Bear")
+        #expect(url?.absoluteString == "https://www.netflix.com/search?q=The%20Bear")
+    }
+
+    @Test func `other services open their home page`() {
+        let disney = ServiceLauncher.webURL(for: service("Disney+"), title: "Bluey")
+        #expect(disney?.absoluteString == "https://www.disneyplus.com")
+        let netflix = ServiceLauncher.webURL(for: service("Netflix"), title: nil)
+        #expect(netflix?.absoluteString == "https://www.netflix.com/browse")
+    }
+
+    @Test func `app links exist only where a scheme is known`() {
+        #expect(ServiceLauncher.appURL(for: service("Disney+"))?.scheme == "disneyplus")
+        #expect(ServiceLauncher.appURL(for: service("Crave")) == nil)
+    }
+}

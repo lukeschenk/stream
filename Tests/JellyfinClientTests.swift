@@ -235,6 +235,44 @@ struct JellyfinClientTests {
         #expect(url?.query?.contains("tag=stag") == true)
     }
 
+    @Test func `library search asks for movies and shows with TMDB IDs`() async throws {
+        let session = JellyfinFixtureSession([
+            "/Items": (200, #"{"Items":[{"Id":"m1","Name":"Arrival","Type":"Movie","ProviderIds":{"Tmdb":"329865"}}]}"#)
+        ])
+        let items = try await client(session).search(term: "Arrival", userID: "user-1")
+        #expect(items.first?.providerIDs?["Tmdb"] == "329865")
+
+        let url = try #require(await session.lastRequest()?.url)
+        let query = URLComponents(url: url, resolvingAgainstBaseURL: false)?.queryItems ?? []
+        #expect(query.contains(URLQueryItem(name: "searchTerm", value: "Arrival")))
+        #expect(query.contains(URLQueryItem(name: "includeItemTypes", value: "Movie,Series")))
+        #expect(query.contains { $0.name == "fields" && $0.value?.contains("ProviderIds") == true })
+    }
+
+    @Test func `library matches prefer the TMDB ID`() {
+        let media = TMDBMediaResult(
+            id: 329_865,
+            mediaType: .movie,
+            title: "Arrival",
+            overview: "",
+            posterPath: nil,
+            releaseDate: "2016-11-11"
+        )
+        let wrongYear = JellyfinItem(id: "a", name: "Arrival", type: "Movie", productionYear: 1996)
+        let tagged = JellyfinItem(
+            id: "b",
+            name: "Arrival (Director's Cut)",
+            type: "Movie",
+            providerIDs: ["Tmdb": "329865"]
+        )
+        let untagged = JellyfinItem(id: "c", name: "arrival", type: "Movie", productionYear: 2016)
+        let show = JellyfinItem(id: "d", name: "Arrival", type: "Series", providerIDs: ["Tmdb": "329865"])
+
+        #expect(JellyfinLibraryMatch.item(for: media, in: [show, wrongYear, untagged, tagged])?.id == "b")
+        #expect(JellyfinLibraryMatch.item(for: media, in: [show, wrongYear, untagged])?.id == "c")
+        #expect(JellyfinLibraryMatch.item(for: media, in: [show, wrongYear]) == nil)
+    }
+
     @Test func `progress reports convert seconds to ticks`() {
         #expect(JellyfinPlaybackReport.ticks(fromSeconds: 1.5) == 15_000_000)
         #expect(JellyfinPlaybackReport.ticks(fromSeconds: .nan) == 0)

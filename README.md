@@ -23,6 +23,35 @@ movies in one place. Add the services you use, search across them, keep links
 to shows you are watching, and maintain a watchlist without switching between
 browser tabs.
 
+## About this fork
+
+This is a personal fork of [timwehrle/wianu](https://github.com/timwehrle/wianu)
+(GPL-3.0). It adds:
+
+- **Profiles** — a Kids profile with its own sites, watchlist, website sign-ins
+  and Jellyfin account (⌃⌘1 / ⌃⌘2 on the Mac).
+- **Jellyfin** — browse and play your own library, with resume progress synced
+  to the server. Needs Jellyfin 10.9 or later.
+- **Service setup and filtering** — pick your services from TMDB's list for your
+  region; search can show only titles included with them.
+- **iCloud watchlist** — CloudKit sync between the Mac, iPhone, iPad and Apple TV.
+- **Stream Mobile** — an iPhone, iPad and Apple TV app: Jellyfin playback, the
+  watchlist, search, and where to watch, opening each service's app.
+
+### Setting up a build
+
+1. In Xcode, choose your team under Signing & Capabilities for the **Wianu**
+   and **Stream Mobile** targets.
+2. For iCloud sync, add the iCloud capability with CloudKit to both targets,
+   using one container (for example `iCloud.com.lukeschenk.stream`). The Mac app
+   detects it automatically. For Stream Mobile, also put the container ID in
+   `StreamCloudKitContainer` in `Mobile/Info.plist`.
+3. Run the **Wianu** scheme for the Mac or **Stream Mobile** for iPhone, iPad
+   and Apple TV.
+
+Automatic updates and usage analytics are switched off in this fork so it never
+installs upstream builds or reports to the upstream analytics server.
+
 ## Features
 
 - Add and organize streaming websites in a sidebar.

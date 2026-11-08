@@ -206,6 +206,25 @@ nonisolated struct JellyfinClient: Sendable {
         return response.items
     }
 
+    /// Movies and shows in the library whose names match `term`.
+    func search(term: String, userID: String, limit: Int = 20) async throws -> [JellyfinItem] {
+        let response: JellyfinItemsResponse = try await send(
+            path: "Items",
+            query: [
+                URLQueryItem(name: "userId", value: userID),
+                URLQueryItem(name: "searchTerm", value: term),
+                URLQueryItem(name: "recursive", value: "true"),
+                URLQueryItem(name: "includeItemTypes", value: "Movie,Series"),
+                URLQueryItem(name: "limit", value: String(limit)),
+                URLQueryItem(name: "fields", value: "Overview,ProviderIds"),
+                URLQueryItem(name: "enableUserData", value: "true"),
+                URLQueryItem(name: "imageTypeLimit", value: "1"),
+                URLQueryItem(name: "enableImageTypes", value: "Primary,Backdrop,Thumb")
+            ]
+        )
+        return response.items
+    }
+
     func seasons(seriesID: String, userID: String) async throws -> [JellyfinItem] {
         let response: JellyfinItemsResponse = try await send(
             path: "Shows/\(seriesID)/Seasons",

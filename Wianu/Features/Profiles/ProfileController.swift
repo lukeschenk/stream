@@ -12,12 +12,10 @@ final class ProfileController {
     @ObservationIgnored
     private let userDefaults: UserDefaults
 
-    static let activeProfileKey = "activeProfile"
-
     init(userDefaults: UserDefaults = .standard) {
         self.userDefaults = userDefaults
         let profile = userDefaults
-            .string(forKey: Self.activeProfileKey)
+            .string(forKey: AppProfile.activeProfileKey)
             .flatMap(AppProfile.init(rawValue:)) ?? .main
         current = profile
         model = AppModel(profile: profile)
@@ -28,6 +26,6 @@ final class ProfileController {
 
         current = profile
         model = AppModel(profile: profile)
-        userDefaults.set(profile.rawValue, forKey: Self.activeProfileKey)
+        userDefaults.set(profile.rawValue, forKey: AppProfile.activeProfileKey)
     }
 }

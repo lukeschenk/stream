@@ -65,7 +65,7 @@ final class AppModel {
             userDefaults: userDefaults
         )
         restoreSelection()
-        if userDefaults.object(forKey: profile.defaultsKey(Self.iCloudSyncKey)) as? Bool ?? true {
+        if userDefaults.object(forKey: profile.defaultsKey(WatchlistCloudSync.preferenceKey)) as? Bool ?? true {
             watchlistSync = WatchlistCloudSync(store: watchlistStore, profile: profile)
         }
         analytics.track(.appLaunched)
@@ -437,8 +437,6 @@ extension AppModel {
 extension AppModel {
     // MARK: iCloud
 
-    static let iCloudSyncKey = "syncWatchlistWithICloud"
-
     /// Whether this build has the iCloud capability at all.
     var canSyncWithICloud: Bool {
         WatchlistCloudSync.containerIdentifier != nil
@@ -449,7 +447,7 @@ extension AppModel {
     }
 
     func setICloudSyncEnabled(_ enabled: Bool) {
-        userDefaults.set(enabled, forKey: profile.defaultsKey(Self.iCloudSyncKey))
+        userDefaults.set(enabled, forKey: profile.defaultsKey(WatchlistCloudSync.preferenceKey))
 
         if enabled, watchlistSync == nil {
             watchlistSync = WatchlistCloudSync(store: watchlistStore, profile: profile)

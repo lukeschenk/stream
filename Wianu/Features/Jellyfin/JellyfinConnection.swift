@@ -1,7 +1,9 @@
 import Foundation
 import Observation
-#if canImport(SystemConfiguration)
+#if os(macOS)
     import SystemConfiguration
+#elseif os(iOS) || os(tvOS)
+    import UIKit
 #endif
 
 /// The Jellyfin account for one profile, and the libraries it can see.
@@ -147,11 +149,14 @@ private extension JellyfinConnection {
         return id
     }
 
-    /// The Mac's name as Jellyfin's dashboard shows it. Read from System
-    /// Configuration, which, unlike `Host`, never waits on the network.
+    /// The device's name as Jellyfin's dashboard shows it. On the Mac this
+    /// comes from System Configuration, which, unlike `Host`, never waits on
+    /// the network.
     static func deviceName(for profile: AppProfile) -> String {
-        #if canImport(SystemConfiguration)
+        #if os(macOS)
             let name = (SCDynamicStoreCopyComputerName(nil, nil) as String?) ?? "Mac"
+        #elseif os(iOS) || os(tvOS)
+            let name = UIDevice.current.model
         #else
             let name = "Mac"
         #endif

@@ -65,6 +65,8 @@ nonisolated struct JellyfinItem: Identifiable, Codable, Hashable, Sendable {
     let seriesPrimaryImageTag: String?
     let backdropImageTags: [String]?
     let userData: JellyfinUserData?
+    /// External IDs such as `"Tmdb": "603"`.
+    let providerIDs: [String: String]?
 
     enum CodingKeys: String, CodingKey {
         case id = "Id"
@@ -83,6 +85,7 @@ nonisolated struct JellyfinItem: Identifiable, Codable, Hashable, Sendable {
         case seriesPrimaryImageTag = "SeriesPrimaryImageTag"
         case backdropImageTags = "BackdropImageTags"
         case userData = "UserData"
+        case providerIDs = "ProviderIds"
     }
 
     init(
@@ -101,7 +104,8 @@ nonisolated struct JellyfinItem: Identifiable, Codable, Hashable, Sendable {
         imageTags: [String: String]? = nil,
         seriesPrimaryImageTag: String? = nil,
         backdropImageTags: [String]? = nil,
-        userData: JellyfinUserData? = nil
+        userData: JellyfinUserData? = nil,
+        providerIDs: [String: String]? = nil
     ) {
         self.id = id
         self.name = name
@@ -119,6 +123,7 @@ nonisolated struct JellyfinItem: Identifiable, Codable, Hashable, Sendable {
         self.seriesPrimaryImageTag = seriesPrimaryImageTag
         self.backdropImageTags = backdropImageTags
         self.userData = userData
+        self.providerIDs = providerIDs
     }
 
     var kind: JellyfinItemKind {
@@ -196,6 +201,34 @@ nonisolated struct JellyfinItem: Identifiable, Codable, Hashable, Sendable {
         case "musicvideos": "music.note.tv"
         default: "folder"
         }
+    }
+}
+
+// MARK: - Matching TMDB titles to the library
+
+nonisolated enum JellyfinLibraryMatch {
+    /// The library item for a TMDB title: by TMDB ID when Jellyfin has one,
+    /// otherwise by exact title and year.
+    static func item(for media: TMDBMediaResult, in candidates: [JellyfinItem]) -> JellyfinItem? {
+        let kind: JellyfinItemKind = media.mediaType == .movie ? .movie : .series
+        let sameKind = candidates.filter { $0.kind == kind }
+
+        if let byID = sameKind.first(where: { $0.providerIDs?["Tmdb"] == String(media.id) }) {
+            return byID
+        }
+
+        let title = normalized(media.title)
+        let year = media.year.flatMap(Int.init)
+        return sameKind.first { item in
+            normalized(item.displayTitle) == title
+                && (year == nil || item.productionYear == nil || item.productionYear == year)
+        }
+    }
+
+    private static func normalized(_ title: String) -> String {
+        title
+            .folding(options: [.caseInsensitive, .diacriticInsensitive], locale: nil)
+            .filter { $0.isLetter || $0.isNumber }
     }
 }
 

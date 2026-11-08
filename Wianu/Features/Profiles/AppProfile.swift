@@ -6,6 +6,9 @@ nonisolated enum AppProfile: String, CaseIterable, Identifiable, Sendable {
     case main
     case kids
 
+    /// UserDefaults key for the profile in use.
+    static let activeProfileKey = "activeProfile"
+
     var id: String {
         rawValue
     }

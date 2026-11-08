@@ -7,6 +7,41 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		85C5EE82F8F95DC96F10BF4B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D1B972673015341900B64B10 /* Assets.xcassets */; };
+		4291178E89CDF01926533199 /* WatchlistCloudSync.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34D6C88550569D277B23FA98 /* WatchlistCloudSync.swift */; };
+		A1FD77B5FE09BF1941F9BCFD /* JSONFileStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1B9725E3015341900B64B10 /* JSONFileStore.swift */; };
+		6FA2DFAD2479E20F280DC5E2 /* URLNormalizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1B972623015341900B64B10 /* URLNormalizer.swift */; };
+		15ECDBBBFBD3D5C0B9A0F816 /* WatchlistStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1B972523015341900B64B10 /* WatchlistStore.swift */; };
+		DD198479FC7E9D287D42D40B /* WatchlistItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1B972503015341900B64B10 /* WatchlistItem.swift */; };
+		12995C0AC7B16E3283CB9E63 /* TMDBSearchModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9C036BB01A04FAE823CE002 /* TMDBSearchModel.swift */; };
+		451A8D211CA57DC05BDE4410 /* TMDBClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4864F4CC291E958A50456E1F /* TMDBClient.swift */; };
+		967F7AA5E7EDA897960AF077 /* TMDBResponses.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2779DA82DAB320184F2669D1 /* TMDBResponses.swift */; };
+		2261A11671E898451A4F3CB6 /* TMDBModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1C000013020000000000001 /* TMDBModels.swift */; };
+		3E2856E5C95E2AA162EEAD54 /* StreamingSearchURL.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1B973003015341900B64B10 /* StreamingSearchURL.swift */; };
+		83ACFB664C0D73B0A03C3EC5 /* SiteStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1B9725B3015341900B64B10 /* SiteStore.swift */; };
+		DFA44B731675F32913C7B347 /* SiteDraft.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1B972583015341900B64B10 /* SiteDraft.swift */; };
+		94B28E49FF81403BE335AD2C /* SavedSite.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1B972573015341900B64B10 /* SavedSite.swift */; };
+		437294D676474A96B61A5C35 /* ServiceLauncher.swift in Sources */ = {isa = PBXBuildFile; fileRef = B79BE722F6D78193F2D9F9E2 /* ServiceLauncher.swift */; };
+		530A8B86B1073C9478421E23 /* StreamingServiceCatalog.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECE5757DDBA9C5466F1D028A /* StreamingServiceCatalog.swift */; };
+		4240F90A18BE7F38A83B96AF /* ServiceAvailability.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FF538621FB0FB49FF1189BC /* ServiceAvailability.swift */; };
+		B2BA1F391FBB7DFC21FAF0E0 /* JellyfinSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5DD1DAE0ADC934232E4A6C1 /* JellyfinSettingsView.swift */; };
+		6BDC6589F0C28F218F745F29 /* JellyfinPlayback.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B33F5A9F98AA7136A4CF342 /* JellyfinPlayback.swift */; };
+		D61257717DD21C05C910991B /* JellyfinTokenStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47FA40E44BE4752586A4DC51 /* JellyfinTokenStorage.swift */; };
+		A8271730E37BDEE80A813456 /* JellyfinConnection.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCC8B0C3B23260ED12F6194B /* JellyfinConnection.swift */; };
+		FEFDE252D1C4F4EAEE9C9552 /* JellyfinClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C8000F1E0FF392E091FDB39 /* JellyfinClient.swift */; };
+		8466011040ECE18BA8FB5873 /* JellyfinDeviceProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = B64B1A9BFF4BEFB435031E2D /* JellyfinDeviceProfile.swift */; };
+		B7DC9D3213E0B795D80265F6 /* JellyfinModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBF8215AF6E1AF16574F53A2 /* JellyfinModels.swift */; };
+		718EA0035BB0094FE2FCC4A4 /* AppProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE59FC003357E8A2069A0E4D /* AppProfile.swift */; };
+		700F65D75E5742E6D6FF9F94 /* MobileSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72E2005603CC62610F7874D4 /* MobileSettingsView.swift */; };
+		874D5C8C06B67F43E31A40E9 /* MobileMediaView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 681AC11170EEC3153D73507D /* MobileMediaView.swift */; };
+		8BA1F5038C117EE97BE150F5 /* MobileWatchlistView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5CF005BA083716E9B2938AB /* MobileWatchlistView.swift */; };
+		F8B9151D306D915F449DAD8A /* MobileLibraryViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CFD1FF44861CBD27E7F725D /* MobileLibraryViews.swift */; };
+		009053D2AED5AAE690247D3C /* MobileHomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26B4F76532FFF070CA6E3452 /* MobileHomeView.swift */; };
+		4573AD3732DB4DCF31E2759C /* MobileComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33EABF5389ABCEE7CF018A1A /* MobileComponents.swift */; };
+		A217B8DA5FAE6BEC2082086D /* MobileRootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 216AF52C81D7CFA1282BB58D /* MobileRootView.swift */; };
+		834353CDD25627B73E410508 /* StreamMobileApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = C14D9DF5D74931AD4DE17D33 /* StreamMobileApp.swift */; };
+		3A2DB40FECFF6EF72A82CFC9 /* ServiceLauncher.swift in Sources */ = {isa = PBXBuildFile; fileRef = B79BE722F6D78193F2D9F9E2 /* ServiceLauncher.swift */; };
+		8118E96A8AD476826D354766 /* JellyfinPlayback.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B33F5A9F98AA7136A4CF342 /* JellyfinPlayback.swift */; };
 		1A47C132CAE281544DB9184D /* WatchlistSyncTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB31F2417B0A0550C0B8F9D8 /* WatchlistSyncTests.swift */; };
 		4A4F06C44548018814EE7532 /* WatchlistCloudSync.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34D6C88550569D277B23FA98 /* WatchlistCloudSync.swift */; };
 		7CF8AD48FB855957F49FBAEF /* ServicesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 387F40465E921FDCA64F8768 /* ServicesTests.swift */; };
@@ -115,6 +150,18 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		D267871E24FA73A27D36E3B1 /* Stream Mobile.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Stream Mobile.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		A6212F151F68E74F0EDC21A3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		72E2005603CC62610F7874D4 /* MobileSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MobileSettingsView.swift; sourceTree = "<group>"; };
+		681AC11170EEC3153D73507D /* MobileMediaView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MobileMediaView.swift; sourceTree = "<group>"; };
+		C5CF005BA083716E9B2938AB /* MobileWatchlistView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MobileWatchlistView.swift; sourceTree = "<group>"; };
+		9CFD1FF44861CBD27E7F725D /* MobileLibraryViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MobileLibraryViews.swift; sourceTree = "<group>"; };
+		26B4F76532FFF070CA6E3452 /* MobileHomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MobileHomeView.swift; sourceTree = "<group>"; };
+		33EABF5389ABCEE7CF018A1A /* MobileComponents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MobileComponents.swift; sourceTree = "<group>"; };
+		216AF52C81D7CFA1282BB58D /* MobileRootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MobileRootView.swift; sourceTree = "<group>"; };
+		C14D9DF5D74931AD4DE17D33 /* StreamMobileApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StreamMobileApp.swift; sourceTree = "<group>"; };
+		B79BE722F6D78193F2D9F9E2 /* ServiceLauncher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceLauncher.swift; sourceTree = "<group>"; };
+		4B33F5A9F98AA7136A4CF342 /* JellyfinPlayback.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JellyfinPlayback.swift; sourceTree = "<group>"; };
 		AB31F2417B0A0550C0B8F9D8 /* WatchlistSyncTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchlistSyncTests.swift; sourceTree = "<group>"; };
 		34D6C88550569D277B23FA98 /* WatchlistCloudSync.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchlistCloudSync.swift; sourceTree = "<group>"; };
 		387F40465E921FDCA64F8768 /* ServicesTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServicesTests.swift; sourceTree = "<group>"; };
@@ -228,6 +275,13 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		54103C7042421696830075E8 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		D14338A03013E5B800BA847C /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -239,6 +293,22 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		251BDA54EB5C6464C6190A5C /* Mobile */ = {
+			isa = PBXGroup;
+			children = (
+				C14D9DF5D74931AD4DE17D33 /* StreamMobileApp.swift */,
+				216AF52C81D7CFA1282BB58D /* MobileRootView.swift */,
+				33EABF5389ABCEE7CF018A1A /* MobileComponents.swift */,
+				26B4F76532FFF070CA6E3452 /* MobileHomeView.swift */,
+				9CFD1FF44861CBD27E7F725D /* MobileLibraryViews.swift */,
+				C5CF005BA083716E9B2938AB /* MobileWatchlistView.swift */,
+				681AC11170EEC3153D73507D /* MobileMediaView.swift */,
+				72E2005603CC62610F7874D4 /* MobileSettingsView.swift */,
+				A6212F151F68E74F0EDC21A3 /* Info.plist */,
+			);
+			path = Mobile;
+			sourceTree = "<group>";
+		};
 		3EAF23C5E121D0C594B8E98D /* Cloud */ = {
 			isa = PBXGroup;
 			children = (
@@ -258,6 +328,7 @@
 		3AE995591A336ED8FC9C20C9 /* Services */ = {
 			isa = PBXGroup;
 			children = (
+				B79BE722F6D78193F2D9F9E2 /* ServiceLauncher.swift */,
 				ECE5757DDBA9C5466F1D028A /* StreamingServiceCatalog.swift */,
 				4FF538621FB0FB49FF1189BC /* ServiceAvailability.swift */,
 			);
@@ -277,6 +348,7 @@
 		9414F66542D60F5575775B78 /* Jellyfin */ = {
 			isa = PBXGroup;
 			children = (
+				4B33F5A9F98AA7136A4CF342 /* JellyfinPlayback.swift */,
 				47FA40E44BE4752586A4DC51 /* JellyfinTokenStorage.swift */,
 				A5DD1DAE0ADC934232E4A6C1 /* JellyfinSettingsView.swift */,
 				523BE2B21C92EBB39B4F0D3A /* JellyfinSeriesView.swift */,
@@ -345,6 +417,7 @@
 		D143389A3013E5B800BA847C = {
 			isa = PBXGroup;
 			children = (
+				251BDA54EB5C6464C6190A5C /* Mobile */,
 				D145FFF8301BB60300983295 /* .swiftformat */,
 				D135CED83038A772001AB3C0 /* .swiftlint.yml */,
 				D1C100043020000000000104 /* Tests */,
@@ -362,6 +435,7 @@
 		D14338A43013E5B800BA847C /* Products */ = {
 			isa = PBXGroup;
 			children = (
+				D267871E24FA73A27D36E3B1 /* Stream Mobile.app */,
 				D14338A33013E5B800BA847C /* Wianu.app */,
 				D1C100033020000000000103 /* WianuTests.xctest */,
 			);
@@ -582,6 +656,23 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		1BAB696A1676EC938D813FD3 /* Stream Mobile */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 890EA99C3F8B544737B9494C /* Build configuration list for PBXNativeTarget "Stream Mobile" */;
+			buildPhases = (
+				6D136F926C42359D7236465E /* Sources */,
+				54103C7042421696830075E8 /* Frameworks */,
+				A3AB7EAE2946761ACAFAB673 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "Stream Mobile";
+			productName = "Stream Mobile";
+			productReference = D267871E24FA73A27D36E3B1 /* Stream Mobile.app */;
+			productType = "com.apple.product-type.application";
+		};
 		D14338A23013E5B800BA847C /* Wianu */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = D14338AE3013E5B800BA847C /* Build configuration list for PBXNativeTarget "Wianu" */;
@@ -628,6 +719,9 @@
 				LastSwiftUpdateCheck = 2620;
 				LastUpgradeCheck = 2660;
 				TargetAttributes = {
+					1BAB696A1676EC938D813FD3 = {
+						CreatedOnToolsVersion = 26.2;
+					};
 					D14338A23013E5B800BA847C = {
 						CreatedOnToolsVersion = 26.2;
 					};
@@ -656,11 +750,20 @@
 			targets = (
 				D14338A23013E5B800BA847C /* Wianu */,
 				D1C100053020000000000105 /* WianuTests */,
+				1BAB696A1676EC938D813FD3 /* Stream Mobile */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		A3AB7EAE2946761ACAFAB673 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				85C5EE82F8F95DC96F10BF4B /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		D14338A13013E5B800BA847C /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -673,10 +776,51 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		6D136F926C42359D7236465E /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				834353CDD25627B73E410508 /* StreamMobileApp.swift in Sources */,
+				A217B8DA5FAE6BEC2082086D /* MobileRootView.swift in Sources */,
+				4573AD3732DB4DCF31E2759C /* MobileComponents.swift in Sources */,
+				009053D2AED5AAE690247D3C /* MobileHomeView.swift in Sources */,
+				F8B9151D306D915F449DAD8A /* MobileLibraryViews.swift in Sources */,
+				8BA1F5038C117EE97BE150F5 /* MobileWatchlistView.swift in Sources */,
+				874D5C8C06B67F43E31A40E9 /* MobileMediaView.swift in Sources */,
+				700F65D75E5742E6D6FF9F94 /* MobileSettingsView.swift in Sources */,
+				718EA0035BB0094FE2FCC4A4 /* AppProfile.swift in Sources */,
+				B7DC9D3213E0B795D80265F6 /* JellyfinModels.swift in Sources */,
+				8466011040ECE18BA8FB5873 /* JellyfinDeviceProfile.swift in Sources */,
+				FEFDE252D1C4F4EAEE9C9552 /* JellyfinClient.swift in Sources */,
+				A8271730E37BDEE80A813456 /* JellyfinConnection.swift in Sources */,
+				D61257717DD21C05C910991B /* JellyfinTokenStorage.swift in Sources */,
+				6BDC6589F0C28F218F745F29 /* JellyfinPlayback.swift in Sources */,
+				B2BA1F391FBB7DFC21FAF0E0 /* JellyfinSettingsView.swift in Sources */,
+				4240F90A18BE7F38A83B96AF /* ServiceAvailability.swift in Sources */,
+				530A8B86B1073C9478421E23 /* StreamingServiceCatalog.swift in Sources */,
+				437294D676474A96B61A5C35 /* ServiceLauncher.swift in Sources */,
+				94B28E49FF81403BE335AD2C /* SavedSite.swift in Sources */,
+				DFA44B731675F32913C7B347 /* SiteDraft.swift in Sources */,
+				83ACFB664C0D73B0A03C3EC5 /* SiteStore.swift in Sources */,
+				3E2856E5C95E2AA162EEAD54 /* StreamingSearchURL.swift in Sources */,
+				2261A11671E898451A4F3CB6 /* TMDBModels.swift in Sources */,
+				967F7AA5E7EDA897960AF077 /* TMDBResponses.swift in Sources */,
+				451A8D211CA57DC05BDE4410 /* TMDBClient.swift in Sources */,
+				12995C0AC7B16E3283CB9E63 /* TMDBSearchModel.swift in Sources */,
+				DD198479FC7E9D287D42D40B /* WatchlistItem.swift in Sources */,
+				15ECDBBBFBD3D5C0B9A0F816 /* WatchlistStore.swift in Sources */,
+				6FA2DFAD2479E20F280DC5E2 /* URLNormalizer.swift in Sources */,
+				A1FD77B5FE09BF1941F9BCFD /* JSONFileStore.swift in Sources */,
+				4291178E89CDF01926533199 /* WatchlistCloudSync.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		D143389F3013E5B800BA847C /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3A2DB40FECFF6EF72A82CFC9 /* ServiceLauncher.swift in Sources */,
+				8118E96A8AD476826D354766 /* JellyfinPlayback.swift in Sources */,
 				4A4F06C44548018814EE7532 /* WatchlistCloudSync.swift in Sources */,
 				6B549721223198233B71EB8C /* OnboardingView.swift in Sources */,
 				9413DB11B1A01CB845D069F8 /* StreamingServiceCatalog.swift in Sources */,
@@ -790,6 +934,88 @@
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
+		CE7C0C3CD98BC8C822FF63C6 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = "";
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Mobile/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = Stream;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.entertainment";
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.lukeschenk.stream.mobile;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = auto;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SUPPORTED_PLATFORMS = "appletvos appletvsimulator iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2,3";
+				TVOS_DEPLOYMENT_TARGET = 26.0;
+			};
+			name = Debug;
+		};
+		4EFD7ABB1E086C4F546A9C4F /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = "";
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Mobile/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = Stream;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.entertainment";
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.lukeschenk.stream.mobile;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = auto;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SUPPORTED_PLATFORMS = "appletvos appletvsimulator iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2,3";
+				TVOS_DEPLOYMENT_TARGET = 26.0;
+			};
+			name = Release;
+		};
 		D14338AC3013E5B800BA847C /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -953,8 +1179,8 @@
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
 				SWIFT_VERSION = 5.0;
-				UMAMI_BASE_URL = "https://analytics.timwehrle.de/";
-				UMAMI_WEBSITE_ID = "d46c3af2-4739-4c9f-aa28-4cd428edab6c";
+				UMAMI_BASE_URL = "";
+				UMAMI_WEBSITE_ID = "";
 			};
 			name = Debug;
 		};
@@ -1003,8 +1229,8 @@
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
 				SWIFT_VERSION = 5.0;
-				UMAMI_BASE_URL = "https://analytics.timwehrle.de/";
-				UMAMI_WEBSITE_ID = "d46c3af2-4739-4c9f-aa28-4cd428edab6c";
+				UMAMI_BASE_URL = "";
+				UMAMI_WEBSITE_ID = "";
 			};
 			name = Release;
 		};
@@ -1041,6 +1267,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		890EA99C3F8B544737B9494C /* Build configuration list for PBXNativeTarget "Stream Mobile" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				CE7C0C3CD98BC8C822FF63C6 /* Debug */,
+				4EFD7ABB1E086C4F546A9C4F /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		D143389E3013E5B800BA847C /* Build configuration list for PBXProject "Wianu" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
