@@ -1,7 +1,7 @@
 import Foundation
 import Observation
-#if canImport(AppKit)
-    import AppKit
+#if canImport(SystemConfiguration)
+    import SystemConfiguration
 #endif
 
 /// The Jellyfin account for one profile, and the libraries it can see.
@@ -23,6 +23,8 @@ final class JellyfinConnection {
     private let session: any JellyfinHTTPSession
     @ObservationIgnored
     private var token: String?
+    @ObservationIgnored
+    private let deviceName: String
 
     init(
         profile: AppProfile,
@@ -34,6 +36,7 @@ final class JellyfinConnection {
         self.userDefaults = userDefaults
         self.tokenStorage = tokenStorage
         self.session = session
+        deviceName = Self.deviceName(for: profile)
 
         let storedAccount = userDefaults
             .data(forKey: accountKey)
@@ -144,9 +147,11 @@ private extension JellyfinConnection {
         return id
     }
 
-    var deviceName: String {
-        #if canImport(AppKit)
-            let name = Host.current().localizedName ?? "Mac"
+    /// The Mac's name as Jellyfin's dashboard shows it. Read from System
+    /// Configuration, which, unlike `Host`, never waits on the network.
+    static func deviceName(for profile: AppProfile) -> String {
+        #if canImport(SystemConfiguration)
+            let name = (SCDynamicStoreCopyComputerName(nil, nil) as String?) ?? "Mac"
         #else
             let name = "Mac"
         #endif

@@ -49,7 +49,6 @@ struct JellyfinSettingsView: View {
     private var signInForm: some View {
         Section {
             TextField("Server", text: $serverAddress, prompt: Text("http://192.168.1.20:8096"))
-                .textContentType(.URL)
             TextField("Username", text: $username)
                 .textContentType(.username)
             SecureField("Password", text: $password)

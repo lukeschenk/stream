@@ -1,3 +1,4 @@
+import AVFoundation
 import AVKit
 import SwiftUI
 
@@ -94,7 +95,7 @@ final class JellyfinPlayback {
 
         let resumeAt = item.resumePositionSeconds
         if resumeAt > 5, !item.isPlayed {
-            await player.seek(
+            _ = await player.seek(
                 to: CMTime(seconds: resumeAt, preferredTimescale: 600),
                 toleranceBefore: .zero,
                 toleranceAfter: .zero

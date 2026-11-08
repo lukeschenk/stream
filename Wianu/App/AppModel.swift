@@ -174,60 +174,6 @@ extension AppModel {
         analytics.track(.siteEdited)
     }
 
-    // MARK: iCloud
-
-    static let iCloudSyncKey = "syncWatchlistWithICloud"
-
-    /// Whether this build has the iCloud capability at all.
-    var canSyncWithICloud: Bool {
-        WatchlistCloudSync.containerIdentifier != nil
-    }
-
-    var isSyncingWithICloud: Bool {
-        watchlistSync != nil
-    }
-
-    func setICloudSyncEnabled(_ enabled: Bool) {
-        userDefaults.set(enabled, forKey: profile.defaultsKey(Self.iCloudSyncKey))
-
-        if enabled, watchlistSync == nil {
-            watchlistSync = WatchlistCloudSync(store: watchlistStore, profile: profile)
-        } else if !enabled {
-            watchlistSync?.stop()
-            watchlistSync = nil
-        }
-    }
-
-    // MARK: Onboarding
-
-    private var onboardingKey: String {
-        profile.defaultsKey("hasCompletedOnboarding")
-    }
-
-    /// First launch of a profile that has no sites yet.
-    var needsOnboarding: Bool {
-        !userDefaults.bool(forKey: onboardingKey) && siteStore.sites.isEmpty
-    }
-
-    func completeOnboarding() {
-        userDefaults.set(true, forKey: onboardingKey)
-    }
-
-    func hasSite(for service: StreamingService) -> Bool {
-        guard let host = service.host else { return false }
-        return siteStore.sites.contains { $0.url?.host()?.lowercased() == host }
-    }
-
-    func addServices(_ options: [ServiceOption]) {
-        for option in options where !hasSite(for: option.service) {
-            addSite(option.siteDraft())
-        }
-
-        if selection == nil, let first = siteStore.sites.first {
-            select(.site(first.id))
-        }
-    }
-
     func dismissCommandPalette() {
         isCommandPalettePresented = false
     }
@@ -483,5 +429,63 @@ extension AppModel {
         }
 
         return host
+    }
+}
+
+// MARK: - iCloud and onboarding
+
+extension AppModel {
+    // MARK: iCloud
+
+    static let iCloudSyncKey = "syncWatchlistWithICloud"
+
+    /// Whether this build has the iCloud capability at all.
+    var canSyncWithICloud: Bool {
+        WatchlistCloudSync.containerIdentifier != nil
+    }
+
+    var isSyncingWithICloud: Bool {
+        watchlistSync != nil
+    }
+
+    func setICloudSyncEnabled(_ enabled: Bool) {
+        userDefaults.set(enabled, forKey: profile.defaultsKey(Self.iCloudSyncKey))
+
+        if enabled, watchlistSync == nil {
+            watchlistSync = WatchlistCloudSync(store: watchlistStore, profile: profile)
+        } else if !enabled {
+            watchlistSync?.stop()
+            watchlistSync = nil
+        }
+    }
+
+    // MARK: Onboarding
+
+    private var onboardingKey: String {
+        profile.defaultsKey("hasCompletedOnboarding")
+    }
+
+    /// First launch of a profile that has no sites yet.
+    var needsOnboarding: Bool {
+        !userDefaults.bool(forKey: onboardingKey) && siteStore.sites.isEmpty
+    }
+
+    func completeOnboarding() {
+        userDefaults.set(true, forKey: onboardingKey)
+    }
+
+    func hasSite(for service: StreamingService) -> Bool {
+        guard let host = service.host else { return false }
+        return siteStore.sites.contains { $0.url?.host()?.lowercased() == host }
+    }
+
+    func addServices(_ options: [ServiceOption]) {
+        for option in options where !hasSite(for: option.service) {
+            addSite(option.siteDraft())
+        }
+
+        if selection == nil, let first = siteStore.sites.first {
+            select(.site(first.id))
+        }
     }
 }

@@ -42,8 +42,14 @@ final class ServiceAvailabilityModel {
 
     @ObservationIgnored
     private let client: TMDBClient
+    private struct Lookup {
+        let key: String
+        let media: TMDBMediaResult
+        let region: String
+    }
+
     @ObservationIgnored
-    private var queue: [(key: String, media: TMDBMediaResult, region: String)] = []
+    private var queue: [Lookup] = []
     @ObservationIgnored
     private var queued = Set<String>()
     @ObservationIgnored
@@ -71,7 +77,7 @@ final class ServiceAvailabilityModel {
         for media in results {
             let key = Self.key(for: media, region: region)
             guard providers[key] == nil, queued.insert(key).inserted else { continue }
-            queue.append((key, media, region))
+            queue.append(Lookup(key: key, media: media, region: region))
         }
 
         pendingCount = queue.count

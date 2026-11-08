@@ -45,7 +45,7 @@ final class WatchlistCloudSync {
     private let zoneID: CKRecordZone.ID
     private let metadataStore: JSONFileStore<WatchlistCloudMetadata>
     private var metadata: WatchlistCloudMetadata
-    private let delegate = WatchlistSyncDelegate()
+    private let engineCallbacks = WatchlistSyncDelegate()
     private var engine: CKSyncEngine?
 
     init?(store: WatchlistStore, profile: AppProfile) {
@@ -63,13 +63,13 @@ final class WatchlistCloudSync {
         metadata = (try? metadataStore.load(defaultValue: WatchlistCloudMetadata())) ?? WatchlistCloudMetadata()
 
         let isFirstRun = metadata.engineState == nil
-        delegate.owner = self
+        engineCallbacks.owner = self
 
         let container = CKContainer(identifier: identifier)
         let configuration = CKSyncEngine.Configuration(
             database: container.privateCloudDatabase,
             stateSerialization: metadata.engineState,
-            delegate: delegate
+            delegate: engineCallbacks
         )
         engine = CKSyncEngine(configuration)
 
@@ -86,7 +86,7 @@ final class WatchlistCloudSync {
     /// Stops syncing. Local data and the iCloud copy are both left alone.
     func stop() {
         store.changeHandler = nil
-        delegate.owner = nil
+        engineCallbacks.owner = nil
         engine = nil
     }
 
@@ -272,7 +272,8 @@ final class WatchlistCloudSync {
                 break
 
             default:
-                Self.logger.error("Could not save watchlist item: \(failure.error.localizedDescription, privacy: .public)")
+                let message = failure.error.localizedDescription
+                Self.logger.error("Could not save watchlist item: \(message, privacy: .public)")
             }
         }
 

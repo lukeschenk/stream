@@ -226,7 +226,9 @@ struct JellyfinWatchingView: View {
         do {
             async let resumeItems = client.resumeItems(userID: userID)
             async let nextUpItems = client.nextUp(userID: userID)
-            (resume, nextUp) = try await (resumeItems, nextUpItems)
+            let (loadedResume, loadedNextUp) = try await (resumeItems, nextUpItems)
+            resume = loadedResume
+            nextUp = loadedNextUp
             errorMessage = nil
         } catch is CancellationError {
             return

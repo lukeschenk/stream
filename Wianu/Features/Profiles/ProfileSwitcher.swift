@@ -17,7 +17,8 @@ struct ProfileSwitcher: View {
         } label: {
             Label("\(current.displayName) Profile", systemImage: current.systemImage)
         }
-        .menuStyle(.borderlessButton)
+        .menuStyle(.button)
+        .buttonStyle(.borderless)
         .fixedSize()
         .help("Switch profile")
         .padding(.horizontal, 16)

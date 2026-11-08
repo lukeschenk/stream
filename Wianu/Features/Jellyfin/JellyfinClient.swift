@@ -279,90 +279,6 @@ nonisolated struct JellyfinClient: Sendable {
         return imageURL(for: item, maxWidth: maxWidth)
     }
 
-    // MARK: Playback
-
-    func playbackSource(
-        itemID: String,
-        userID: String,
-        profile: JellyfinDeviceProfile = .avPlayer
-    ) async throws -> JellyfinPlaybackSource {
-        let response: JellyfinPlaybackInfoResponse = try await send(
-            path: "Items/\(itemID)/PlaybackInfo",
-            method: "POST",
-            query: [URLQueryItem(name: "userId", value: userID)],
-            body: JellyfinPlaybackInfoRequest(
-                userID: userID,
-                maxStreamingBitrate: profile.maxStreamingBitrate,
-                deviceProfile: profile
-            )
-        )
-
-        guard response.errorCode == nil,
-              let source = response.mediaSources.first
-        else { throw JellyfinError.noPlayableSource }
-
-        return try playbackSource(
-            itemID: itemID,
-            mediaSource: source,
-            playSessionID: response.playSessionID
-        )
-    }
-
-    func playbackSource(
-        itemID: String,
-        mediaSource source: JellyfinMediaSource,
-        playSessionID: String?
-    ) throws -> JellyfinPlaybackSource {
-        guard let accessToken else { throw JellyfinError.notSignedIn }
-
-        if source.supportsDirectPlay == true {
-            var query = [
-                URLQueryItem(name: "static", value: "true"),
-                URLQueryItem(name: "mediaSourceId", value: source.id),
-                URLQueryItem(name: "deviceId", value: deviceID),
-                URLQueryItem(name: "ApiKey", value: accessToken)
-            ]
-            if let playSessionID {
-                query.append(URLQueryItem(name: "playSessionId", value: playSessionID))
-            }
-
-            guard let url = url(path: "Videos/\(itemID)/stream", query: query) else {
-                throw JellyfinError.invalidResponse
-            }
-
-            return JellyfinPlaybackSource(
-                url: url,
-                mediaSourceID: source.id,
-                playSessionID: playSessionID,
-                playMethod: .directPlay
-            )
-        }
-
-        // The server builds this URL, including the API key.
-        guard let transcodingPath = source.transcodingURL,
-              let url = URL(string: Self.join(serverURL, transcodingPath))
-        else { throw JellyfinError.noPlayableSource }
-
-        return JellyfinPlaybackSource(
-            url: url,
-            mediaSourceID: source.id,
-            playSessionID: playSessionID,
-            playMethod: .transcode
-        )
-    }
-
-    func reportPlaybackStarted(_ report: JellyfinPlaybackReport) async throws {
-        try await sendWithoutResponse(path: "Sessions/Playing", method: "POST", body: report)
-    }
-
-    func reportPlaybackProgress(_ report: JellyfinPlaybackReport) async throws {
-        try await sendWithoutResponse(path: "Sessions/Playing/Progress", method: "POST", body: report)
-    }
-
-    func reportPlaybackStopped(_ report: JellyfinPlaybackReport) async throws {
-        try await sendWithoutResponse(path: "Sessions/Playing/Stopped", method: "POST", body: report)
-    }
-
     // MARK: Requests
 
     /// `MediaBrowser Client="Wianu", Device="Mac", DeviceId="…", Version="…", Token="…"`
@@ -467,8 +383,98 @@ nonisolated struct JellyfinClient: Sendable {
         }
     }
 
-    // MARK: Helpers
 
+}
+
+// MARK: - Playback
+
+extension JellyfinClient {
+    func playbackSource(
+        itemID: String,
+        userID: String,
+        profile: JellyfinDeviceProfile = .avPlayer
+    ) async throws -> JellyfinPlaybackSource {
+        let response: JellyfinPlaybackInfoResponse = try await send(
+            path: "Items/\(itemID)/PlaybackInfo",
+            method: "POST",
+            query: [URLQueryItem(name: "userId", value: userID)],
+            body: JellyfinPlaybackInfoRequest(
+                userID: userID,
+                maxStreamingBitrate: profile.maxStreamingBitrate,
+                deviceProfile: profile
+            )
+        )
+
+        guard response.errorCode == nil,
+              let source = response.mediaSources.first
+        else { throw JellyfinError.noPlayableSource }
+
+        return try playbackSource(
+            itemID: itemID,
+            mediaSource: source,
+            playSessionID: response.playSessionID
+        )
+    }
+
+    func playbackSource(
+        itemID: String,
+        mediaSource source: JellyfinMediaSource,
+        playSessionID: String?
+    ) throws -> JellyfinPlaybackSource {
+        guard let accessToken else { throw JellyfinError.notSignedIn }
+
+        if source.supportsDirectPlay == true {
+            var query = [
+                URLQueryItem(name: "static", value: "true"),
+                URLQueryItem(name: "mediaSourceId", value: source.id),
+                URLQueryItem(name: "deviceId", value: deviceID),
+                URLQueryItem(name: "ApiKey", value: accessToken)
+            ]
+            if let playSessionID {
+                query.append(URLQueryItem(name: "playSessionId", value: playSessionID))
+            }
+
+            guard let url = url(path: "Videos/\(itemID)/stream", query: query) else {
+                throw JellyfinError.invalidResponse
+            }
+
+            return JellyfinPlaybackSource(
+                url: url,
+                mediaSourceID: source.id,
+                playSessionID: playSessionID,
+                playMethod: .directPlay
+            )
+        }
+
+        // The server builds this URL, including the API key.
+        guard let transcodingPath = source.transcodingURL,
+              let url = URL(string: Self.join(serverURL, transcodingPath))
+        else { throw JellyfinError.noPlayableSource }
+
+        return JellyfinPlaybackSource(
+            url: url,
+            mediaSourceID: source.id,
+            playSessionID: playSessionID,
+            playMethod: .transcode
+        )
+    }
+
+    func reportPlaybackStarted(_ report: JellyfinPlaybackReport) async throws {
+        try await sendWithoutResponse(path: "Sessions/Playing", method: "POST", body: report)
+    }
+
+    func reportPlaybackProgress(_ report: JellyfinPlaybackReport) async throws {
+        try await sendWithoutResponse(path: "Sessions/Playing/Progress", method: "POST", body: report)
+    }
+
+    func reportPlaybackStopped(_ report: JellyfinPlaybackReport) async throws {
+        try await sendWithoutResponse(path: "Sessions/Playing/Stopped", method: "POST", body: report)
+    }
+}
+
+// MARK: - Helpers
+
+extension JellyfinClient {
     private static let listFields = [
         URLQueryItem(name: "fields", value: "Overview,PrimaryImageAspectRatio"),
         URLQueryItem(name: "enableUserData", value: "true"),

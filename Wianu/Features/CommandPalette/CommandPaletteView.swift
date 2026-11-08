@@ -35,38 +35,6 @@ struct CommandPaletteView: View {
                 : [])
     }
 
-    private var availability: ServiceAvailabilityModel {
-        model.serviceAvailability
-    }
-
-    private var hasLinkedServices: Bool {
-        MyServices.hasLinkedServices(model.siteStore.sites)
-    }
-
-    private var filtersToMyServices: Bool {
-        onlyMyServices && hasLinkedServices
-    }
-
-    /// Saved sites that stream the title, or `nil` while that's unknown.
-    private func myServices(for media: TMDBMediaResult) -> [SavedSite]? {
-        availability
-            .streamingProviders(for: media, region: search.selectedRegion)
-            .map { MyServices.sites(streaming: $0, from: model.siteStore.sites) }
-    }
-
-    private var displayedResults: [TMDBMediaResult] {
-        guard filtersToMyServices else { return search.results }
-        return search.results.filter { myServices(for: $0)?.isEmpty == false }
-    }
-
-    private var prefetchID: PrefetchID {
-        PrefetchID(
-            resultIDs: search.results.map(\.id),
-            region: search.selectedRegion,
-            isFiltering: filtersToMyServices
-        )
-    }
-
     private var canSelectMediaResults: Bool {
         !trimmedQuery.isEmpty
             && !search.isSearching
@@ -256,36 +224,6 @@ struct CommandPaletteView: View {
         }
     }
 
-    @ViewBuilder
-    private var myServicesFooter: some View {
-        if availability.pendingCount > 0 {
-            HStack(spacing: 8) {
-                ProgressView().controlSize(.small)
-                Text("Checking your services…")
-                    .font(.system(size: 12))
-                    .foregroundStyle(.secondary)
-            }
-            .frame(maxWidth: .infinity)
-            .padding()
-        } else {
-            VStack(spacing: 8) {
-                if displayedResults.isEmpty {
-                    Text("None of these are included with your services.")
-                        .font(.system(size: 12))
-                        .foregroundStyle(.secondary)
-                }
-                if search.canLoadMore, let last = search.results.last {
-                    Button("Search More Titles") {
-                        search.loadMoreIfNeeded(after: last)
-                    }
-                    .controlSize(.small)
-                }
-            }
-            .frame(maxWidth: .infinity)
-            .padding()
-        }
-    }
-
     private var trimmedQuery: String {
         search.query.trimmingCharacters(in: .whitespacesAndNewlines)
     }
@@ -438,6 +376,72 @@ private extension CommandPaletteView {
         .padding(.horizontal, 10)
         .padding(.vertical, 6)
         .contentShape(Rectangle())
+    }
+}
+
+// MARK: - On My Services
+
+private extension CommandPaletteView {
+    var availability: ServiceAvailabilityModel {
+        model.serviceAvailability
+    }
+
+    var hasLinkedServices: Bool {
+        MyServices.hasLinkedServices(model.siteStore.sites)
+    }
+
+    var filtersToMyServices: Bool {
+        onlyMyServices && hasLinkedServices
+    }
+
+    /// Saved sites that stream the title, or `nil` while that's unknown.
+    func myServices(for media: TMDBMediaResult) -> [SavedSite]? {
+        availability
+            .streamingProviders(for: media, region: search.selectedRegion)
+            .map { MyServices.sites(streaming: $0, from: model.siteStore.sites) }
+    }
+
+    var displayedResults: [TMDBMediaResult] {
+        guard filtersToMyServices else { return search.results }
+        return search.results.filter { myServices(for: $0)?.isEmpty == false }
+    }
+
+    var prefetchID: PrefetchID {
+        PrefetchID(
+            resultIDs: search.results.map(\.id),
+            region: search.selectedRegion,
+            isFiltering: filtersToMyServices
+        )
+    }
+
+    @ViewBuilder
+    var myServicesFooter: some View {
+        if availability.pendingCount > 0 {
+            HStack(spacing: 8) {
+                ProgressView().controlSize(.small)
+                Text("Checking your services…")
+                    .font(.system(size: 12))
+                    .foregroundStyle(.secondary)
+            }
+            .frame(maxWidth: .infinity)
+            .padding()
+        } else {
+            VStack(spacing: 8) {
+                if displayedResults.isEmpty {
+                    Text("None of these are included with your services.")
+                        .font(.system(size: 12))
+                        .foregroundStyle(.secondary)
+                }
+                if search.canLoadMore, let last = search.results.last {
+                    Button("Search More Titles") {
+                        search.loadMoreIfNeeded(after: last)
+                    }
+                    .controlSize(.small)
+                }
+            }
+            .frame(maxWidth: .infinity)
+            .padding()
+        }
     }
 }
 

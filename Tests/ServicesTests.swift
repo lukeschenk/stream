@@ -72,7 +72,11 @@ struct MyServicesTests {
 
     @Test func `titles match saved sites by provider`() {
         let sites = [
-            SavedSite(name: "Netflix", urlString: "https://www.netflix.com", tmdbProvider: .init(id: 8, name: "Netflix")),
+            SavedSite(
+                name: "Netflix",
+                urlString: "https://www.netflix.com",
+                tmdbProvider: .init(id: 8, name: "Netflix")
+            ),
             SavedSite(name: "Blog", urlString: "https://example.com"),
             SavedSite(name: "Crave", urlString: "https://www.crave.ca", tmdbProvider: .init(id: 230, name: "Crave"))
         ]
