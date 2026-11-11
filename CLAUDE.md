@@ -58,6 +58,29 @@ AVKit code on the first build.
 - `Mobile/` — the iOS/tvOS app. tvOS has no web browser, so titles open in
   each service's app by universal link or the TV app.
 
+## Decisions so far
+
+The first rounds of work happened in a cloud session; `git log` on this branch
+has the history. Things worth knowing:
+
+- Jellyfin access tokens are tied to the device ID that signed in, so they
+  stay in each device's Keychain. Only the server address and username sync
+  through iCloud; Quick Connect covers signing in on Apple TV.
+- Streaming Availability's free plan allows 1,000 lookups a month, so answers
+  are cached (`TitleLinksModel.lifetime`): movies 30 days, shows a week, and
+  shows again a few hours after a new episode airs (`linksStaleBefore`). A
+  quota or auth error pauses lookups until relaunch; Wikidata fills in.
+- Wikidata properties used: TMDB P4947 (movie) / P4983 (TV), Disney+ P13902,
+  Netflix P1874, Prime Video P14440 / P14462 / P8055, Tubi P7760 / P7761,
+  Crunchyroll P11330, Apple TV P9586 (movie) / P9751 (show).
+- Trakt is used through its public API with only the Client ID
+  (`trakt-api-key` header). The Trakt app has no client secret; sign-in must
+  use PKCE.
+- "Pick up" progress is only what was opened from Stream; no service exposes
+  watch history. Recording an episode adds the show to the watchlist.
+- Settings sync merges sites by ID and host on a device's first sync, then the
+  newest change wins.
+
 ## Still to do
 
 - First Xcode build of both schemes; fix compile errors; run on devices.

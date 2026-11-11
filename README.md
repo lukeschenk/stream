@@ -26,24 +26,39 @@ browser tabs.
 ## About this fork
 
 This is a personal fork of [timwehrle/wianu](https://github.com/timwehrle/wianu)
-(GPL-3.0). It adds:
+(GPL-3.0). Work happens on the `jellyfin-and-kids-profile` branch. It adds:
 
-- **Profiles** — a Kids profile with its own sites, watchlist, website sign-ins
-  and Jellyfin account (⌃⌘1 / ⌃⌘2 on the Mac).
-- **Jellyfin** — browse and play your own library, with resume progress synced
-  to the server. Needs Jellyfin 10.9 or later.
-- **Service setup and filtering** — pick your services from TMDB's list for your
-  region; search can show only titles included with them.
-- **iCloud sync** — each profile's watchlist, streaming services and Jellyfin
-  server stay the same on the Mac, iPhone, iPad and Apple TV. Jellyfin sign-ins
-  stay on each device; the Apple TV can sign in with a code approved from
-  another device (Jellyfin Quick Connect).
+- **Profiles** — Main and Kids, switched from the Profile menu on the Mac
+  (⌃⌘1 / ⌃⌘2) or in Settings on Stream Mobile. Each profile has its own sites,
+  watchlist, website sign-ins and Jellyfin account. Give the Kids profile a
+  Jellyfin user with parental controls.
+- **Jellyfin** — browse and play your own library. Files play directly when
+  Apple's player supports them, and the server converts the rest; resume
+  points sync with the server. Sign in with a password, or with a Quick
+  Connect code approved from a device that's already signed in (handy on Apple
+  TV). Needs Jellyfin 10.9 or later.
+- **Service setup** — a first-run setup picks your services from TMDB's list
+  for your region, and search can show only titles included with them.
 - **Title and episode links** — services open on the title or episode rather
-  than a search, using Wikidata and, with a key, Streaming Availability. Stream
-  remembers the last episode you opened for each show.
-- **Release days** — when a show's next episode comes out, from Trakt.
-- **Stream Mobile** — an iPhone, iPad and Apple TV app: Jellyfin playback, the
-  watchlist, search, and where to watch, opening each service's app.
+  than a search, using Wikidata and, with a key, the Streaming Availability
+  API.
+- **Pick up where you left off** — for shows, Stream remembers the last
+  episode you opened from it and offers the next one. It can't see what you
+  watched directly in a service's own app.
+- **Release days** — when a show's next episode comes out, or its weekly slot,
+  from Trakt.
+- **iCloud sync** — optional. Each profile's watchlist, services and Jellyfin
+  server stay the same on the Mac, iPhone, iPad and Apple TV. Sign-ins stay on
+  each device.
+- **Stream Mobile** — an iPhone, iPad and Apple TV app with Jellyfin playback,
+  shows in progress, the watchlist, search and where to watch. Apple TV has no
+  web browser, so titles open in each service's app or the TV app.
+
+### Status
+
+A work in progress. The unit tests pass, but the latest changes haven't been
+built in Xcode yet, so expect a few compile fixes on the first build.
+[CLAUDE.md](CLAUDE.md) has the code conventions, layout and what's next.
 
 ### Setting up a build
 
@@ -54,10 +69,19 @@ This is a personal fork of [timwehrle/wianu](https://github.com/timwehrle/wianu)
    detects it automatically. For Stream Mobile, also put the container ID in
    `StreamCloudKitContainer` in `Mobile/Info.plist`.
 3. Optional: copy `Config/Secrets.example.xcconfig` to `Config/Secrets.xcconfig`
-   (which git ignores) and add a Streaming Availability key for episode links
-   and a Trakt Client ID for release days.
+   and add your API keys (see below). Git ignores that file, so keys never
+   reach this public repo.
 4. Run the **Wianu** scheme for the Mac or **Stream Mobile** for iPhone, iPad
    and Apple TV.
+
+### API keys
+
+Both are optional; Stream builds and runs without them.
+
+| Setting | Get it from | What it adds |
+| :- | :- | :- |
+| `STREAMING_AVAILABILITY_API_KEY` | [Movie of the Night](https://www.movieofthenight.com/about/api) | Episode links and more services. The free plan allows 1,000 lookups a month; answers are saved on each device (movies for 30 days, shows for a week or until a new episode airs). Without it, Wikidata supplies title links only. |
+| `TRAKT_CLIENT_ID` | [Trakt API apps](https://trakt.tv/oauth/applications) | Release days. Only the Client ID is used. A planned Trakt sign-in will use the redirect URI `com.lukeschenk.stream://trakt`. |
 
 Automatic updates and usage analytics are switched off in this fork so it never
 installs upstream builds or reports to the upstream analytics server.
@@ -88,6 +112,11 @@ synced to your account.
 If you save an episode or player page, Wianu will reopen that exact episode.
 Progress made on another device cannot change the saved link.
 
+In this fork, show pages also get a **Pick Up** section when a Streaming
+Availability key is set. Opening an episode from Stream saves it (adding the
+show to your watchlist), and next time Stream offers the following episode.
+Jellyfin items resume where you stopped.
+
 ### Example
 
 1. Open the detail page for _How I Met Your Mother_.
@@ -114,8 +143,8 @@ sites, you can add a compatible search URL yourself.
 
 ## Anonymous usage analytics
 
-Wianu can send privacy-minimal feature events to a self-hosted Umami instance.
-Users can turn analytics off from the General settings tab.
+Upstream Wianu can send privacy-minimal feature events to a self-hosted Umami
+instance. This fork switches analytics off.
 
 ## Watchlist
 
@@ -133,8 +162,9 @@ The importer expects the standard Letterboxd columns, including `Name` and
 
 ## Requirements
 
-- macOS 26 or later
+- macOS 26 or later; Stream Mobile needs iOS, iPadOS or tvOS 26 or later
 - An account with each streaming service you want to use
+- For your own library, a Jellyfin 10.9 or later server
 
 Availability and playback depend on the streaming service, your subscription,
 and your region. A provider may also restrict playback in embedded browsers.
@@ -149,7 +179,9 @@ Wianu. Please share them using the
 
 1. Clone this repository.
 2. Open `Wianu.xcodeproj` in Xcode.
-3. Select the Wianu scheme and build.
+3. Select the Wianu scheme (Mac) or Stream Mobile scheme (iPhone, iPad and
+   Apple TV) and build. See [Setting up a build](#setting-up-a-build) for
+   signing, iCloud and API keys.
 
 Swift Package Manager resolves the project's dependencies, including Sparkle
 for application updates.
@@ -163,6 +195,16 @@ and `make check`. SwiftFormat and SwiftLint can be installed with Homebrew.
 Saved sites, Continue Watching entries, and watchlist items are stored locally
 on your Mac. Streaming-service sign-in and playback take place in the embedded
 web view. Movie and TV metadata is retrieved through Wianu's backend service.
+
+In this fork:
+
+- With iCloud sync on, the watchlist, chosen services and Jellyfin server
+  address are kept in your private iCloud database. Jellyfin sign-ins are
+  stored in each device's Keychain and aren't synced.
+- Title links come from Wikidata and, with a key, Streaming Availability;
+  release days come from Trakt. These lookups send the title's TMDB ID (and
+  your region, for Streaming Availability), not your viewing history.
+- Jellyfin playback talks only to your own server.
 
 ## License
 
