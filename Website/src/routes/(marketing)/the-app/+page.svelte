@@ -8,10 +8,10 @@
 </script>
 
 <svelte:head>
-	<title>The App - Wianu</title>
+	<title>The App - Stream</title>
 	<meta
 		name="description"
-		content="I made Wianu to keep the streaming services I use, what I'm watching, and my watchlist in one place."
+		content="I made Stream to keep the streaming services I use, what I'm watching, and my watchlist in one place."
 	/>
 </svelte:head>
 
@@ -20,7 +20,7 @@
 		<h1>Everything you're watching,<br /><em>in one place.</em></h1>
 		<div class="hero-bottom">
 			<p>
-				I made Wianu for the moment when you want to watch something but can't
+				I made Stream for the moment when you want to watch something but can't
 				remember where it lives. Your services, current shows, and watchlist are
 				together in one Mac app.
 			</p>
@@ -38,8 +38,8 @@
 
 	<div class="app-image">
 		<enhanced:img
-			src="#lib/assets/wianu-app.png"
-			alt="Wianu showing streaming sites, Continue Watching, and a watchlist in one window"
+			src="#lib/assets/stream-app.png"
+			alt="Stream showing streaming sites, Continue Watching, and a watchlist in one window"
 			loading="eager"
 			fetchpriority="high"
 		/>
@@ -47,7 +47,7 @@
 
 	<section
 		class="features"
-		aria-label="What Wianu brings together"
+		aria-label="What Stream brings together"
 	>
 		<div class="feature">
 			<div class="feature-copy">
@@ -66,7 +66,7 @@
 						src={servicesImage}
 						width="464"
 						height="526"
-						alt="Streaming services together in the Wianu sidebar"
+						alt="Streaming services together in the Stream sidebar"
 						loading="lazy"
 					/>
 				</div>
@@ -89,7 +89,7 @@
 						src={watchingImage}
 						width="458"
 						height="214"
-						alt="Continue Watching in Wianu, showing saved shows and films"
+						alt="Continue Watching in Stream, showing saved shows and films"
 						loading="lazy"
 					/>
 				</div>
@@ -112,7 +112,7 @@
 						src={watchlistImage}
 						width="454"
 						height="596"
-						alt="The Wianu watchlist with films saved for later"
+						alt="The Stream watchlist with films saved for later"
 						loading="lazy"
 					/>
 				</div>
@@ -128,7 +128,7 @@
 		<div class="maker-copy">
 			<p>
 				I'm Tim Wehrle, an independent software developer from Germany. I built
-				Wianu because I kept losing track of what I was watching across
+				Stream because I kept losing track of what I was watching across
 				streaming services. It's the Mac app I wanted for my own everyday
 				watching.
 			</p>
@@ -157,7 +157,7 @@
 		class="download"
 		aria-labelledby="download-title"
 	>
-		<h2 id="download-title">Give Wianu<br /><em>a try.</em></h2>
+		<h2 id="download-title">Give Stream<br /><em>a try.</em></h2>
 		<div class="download-bottom">
 			<p>Your next film is waiting.</p>
 			<div class="download-action">
@@ -165,7 +165,7 @@
 					href={resolve('download')}
 					data-sveltekit-reload
 					target="_blank"
-					rel="noopener noreferrer">Download Wianu</Button
+					rel="noopener noreferrer">Download Stream</Button
 				>
 				<span>macOS 26 or later</span>
 			</div>

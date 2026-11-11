@@ -1,0 +1,14 @@
+// Build settings shared by the Mac app and Stream Mobile.
+//
+// Private keys live in Secrets.xcconfig next to this file, which git ignores.
+// Copy Secrets.example.xcconfig to Secrets.xcconfig and fill it in. Without
+// it, Stream still builds and falls back to Wikidata for title links.
+#include? "Secrets.xcconfig"
+
+// The iCloud container, matching the entitlements files. Stream Mobile reads
+// it from Info.plist because iOS can't read its own entitlements. Builds
+// without code signing have no entitlements, and CloudKit crashes without
+// them, so those builds leave it empty and skip iCloud.
+STREAM_CLOUDKIT_CONTAINER_YES = iCloud.com.lukeschenk.stream
+STREAM_CLOUDKIT_CONTAINER_NO =
+STREAM_CLOUDKIT_CONTAINER = $(STREAM_CLOUDKIT_CONTAINER_$(CODE_SIGNING_ALLOWED))

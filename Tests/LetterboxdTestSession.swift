@@ -1,5 +1,5 @@
 import Foundation
-@testable import Wianu
+@testable import Stream
 
 actor LetterboxdTestSession: TMDBSession {
     private let pages: [Data]

@@ -31,8 +31,8 @@
 	<div class="home-hero-image-wrapper page-container">
 		<enhanced:img
 			class="home-hero-image"
-			src="#lib/assets/wianu-app.png"
-			alt="A screenshot of the Wianu app"
+			src="#lib/assets/stream-app.png"
+			alt="A screenshot of the Stream app"
 			fetchpriority="high"
 		></enhanced:img>
 	</div>

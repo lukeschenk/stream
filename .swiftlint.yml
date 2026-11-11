@@ -1,5 +1,6 @@
 included:
-  - Wianu
+  - Stream
+  - Mobile
   - Tests
 
 excluded:

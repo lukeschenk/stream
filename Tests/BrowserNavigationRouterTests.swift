@@ -1,6 +1,6 @@
 import Foundation
 import Testing
-@testable import Wianu
+@testable import Stream
 
 @MainActor
 @Suite("Browser navigation router")

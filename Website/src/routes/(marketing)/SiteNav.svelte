@@ -109,7 +109,7 @@
 				<div class="nav-logo">
 					<a
 						href={resolve('')}
-						onclick={closeMenu}>Wianu</a
+						onclick={closeMenu}>Stream</a
 					>
 				</div>
 				<a
@@ -202,7 +202,7 @@
 							rel="noopener noreferrer"
 						>
 							<span class="nav-menu-copy">
-								<span class="nav-menu-title">Download Wianu</span>
+								<span class="nav-menu-title">Download Stream</span>
 								<span class="nav-menu-description">For macOS 26 or later</span>
 							</span>
 							<span

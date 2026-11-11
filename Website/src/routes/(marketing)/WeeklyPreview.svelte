@@ -15,7 +15,7 @@
 		<div class="weekly-container page-container">
 			<header class="weekly-heading">
 				<div class="weekly-topline">
-					<span>Wianu</span>
+					<span>Stream</span>
 				</div>
 				<div class="weekly-titleline">
 					<h2 id="weekly-title"><em>Weekly</em></h2>

@@ -3,10 +3,10 @@
 </script>
 
 <svelte:head>
-	<title>Imprint - Wianu</title>
+	<title>Imprint - Stream</title>
 	<meta
 		name="description"
-		content="Operator and contact information for Wianu."
+		content="Operator and contact information for Stream."
 	/>
 </svelte:head>
 

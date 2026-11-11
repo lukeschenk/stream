@@ -17,7 +17,7 @@
 			<div>
 				<a
 					class="footer-brand"
-					href={resolve('')}>Wianu</a
+					href={resolve('')}>Stream</a
 				>
 				<p class="footer-signoff">
 					Made by <a
@@ -29,7 +29,7 @@
 			</div>
 			<div class="footer-columns">
 				<nav aria-label="Footer navigation">
-					<h2>Wianu</h2>
+					<h2>Stream</h2>
 					<a href={resolve('the-app')}>The App</a>
 					<a href={resolve('weekly')}>Weekly</a>
 					<a
@@ -60,7 +60,7 @@
 			</div>
 		</div>
 		<div class="footer-bottom">
-			<p>© {year} Wianu</p>
+			<p>© {year} Stream</p>
 			<nav aria-label="Legal navigation">
 				<a href={resolve('privacy-policy')}>Privacy policy</a>
 				<a href={resolve('imprint')}>Imprint</a>

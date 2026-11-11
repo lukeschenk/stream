@@ -1,6 +1,6 @@
 import Foundation
 import Testing
-@testable import Wianu
+@testable import Stream
 
 private actor AnalyticsFixtureSession: AnalyticsSession {
     private(set) var requests: [URLRequest] = []
@@ -53,7 +53,7 @@ struct AnalyticsClientTests {
         let request = try #require(await session.capturedRequests().first)
         #expect(request.httpMethod == "POST")
         #expect(request.value(forHTTPHeaderField: "Content-Type") == "application/json")
-        #expect(request.value(forHTTPHeaderField: "User-Agent") == "Wianu/1.5.0 (macOS)")
+        #expect(request.value(forHTTPHeaderField: "User-Agent") == "Stream/1.5.0 (macOS)")
         let body = try #require(request.httpBody)
         let json = try #require(
             JSONSerialization.jsonObject(with: body) as? [String: Any]

@@ -2,7 +2,7 @@
 set -euo pipefail
 
 if [[ $# -ne 2 ]]; then
-  echo "Usage: bash Scripts/create-dmg.sh /path/to/Wianu.app /path/to/Wianu.dmg" >&2
+  echo "Usage: bash Scripts/create-dmg.sh /path/to/Stream.app /path/to/Stream.dmg" >&2
   exit 1
 fi
 
@@ -11,12 +11,12 @@ APP_PATH="$(cd "$(dirname "$1")" && pwd)/$(basename "$1")"
 OUTPUT_DIR="$(dirname "$2")"
 mkdir -p "$OUTPUT_DIR"
 OUTPUT_PATH="$(cd "$OUTPUT_DIR" && pwd)/$(basename "$2")"
-[[ -d "$APP_PATH/Contents" && "$(basename "$APP_PATH")" == Wianu.app ]] || {
-  echo "Expected a Wianu.app bundle: $APP_PATH" >&2; exit 1;
+[[ -d "$APP_PATH/Contents" && "$(basename "$APP_PATH")" == Stream.app ]] || {
+  echo "Expected a Stream.app bundle: $APP_PATH" >&2; exit 1;
 }
 [[ ! -e "$OUTPUT_PATH" ]] || { echo "Output already exists: $OUTPUT_PATH" >&2; exit 1; }
 
-WORK_DIR="$(mktemp -d "${TMPDIR:-/tmp}/wianu-dmg.XXXXXX")"
+WORK_DIR="$(mktemp -d "${TMPDIR:-/tmp}/stream-dmg.XXXXXX")"
 MOUNT_PATH="$WORK_DIR/mounted"
 MOUNTED=0
 
@@ -30,11 +30,11 @@ cleanup() {
 trap cleanup EXIT
 
 mkdir -p "$WORK_DIR/staging/.background"
-ditto "$APP_PATH" "$WORK_DIR/staging/Wianu.app"
+ditto "$APP_PATH" "$WORK_DIR/staging/Stream.app"
 ln -s /Applications "$WORK_DIR/staging/Applications"
 cp "$REPO_ROOT/Packaging/dmg-background.png" "$WORK_DIR/staging/.background/background.png"
 
-hdiutil create -volname Wianu -srcfolder "$WORK_DIR/staging" \
+hdiutil create -volname Stream -srcfolder "$WORK_DIR/staging" \
   -fs HFS+ -format UDRW "$WORK_DIR/editable.dmg"
 hdiutil attach -readwrite -nobrowse -mountpoint "$MOUNT_PATH" "$WORK_DIR/editable.dmg"
 MOUNTED=1

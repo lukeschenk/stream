@@ -10,7 +10,7 @@ import {
 import { promisify } from 'node:util';
 import type { Cookies } from '@sveltejs/kit';
 
-const cookieName = 'wianu_admin';
+const cookieName = 'stream_admin';
 const sessionSeconds = 12 * 60 * 60;
 const attempts = new Map<string, { count: number; until: number }>();
 const scrypt = promisify(scryptCallback);

@@ -15,18 +15,18 @@ export const GET: RequestHandler = async ({ fetch }) => {
 			{
 				headers: {
 					Accept: 'application/vnd.github+json',
-					'User-Agent': 'Wianu-website'
+					'User-Agent': 'Stream-website'
 				}
 			}
 		);
 	} catch {
-		throw error(502, 'The Wianu download is temporarily unavailable.');
+		throw error(502, 'The Stream download is temporarily unavailable.');
 	}
 
 	if (!response.ok) {
 		throw error(
 			response.status === 404 ? 404 : 502,
-			'The Wianu download is unavailable.'
+			'The Stream download is unavailable.'
 		);
 	}
 
@@ -34,15 +34,15 @@ export const GET: RequestHandler = async ({ fetch }) => {
 	const tag = release.tag_name;
 
 	if (!tag || !/^v\d+\.\d+\.\d+(?:[.-][A-Za-z0-9.-]+)?$/.test(tag)) {
-		throw error(502, 'The latest Wianu release has an unexpected version.');
+		throw error(502, 'The latest Stream release has an unexpected version.');
 	}
 
 	const archiveName = ['dmg', 'zip']
-		.map((extension) => `Wianu-${tag.slice(1)}.${extension}`)
+		.map((extension) => `Stream-${tag.slice(1)}.${extension}`)
 		.find((name) => release.assets?.some((asset) => asset.name === name));
 
 	if (!archiveName) {
-		throw error(404, 'The latest Wianu release has no download available.');
+		throw error(404, 'The latest Stream release has no download available.');
 	}
 
 	return new Response(null, {
