@@ -61,6 +61,7 @@ final class MobileModel {
     let tmdbClient: TMDBClient
     let search: TMDBSearchModel
     let availability: ServiceAvailabilityModel
+    let titleLinks = TitleLinksModel()
     private(set) var watchlistSync: WatchlistCloudSync?
 
     @ObservationIgnored

@@ -18,6 +18,10 @@ struct MobileMediaView: View {
         model.search.selectedRegion
     }
 
+    private var links: TitleLinks? {
+        model.titleLinks.links(for: media, region: region)
+    }
+
     var body: some View {
         List {
             header
@@ -38,6 +42,7 @@ struct MobileMediaView: View {
         }
         .navigationTitle(media.title)
         .task { await loadAvailability() }
+        .task { await model.titleLinks.load(for: media, region: region) }
         .task(id: model.jellyfin.account) { await findInLibrary() }
         .alert(
             "Open \(unopenedService?.name ?? "the App")",
@@ -98,6 +103,14 @@ struct MobileMediaView: View {
                 }
             }
 
+            if let appleTV = links?.appleTV {
+                Button {
+                    openURL(appleTV)
+                } label: {
+                    Label("Open in the TV App", systemImage: "appletv")
+                }
+            }
+
             let isSaved = model.watchlistItem(for: media) != nil
             Button {
                 model.toggleWatchlist(media)
@@ -155,10 +168,10 @@ struct MobileMediaView: View {
 
                 VStack(alignment: .leading, spacing: 2) {
                     Text(provider.name)
-                    if isMine {
-                        Text("Your service")
+                    if let detail = detail(isMine: isMine, service: service) {
+                        Text(detail)
                             .font(.caption)
-                            .foregroundStyle(Color.accentColor)
+                            .foregroundStyle(isMine ? Color.accentColor : .secondary)
                     }
                 }
 
@@ -179,19 +192,42 @@ struct MobileMediaView: View {
         model.search.regions.first { $0.isoCode == region }?.displayName ?? region
     }
 
+    private func detail(isMine: Bool, service: StreamingService?) -> String? {
+        let opensTitle = service.flatMap { links?.url(for: $0) } != nil
+        switch (isMine, opensTitle) {
+        case (true, true): return "Your service · Opens to this title"
+        case (true, false): return "Your service"
+        case (false, true): return "Opens to this title"
+        case (false, false): return nil
+        }
+    }
+
     private func open(_ service: StreamingService) {
         #if os(tvOS)
-            guard let url = ServiceLauncher.appURL(for: service) else {
-                unopenedService = service
-                return
-            }
+            let platform = ServiceLauncher.Platform.appleTV
         #else
-            guard let url = ServiceLauncher.webURL(for: service, title: media.title) else { return }
+            let platform = ServiceLauncher.Platform.touch
         #endif
+
+        let candidates = ServiceLauncher.candidates(
+            for: service,
+            title: media.title,
+            links: links,
+            platform: platform
+        )
+        open(candidates, fallingBackTo: service)
+    }
+
+    /// Tries each link in turn; an app that doesn't claim a link refuses it.
+    private func open(_ urls: [URL], fallingBackTo service: StreamingService) {
+        guard let url = urls.first else {
+            unopenedService = service
+            return
+        }
 
         openURL(url) { accepted in
             if !accepted {
-                unopenedService = service
+                open(Array(urls.dropFirst()), fallingBackTo: service)
             }
         }
     }

@@ -16,6 +16,7 @@ final class AppModel {
     let mediaIdentification: MediaIdentificationCoordinator
     let jellyfin: JellyfinConnection
     let serviceAvailability: ServiceAvailabilityModel
+    let titleLinks = TitleLinksModel()
     private(set) var watchlistSync: WatchlistCloudSync?
     private(set) var tmdbClient: TMDBClient
     private(set) var tmdbSearch: TMDBSearchModel
@@ -185,13 +186,31 @@ extension AppModel {
     }
 
     func openProvider(_ provider: TMDBProvider, for media: TMDBMediaResult) {
-        guard let site = siteStore.sites.first(where: {
-            $0.tmdbProvider?.matches(provider) == true
-                && $0.isTMDBProviderActionable
-        }), site.searchURL(for: media.title) != nil
-        else { return }
+        guard let site = site(for: provider) else { return }
+
+        // Go straight to the title when its link is known.
+        if let titleURL = titleLink(for: provider, media: media) {
+            analytics.track(.providerSelected)
+            dismissCommandPalette()
+            select(.site(site.id))
+            navigate(to: titleURL)
+            return
+        }
+
+        guard site.isTMDBProviderActionable, site.searchURL(for: media.title) != nil else { return }
         analytics.track(.providerSelected)
         search(media.title, in: site)
+    }
+
+    /// A link that opens the title itself in the provider's site.
+    func titleLink(for provider: TMDBProvider, media: TMDBMediaResult) -> URL? {
+        guard let service = StreamingServiceCatalog.service(forProviderName: provider.name) else {
+            return nil
+        }
+
+        return titleLinks
+            .links(for: media, region: tmdbSearch.selectedRegion)?
+            .url(for: service)
     }
 
     func site(for provider: TMDBProvider) -> SavedSite? {

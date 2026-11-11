@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		9684851D29365CF9D9964255 /* TitleLinks.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9099A310CBFBC730DB52631 /* TitleLinks.swift */; };
+		ABFF3651665EDFEE6020B95F /* TitleLinks.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9099A310CBFBC730DB52631 /* TitleLinks.swift */; };
 		85C5EE82F8F95DC96F10BF4B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D1B972673015341900B64B10 /* Assets.xcassets */; };
 		4291178E89CDF01926533199 /* WatchlistCloudSync.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34D6C88550569D277B23FA98 /* WatchlistCloudSync.swift */; };
 		A1FD77B5FE09BF1941F9BCFD /* JSONFileStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1B9725E3015341900B64B10 /* JSONFileStore.swift */; };
@@ -150,6 +152,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		C9099A310CBFBC730DB52631 /* TitleLinks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TitleLinks.swift; sourceTree = "<group>"; };
 		D267871E24FA73A27D36E3B1 /* Stream Mobile.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Stream Mobile.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		A6212F151F68E74F0EDC21A3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		72E2005603CC62610F7874D4 /* MobileSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MobileSettingsView.swift; sourceTree = "<group>"; };
@@ -328,6 +331,7 @@
 		3AE995591A336ED8FC9C20C9 /* Services */ = {
 			isa = PBXGroup;
 			children = (
+				C9099A310CBFBC730DB52631 /* TitleLinks.swift */,
 				B79BE722F6D78193F2D9F9E2 /* ServiceLauncher.swift */,
 				ECE5757DDBA9C5466F1D028A /* StreamingServiceCatalog.swift */,
 				4FF538621FB0FB49FF1189BC /* ServiceAvailability.swift */,
@@ -780,6 +784,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9684851D29365CF9D9964255 /* TitleLinks.swift in Sources */,
 				834353CDD25627B73E410508 /* StreamMobileApp.swift in Sources */,
 				A217B8DA5FAE6BEC2082086D /* MobileRootView.swift in Sources */,
 				4573AD3732DB4DCF31E2759C /* MobileComponents.swift in Sources */,
@@ -819,6 +824,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				ABFF3651665EDFEE6020B95F /* TitleLinks.swift in Sources */,
 				3A2DB40FECFF6EF72A82CFC9 /* ServiceLauncher.swift in Sources */,
 				8118E96A8AD476826D354766 /* JellyfinPlayback.swift in Sources */,
 				4A4F06C44548018814EE7532 /* WatchlistCloudSync.swift in Sources */,

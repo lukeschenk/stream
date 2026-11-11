@@ -15,6 +15,11 @@ struct TMDBAvailabilityView: View {
             Divider()
             content
         }
+        // Direct links to the title, so services open on it rather than a
+        // search.
+        .task(id: "\(media.mediaType.rawValue)/\(media.id)/\(search.selectedRegion)") {
+            await model.titleLinks.load(for: media, region: search.selectedRegion)
+        }
     }
 
     private var header: some View {
@@ -141,6 +146,8 @@ struct TMDBAvailabilityView: View {
 
     private func providerButton(_ provider: TMDBProvider) -> some View {
         let site = model.site(for: provider)
+        let titleLink = model.titleLink(for: provider, media: media)
+        let canOpen = site != nil && (titleLink != nil || site?.isTMDBProviderActionable == true)
         return Button {
             model.openProvider(provider, for: media)
         } label: {
@@ -152,12 +159,12 @@ struct TMDBAvailabilityView: View {
                 )
                 VStack(alignment: .leading, spacing: 2) {
                     Text(provider.name)
-                    Text(providerDescription(for: site))
+                    Text(providerDescription(for: site, opensTitle: titleLink != nil))
                         .font(.caption)
                         .foregroundStyle(.secondary)
                 }
                 Spacer()
-                if site?.isTMDBProviderActionable == true {
+                if canOpen {
                     Image(systemName: "arrow.up.forward.app")
                         .foregroundStyle(.secondary)
                 }
@@ -165,13 +172,15 @@ struct TMDBAvailabilityView: View {
             .contentShape(Rectangle())
         }
         .buttonStyle(.plain)
-        .disabled(site?.isTMDBProviderActionable != true)
+        .disabled(!canOpen)
     }
 
-    private func providerDescription(for site: SavedSite?) -> String {
-        guard let site, site.resolvedSearchURLTemplate != nil else {
-            return "Not configured"
+    private func providerDescription(for site: SavedSite?, opensTitle: Bool) -> String {
+        guard let site else { return "Not configured" }
+        if opensTitle {
+            return "Open in \(site.name)"
         }
+        guard site.resolvedSearchURLTemplate != nil else { return "Not configured" }
         return "Search in \(site.name)"
     }
 }
