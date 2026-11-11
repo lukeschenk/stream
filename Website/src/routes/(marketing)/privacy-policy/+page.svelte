@@ -5,10 +5,10 @@
 </script>
 
 <svelte:head>
-	<title>Privacy Policy - Wianu</title>
+	<title>Privacy Policy - Stream</title>
 	<meta
 		name="description"
-		content="How the Wianu website processes personal data, and how to exercise your privacy rights."
+		content="How the Stream website processes personal data, and how to exercise your privacy rights."
 	/>
 </svelte:head>
 
@@ -17,7 +17,7 @@
 	<section>
 		<h2>Scope and controller</h2>
 		<p>
-			This policy covers the Wianu website and its API. The controller
+			This policy covers the Stream website and its API. The controller
 			responsible for processing personal data is:
 		</p>
 		<address>
@@ -30,7 +30,7 @@
 			</ul>
 		</address>
 		<p>
-			This website notice also applies when the Wianu app contacts our API. It
+			This website notice also applies when the Stream app contacts our API. It
 			does not cover the app's local storage, embedded browser, update service,
 			or native usage analytics. The website's analytics choice does not change
 			the app's analytics setting. Streaming services accessed through the app
@@ -89,7 +89,7 @@
 		</p>
 		<p>
 			We store your analytics choice in a necessary first-party cookie named
-			<code>wianu_analytics_consent</code> for 180 days. Its value records only whether
+			<code>stream_analytics_consent</code> for 180 days. Its value records only whether
 			you allowed or rejected website analytics and the preference version. It is
 			not a visitor identifier. You can change the choice at any time using “Privacy
 			settings” in the footer. Storing the choice is based on § 25(2)(2) TDDDG; processing

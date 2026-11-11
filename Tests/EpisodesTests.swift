@@ -1,6 +1,6 @@
 import Foundation
 import Testing
-@testable import Wianu
+@testable import Stream
 
 /// Answers by host, counting requests.
 actor RoutedSession: TMDBSession {
@@ -260,7 +260,7 @@ struct EpisodeProgressTests {
     private func store() -> WatchlistStore {
         let directory = FileManager.default.temporaryDirectory.appending(path: "Progress-\(UUID().uuidString)")
         return WatchlistStore(
-            fileStore: JSONFileStore(fileName: "watchlist.json", folderName: "Wianu", baseDirectory: directory)
+            fileStore: JSONFileStore(fileName: "watchlist.json", folderName: "Stream", baseDirectory: directory)
         )
     }
 

@@ -1,6 +1,6 @@
 import Foundation
 import Testing
-@testable import Wianu
+@testable import Stream
 
 @Suite("Show schedules")
 @MainActor
@@ -197,7 +197,7 @@ struct SettingsSyncTests {
     @Test func `site edits are reported and iCloud updates are not`() {
         let directory = FileManager.default.temporaryDirectory.appending(path: "Sites-\(UUID().uuidString)")
         let store = SiteStore(
-            fileStore: JSONFileStore(fileName: "sites.json", folderName: "Wianu", baseDirectory: directory)
+            fileStore: JSONFileStore(fileName: "sites.json", folderName: "Stream", baseDirectory: directory)
         )
         var changes = 0
         store.changeHandler = { changes += 1 }

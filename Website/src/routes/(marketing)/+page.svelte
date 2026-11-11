@@ -6,7 +6,7 @@
 </script>
 
 <svelte:head>
-	<title>Wianu - All your streaming. One home.</title>
+	<title>Stream - All your streaming. One home.</title>
 </svelte:head>
 
 <HomeHero />

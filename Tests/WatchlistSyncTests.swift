@@ -1,6 +1,6 @@
 import Foundation
 import Testing
-@testable import Wianu
+@testable import Stream
 
 @Suite("Watchlist sync hooks")
 @MainActor
@@ -16,7 +16,7 @@ struct WatchlistSyncTests {
         let store = WatchlistStore(
             fileStore: JSONFileStore(
                 fileName: "watchlist.json",
-                folderName: "Wianu",
+                folderName: "Stream",
                 baseDirectory: directory
             )
         )

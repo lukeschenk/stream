@@ -20,8 +20,8 @@ on run argv
         end tell
         tell mountedFolder
             set position of item ".background" to {120, 600}
-            set position of item "Wianu.app" to {210, 190}
-            set extension hidden of item "Wianu.app" to true
+            set position of item "Stream.app" to {210, 190}
+            set extension hidden of item "Stream.app" to true
             set position of item "Applications" to {510, 190}
         end tell
         close container window of mountedFolder

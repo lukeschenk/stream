@@ -1,8 +1,8 @@
-export const consentCookie = 'wianu_analytics_consent';
+export const consentCookie = 'stream_analytics_consent';
 export const consentMaxAge = 180 * 24 * 60 * 60;
 export const websiteId = '52f5d899-2f07-4c6a-8996-fbb33bac6f9e';
 export const trackerUrl = 'https://analytics.timwehrle.de/app.js';
-export const settingsEvent = 'wianu:privacy-settings';
+export const settingsEvent = 'stream:privacy-settings';
 
 export type AnalyticsConsent = 'granted' | 'denied';
 

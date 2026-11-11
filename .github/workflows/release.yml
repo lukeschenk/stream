@@ -1,4 +1,4 @@
-name: Release Wianu
+name: Release Stream
 
 on:
   push:
@@ -13,10 +13,10 @@ concurrency:
   cancel-in-progress: false
 
 env:
-  APP_NAME: Wianu
-  SCHEME: Wianu
-  PROJECT_PATH: Wianu.xcodeproj
-  ARCHIVE_PATH: ${{ github.workspace }}/build/Wianu.xcarchive
+  APP_NAME: Stream
+  SCHEME: Stream
+  PROJECT_PATH: Stream.xcodeproj
+  ARCHIVE_PATH: ${{ github.workspace }}/build/Stream.xcarchive
   EXPORT_PATH: ${{ github.workspace }}/build/export
   APPCAST_PATH: ${{ github.workspace }}/build/appcast
   DISTRIBUTION_PATH: ${{ github.workspace }}/build/distribution
@@ -84,7 +84,7 @@ jobs:
           set -euo pipefail
 
           CERTIFICATE_PATH="$RUNNER_TEMP/developer_id.p12"
-          KEYCHAIN_PATH="$RUNNER_TEMP/wianu-signing.keychain-db"
+          KEYCHAIN_PATH="$RUNNER_TEMP/stream-signing.keychain-db"
 
           echo -n "$CERTIFICATE_BASE64" | base64 --decode > "$CERTIFICATE_PATH"
 
@@ -399,11 +399,11 @@ jobs:
         run: |
           set -euo pipefail
 
-          printf '%s\n' "$SSH_PRIVATE_KEY" > "$RUNNER_TEMP/wianu-deploy"
-          chmod 600 "$RUNNER_TEMP/wianu-deploy"
+          printf '%s\n' "$SSH_PRIVATE_KEY" > "$RUNNER_TEMP/stream-deploy"
+          chmod 600 "$RUNNER_TEMP/stream-deploy"
 
-          printf '%s\n' "$DEPLOY_HOST_KEY" > "$RUNNER_TEMP/wianu-known-hosts"
-          chmod 600 "$RUNNER_TEMP/wianu-known-hosts"
+          printf '%s\n' "$DEPLOY_HOST_KEY" > "$RUNNER_TEMP/stream-known-hosts"
+          chmod 600 "$RUNNER_TEMP/stream-known-hosts"
 
       - name: Deploy current and legacy appcasts
         shell: bash
@@ -427,13 +427,13 @@ jobs:
               --archive \
               --verbose \
               --compress \
-              -e "ssh -i $RUNNER_TEMP/wianu-deploy -o UserKnownHostsFile=$RUNNER_TEMP/wianu-known-hosts -o StrictHostKeyChecking=yes" \
+              -e "ssh -i $RUNNER_TEMP/stream-deploy -o UserKnownHostsFile=$RUNNER_TEMP/stream-known-hosts -o StrictHostKeyChecking=yes" \
               "$APPCAST_PATH/appcast.xml" \
               "${DEPLOY_USER}@${DEPLOY_HOST}:${destination}/appcast.xml.next"
 
             ssh \
-              -i "$RUNNER_TEMP/wianu-deploy" \
-              -o "UserKnownHostsFile=$RUNNER_TEMP/wianu-known-hosts" \
+              -i "$RUNNER_TEMP/stream-deploy" \
+              -o "UserKnownHostsFile=$RUNNER_TEMP/stream-known-hosts" \
               -o StrictHostKeyChecking=yes \
               "${DEPLOY_USER}@${DEPLOY_HOST}" \
               "chmod 644 ${destination}/appcast.xml.next && mv -f ${destination}/appcast.xml.next ${destination}/appcast.xml"
@@ -467,11 +467,11 @@ jobs:
         shell: bash
         run: |
           security delete-keychain \
-            "$RUNNER_TEMP/wianu-signing.keychain-db" \
+            "$RUNNER_TEMP/stream-signing.keychain-db" \
             2>/dev/null || true
 
           rm -f \
             "$RUNNER_TEMP/developer_id.p12" \
             "$RUNNER_TEMP"/AuthKey_*.p8 \
-            "$RUNNER_TEMP/wianu-deploy" \
-            "$RUNNER_TEMP/wianu-known-hosts"
+            "$RUNNER_TEMP/stream-deploy" \
+            "$RUNNER_TEMP/stream-known-hosts"

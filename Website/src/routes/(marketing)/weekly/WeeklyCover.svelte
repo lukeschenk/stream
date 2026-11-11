@@ -15,7 +15,7 @@
 
 <header class="issue-cover">
 	<div class="issue-topline">
-		<span>Wianu</span>
+		<span>Stream</span>
 		<span>
 			{selection ? selection.week.slice(0, 4) : new Date().getFullYear()}
 		</span>

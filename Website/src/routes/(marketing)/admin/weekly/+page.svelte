@@ -47,7 +47,7 @@
 </script>
 
 <svelte:head>
-	<title>Weekly editor — Wianu</title>
+	<title>Weekly editor — Stream</title>
 	<meta
 		name="robots"
 		content="noindex, nofollow"
@@ -65,7 +65,7 @@
 	{/if}
 	<header class="page-header">
 		<div>
-			<h1>Wianu <em>Weekly</em></h1>
+			<h1>Stream <em>Weekly</em></h1>
 		</div>
 	</header>
 

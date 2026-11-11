@@ -13,8 +13,8 @@ concurrency:
   cancel-in-progress: true
 
 env:
-  SCHEME: Wianu
-  PROJECT_PATH: Wianu.xcodeproj
+  SCHEME: Stream
+  PROJECT_PATH: Stream.xcodeproj
 
 jobs:
   quality:

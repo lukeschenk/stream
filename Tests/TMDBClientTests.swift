@@ -1,6 +1,6 @@
 import Foundation
 import Testing
-@testable import Wianu
+@testable import Stream
 
 private actor FixtureSession: TMDBSession {
     let status: Int

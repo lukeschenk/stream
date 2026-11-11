@@ -1,6 +1,6 @@
 ---
 name: Feature Request
-about: Suggest an idea for Wianu
+about: Suggest an idea for Stream
 title: ''
 labels: enhancement
 assignees: ''

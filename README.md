@@ -1,14 +1,14 @@
 <p align="center">
   <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="Assets/wianu-logo.svg">
-    <img src="Assets/wianu-logo-dark.svg" width="120" alt="Wianu app icon">
+    <source media="(prefers-color-scheme: dark)" srcset="Assets/stream-logo.svg">
+    <img src="Assets/stream-logo-dark.svg" width="120" alt="Stream app icon">
   </picture>
 </p>
 
 <div align="center">
 
-![Wianu](Assets/wianu-light-mode.svg#gh-light-mode-only)
-![Wianu](Assets/wianu-dark-mode.svg#gh-dark-mode-only)
+![Stream](Assets/stream-light-mode.svg#gh-light-mode-only)
+![Stream](Assets/stream-dark-mode.svg#gh-dark-mode-only)
 
 </div>
 
@@ -18,7 +18,7 @@
 
 <img src="Assets/showcase.png">
 
-Wianu is a lightweight browser for organizing streaming websites, shows, and
+Stream is a lightweight browser for organizing streaming websites, shows, and
 movies in one place. Add the services you use, search across them, keep links
 to shows you are watching, and maintain a watchlist without switching between
 browser tabs.
@@ -56,13 +56,14 @@ This is a personal fork of [timwehrle/wianu](https://github.com/timwehrle/wianu)
 
 ### Status
 
-A work in progress. The unit tests pass, but the latest changes haven't been
-built in Xcode yet, so expect a few compile fixes on the first build.
+A work in progress. The Mac app builds in Xcode and the unit tests pass. The
+iPhone, iPad and Apple TV app hasn't been built in Xcode yet, so expect a few
+compile fixes on its first build.
 [CLAUDE.md](CLAUDE.md) has the code conventions, layout and what's next.
 
 ### Setting up a build
 
-1. In Xcode, choose your team under Signing & Capabilities for the **Wianu**
+1. In Xcode, choose your team under Signing & Capabilities for the **Stream**
    and **Stream Mobile** targets.
 2. For iCloud sync, add the iCloud capability with CloudKit to both targets,
    using one container (for example `iCloud.com.lukeschenk.stream`). The Mac app
@@ -71,7 +72,7 @@ built in Xcode yet, so expect a few compile fixes on the first build.
 3. Optional: copy `Config/Secrets.example.xcconfig` to `Config/Secrets.xcconfig`
    and add your API keys (see below). Git ignores that file, so keys never
    reach this public repo.
-4. Run the **Wianu** scheme for the Mac or **Stream Mobile** for iPhone, iPad
+4. Run the **Stream** scheme for the Mac or **Stream Mobile** for iPhone, iPad
    and Apple TV.
 
 ### API keys
@@ -100,7 +101,7 @@ installs upstream builds or reports to the upstream analytics server.
 
 ## Continue Watching
 
-Wianu's Continue Watching list saves a link; it does not track playback
+Stream's Continue Watching list saves a link; it does not track playback
 progress itself.
 
 For the best cross-device experience, add a show from its **show or series
@@ -109,7 +110,7 @@ the saved item later, use the streaming service's own Continue or Resume
 button. The service can then select the latest episode using the progress
 synced to your account.
 
-If you save an episode or player page, Wianu will reopen that exact episode.
+If you save an episode or player page, Stream will reopen that exact episode.
 Progress made on another device cannot change the saved link.
 
 In this fork, show pages also get a **Pick Up** section when a Streaming
@@ -120,18 +121,18 @@ Jellyfin items resume where you stopped.
 ### Example
 
 1. Open the detail page for _How I Met Your Mother_.
-2. Select the Continue Watching button in Wianu's toolbar.
+2. Select the Continue Watching button in Stream's toolbar.
 3. Watch on any device signed in to the same streaming account.
-4. Open the show from Wianu and select the provider's Continue or Resume
+4. Open the show from Stream and select the provider's Continue or Resume
    button.
 
-> Wianu is not affiliated with streaming providers and cannot read their
+> Stream is not affiliated with streaming providers and cannot read their
 > private viewing history. Playback synchronization is handled by each
 > provider.
 
 ## Getting started
 
-1. Launch Wianu.
+1. Launch Stream.
 2. Select **Add Site** in the sidebar.
 3. Enter a name and the website URL.
 4. Optionally enter a search URL containing `{query}`, for example
@@ -143,7 +144,7 @@ sites, you can add a compatible search URL yourself.
 
 ## Anonymous usage analytics
 
-Upstream Wianu can send privacy-minimal feature events to a self-hosted Umami
+Upstream Stream can send privacy-minimal feature events to a self-hosted Umami
 instance. This fork switches analytics off.
 
 ## Watchlist
@@ -172,14 +173,14 @@ and your region. A provider may also restrict playback in embedded browsers.
 ## Feature requests
 
 Feature requests are very welcome! I am always happy to hear your ideas for
-Wianu. Please share them using the
+Stream. Please share them using the
 [feature request issue template](.github/ISSUE_TEMPLATE/feature-request.md).
 
 ## Build from source
 
 1. Clone this repository.
-2. Open `Wianu.xcodeproj` in Xcode.
-3. Select the Wianu scheme (Mac) or Stream Mobile scheme (iPhone, iPad and
+2. Open `Stream.xcodeproj` in Xcode.
+3. Select the Stream scheme (Mac) or Stream Mobile scheme (iPhone, iPad and
    Apple TV) and build. See [Setting up a build](#setting-up-a-build) for
    signing, iCloud and API keys.
 
@@ -208,4 +209,4 @@ In this fork:
 
 ## License
 
-Wianu is available under the terms in [LICENSE](LICENSE).
+Stream is available under the terms in [LICENSE](LICENSE).

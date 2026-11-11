@@ -1,6 +1,6 @@
 import Foundation
 import Testing
-@testable import Wianu
+@testable import Stream
 
 /// Answers requests by path and records what was sent.
 actor JellyfinFixtureSession: JellyfinHTTPSession {
@@ -89,7 +89,7 @@ struct JellyfinClientTests {
     @Test func `authorization header carries the token and escapes values`() {
         let header = client(JellyfinFixtureSession([:])).authorizationHeader
         #expect(header.hasPrefix("MediaBrowser "))
-        #expect(header.contains(#"Client="Wianu""#))
+        #expect(header.contains(#"Client="Stream""#))
         #expect(header.contains(#"DeviceId="device-1""#))
         #expect(header.contains(#"Token="token-123""#))
         #expect(header.contains("Luke%E2%80%99s Mac"))
