@@ -10,6 +10,11 @@ final class SiteStore {
     @ObservationIgnored
     private let fileStore: JSONFileStore<[SavedSite]>
 
+    /// Called after local edits so iCloud can save them. Changes applied
+    /// from iCloud don't trigger it.
+    @ObservationIgnored
+    var changeHandler: (() -> Void)?
+
     init(
         fileStore: JSONFileStore<[SavedSite]> = JSONFileStore(
             fileName: "sites.json",
@@ -50,6 +55,13 @@ final class SiteStore {
         persist()
     }
 
+    /// Replaces the list with one from iCloud without echoing it back.
+    func replaceSites(_ newSites: [SavedSite]) {
+        guard newSites != sites else { return }
+        sites = newSites
+        write()
+    }
+
     private func load() {
         do {
             sites = try fileStore.load(defaultValue: [])
@@ -61,6 +73,11 @@ final class SiteStore {
     }
 
     private func persist() {
+        write()
+        changeHandler?()
+    }
+
+    private func write() {
         do {
             try fileStore.save(sites)
             persistenceError = nil

@@ -77,9 +77,15 @@ struct MobileHomeView: View {
                                         .font(.caption.weight(.medium))
                                         .foregroundStyle(Color.accentColor)
                                 }
+                                if let upcoming = model.schedules.schedule(for: media)?.shortSummary() {
+                                    Text(upcoming)
+                                        .font(.caption)
+                                        .foregroundStyle(.secondary)
+                                }
                             }
                         }
                         .cardButtonStyle()
+                        .task { await model.schedules.load(for: media) }
                     }
                 }
             }

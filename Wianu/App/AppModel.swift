@@ -17,7 +17,9 @@ final class AppModel {
     let jellyfin: JellyfinConnection
     let serviceAvailability: ServiceAvailabilityModel
     let titleLinks = TitleLinksModel()
+    let showSchedules = ShowScheduleModel()
     private(set) var watchlistSync: WatchlistCloudSync?
+    private(set) var settingsSync: ProfileSettingsCloudSync?
     private(set) var tmdbClient: TMDBClient
     private(set) var tmdbSearch: TMDBSearchModel
     private(set) var isCommandPalettePresented = false
@@ -67,7 +69,7 @@ final class AppModel {
         )
         restoreSelection()
         if userDefaults.object(forKey: profile.defaultsKey(WatchlistCloudSync.preferenceKey)) as? Bool ?? true {
-            watchlistSync = WatchlistCloudSync(store: watchlistStore, profile: profile)
+            startICloudSync()
         }
         analytics.track(.appLaunched)
     }
@@ -456,6 +458,12 @@ extension AppModel {
 extension AppModel {
     // MARK: iCloud
 
+    /// Shares the watchlist, streaming services and Jellyfin server.
+    private func startICloudSync() {
+        watchlistSync = WatchlistCloudSync(store: watchlistStore, profile: profile)
+        settingsSync = ProfileSettingsCloudSync(sites: siteStore, jellyfin: jellyfin, profile: profile)
+    }
+
     /// Whether this build has the iCloud capability at all.
     var canSyncWithICloud: Bool {
         WatchlistCloudSync.containerIdentifier != nil
@@ -469,10 +477,12 @@ extension AppModel {
         userDefaults.set(enabled, forKey: profile.defaultsKey(WatchlistCloudSync.preferenceKey))
 
         if enabled, watchlistSync == nil {
-            watchlistSync = WatchlistCloudSync(store: watchlistStore, profile: profile)
+            startICloudSync()
         } else if !enabled {
             watchlistSync?.stop()
             watchlistSync = nil
+            settingsSync?.stop()
+            settingsSync = nil
         }
     }
 

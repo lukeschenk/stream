@@ -7,6 +7,8 @@ nonisolated enum JellyfinError: LocalizedError, Equatable {
     case unauthorized
     case invalidResponse
     case noPlayableSource
+    case quickConnectDisabled
+    case quickConnectExpired
     case server(statusCode: Int)
 
     var errorDescription: String? {
@@ -23,6 +25,11 @@ nonisolated enum JellyfinError: LocalizedError, Equatable {
             "The Jellyfin server returned a response Wianu could not read."
         case .noPlayableSource:
             "Jellyfin could not find a way to stream this item to Wianu."
+        case .quickConnectDisabled:
+            "Quick Connect is turned off on this server. Turn it on in Jellyfin’s dashboard under General, "
+                + "or sign in with your password."
+        case .quickConnectExpired:
+            "The code expired before it was approved. Try again."
         case let .server(statusCode):
             "The Jellyfin server could not complete the request (\(statusCode))."
         }
@@ -300,24 +307,6 @@ nonisolated struct JellyfinClient: Sendable {
 
     // MARK: Requests
 
-    /// `MediaBrowser Client="Wianu", Device="Mac", DeviceId="…", Version="…", Token="…"`
-    var authorizationHeader: String {
-        var parts = [
-            ("Client", Self.clientName),
-            ("Device", deviceName),
-            ("DeviceId", deviceID),
-            ("Version", clientVersion)
-        ]
-        if let accessToken {
-            parts.append(("Token", accessToken))
-        }
-
-        let fields = parts.map { key, value in
-            "\(key)=\"\(Self.headerValue(value))\""
-        }
-        return "MediaBrowser " + fields.joined(separator: ", ")
-    }
-
     func url(path: String, query: [URLQueryItem] = []) -> URL? {
         guard var components = URLComponents(
             url: serverURL.appending(path: path),
@@ -354,7 +343,8 @@ nonisolated struct JellyfinClient: Sendable {
         return request
     }
 
-    private func send<Response: Decodable>(
+    /// Internal so the client's extensions in other files can use it.
+    func send<Response: Decodable>(
         path: String,
         method: String = "GET",
         query: [URLQueryItem] = []
@@ -362,7 +352,7 @@ nonisolated struct JellyfinClient: Sendable {
         try await send(path: path, method: method, query: query, body: Optional<Data>.none)
     }
 
-    private func send<Response: Decodable>(
+    func send<Response: Decodable>(
         path: String,
         method: String = "GET",
         query: [URLQueryItem] = [],
@@ -401,8 +391,6 @@ nonisolated struct JellyfinClient: Sendable {
             throw JellyfinError.server(statusCode: http.statusCode)
         }
     }
-
-
 }
 
 // MARK: - Playback
@@ -494,6 +482,24 @@ nonisolated extension JellyfinClient {
 // MARK: - Helpers
 
 nonisolated extension JellyfinClient {
+    /// `MediaBrowser Client="Wianu", Device="Mac", DeviceId="…", Version="…", Token="…"`
+    var authorizationHeader: String {
+        var parts = [
+            ("Client", Self.clientName),
+            ("Device", deviceName),
+            ("DeviceId", deviceID),
+            ("Version", clientVersion)
+        ]
+        if let accessToken {
+            parts.append(("Token", accessToken))
+        }
+
+        let fields = parts.map { key, value in
+            "\(key)=\"\(Self.headerValue(value))\""
+        }
+        return "MediaBrowser " + fields.joined(separator: ", ")
+    }
+
     private static let listFields = [
         URLQueryItem(name: "fields", value: "Overview,PrimaryImageAspectRatio"),
         URLQueryItem(name: "enableUserData", value: "true"),

@@ -6,11 +6,17 @@ struct MobilePickUpSection: View {
     let model: MobileModel
     let media: TMDBMediaResult
     let links: TitleLinks?
+    let schedule: ShowSchedule?
     let open: (TitleEpisode) -> Void
 
     var body: some View {
         if let links, !links.seasons.isEmpty {
             Section {
+                if let summary = schedule?.summary() {
+                    Label(summary, systemImage: schedule?.hasEnded == true ? "flag.checkered" : "calendar")
+                        .foregroundStyle(.secondary)
+                }
+
                 if let progress = model.progress(for: media) {
                     pickUp(progress, links: links)
                 } else if let first = links.episodes.first {

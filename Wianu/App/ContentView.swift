@@ -4,6 +4,7 @@ struct ContentView: View {
     @Bindable var model: AppModel
     var switchProfile: (AppProfile) -> Void = { _ in }
     @Environment(\.openSettings) private var openSettings
+    @Environment(\.scenePhase) private var scenePhase
     @State private var showingAddSite = false
     @State private var showingOnboarding = false
 
@@ -46,8 +47,15 @@ struct ContentView: View {
             }
         }
         .task {
+            // Services chosen on another device count, so check iCloud first.
+            await model.settingsSync?.refresh(timeout: .seconds(4))
             if model.needsOnboarding {
                 showingOnboarding = true
+            }
+        }
+        .onChange(of: scenePhase) { _, phase in
+            if phase == .active {
+                Task { await model.settingsSync?.refresh() }
             }
         }
         .sheet(isPresented: $showingAddSite) {

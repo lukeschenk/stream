@@ -14,6 +14,12 @@ final class JellyfinConnection {
     private(set) var libraries: [JellyfinItem] = []
     private(set) var librariesError: String?
     private(set) var isLoadingLibraries = false
+    /// The server and user from another device, to fill in sign-in.
+    private(set) var suggestion: JellyfinServerSuggestion?
+
+    /// Called when this device signs in, so iCloud can share the server.
+    @ObservationIgnored
+    var accountChangeHandler: (() -> Void)?
 
     @ObservationIgnored
     private let profile: AppProfile
@@ -76,16 +82,94 @@ final class JellyfinConnection {
             password: password
         )
 
-        tokenStorage.setToken(result.accessToken, for: tokenAccount)
-        token = result.accessToken
-        account = JellyfinAccount(
-            serverURL: serverURL,
-            serverName: info.serverName,
-            userID: result.user.id,
-            userName: result.user.name ?? username
-        )
-        persistAccount()
-        await refreshLibraries()
+        await finishSignIn(result, serverURL: serverURL, serverName: info.serverName, fallbackName: username)
+    }
+
+    // MARK: Quick Connect
+
+    /// Asks the server for a code to approve from a signed-in device.
+    func beginQuickConnect(serverAddress: String) async throws -> JellyfinQuickConnectRequest {
+        guard let serverURL = JellyfinClient.serverURL(from: serverAddress) else {
+            throw JellyfinError.invalidServerAddress
+        }
+
+        let client = makeClient(serverURL: serverURL, token: nil)
+        guard try await client.isQuickConnectEnabled() else {
+            throw JellyfinError.quickConnectDisabled
+        }
+
+        do {
+            let state = try await client.initiateQuickConnect()
+            return JellyfinQuickConnectRequest(serverURL: serverURL, code: state.code, secret: state.secret)
+        } catch JellyfinError.unauthorized {
+            throw JellyfinError.quickConnectDisabled
+        }
+    }
+
+    /// Waits for the code to be approved, then signs in. Codes last a few
+    /// minutes on the server.
+    func completeQuickConnect(
+        _ request: JellyfinQuickConnectRequest,
+        pollInterval: Duration = .seconds(3),
+        timeout: Duration = .seconds(600)
+    ) async throws {
+        let client = makeClient(serverURL: request.serverURL, token: nil)
+        let deadline = ContinuousClock.now + timeout
+
+        while true {
+            try await Task.sleep(for: pollInterval)
+
+            let state: JellyfinQuickConnectState
+            do {
+                state = try await client.quickConnectState(secret: request.secret)
+            } catch JellyfinError.server(statusCode: 404) {
+                throw JellyfinError.quickConnectExpired
+            }
+
+            if state.authenticated {
+                break
+            }
+            if ContinuousClock.now > deadline {
+                throw JellyfinError.quickConnectExpired
+            }
+        }
+
+        let info = try? await client.publicSystemInfo()
+        let result = try await client.authenticate(quickConnectSecret: request.secret)
+        await finishSignIn(result, serverURL: request.serverURL, serverName: info?.serverName, fallbackName: "")
+    }
+
+    /// Approves another device's code for this user.
+    func approveQuickConnect(code: String) async throws {
+        guard let client else { throw JellyfinError.notSignedIn }
+
+        let trimmed = code.filter(\.isNumber)
+        do {
+            guard try await client.authorizeQuickConnect(code: trimmed) else {
+                throw JellyfinError.quickConnectExpired
+            }
+        } catch JellyfinError.server(statusCode: 404) {
+            throw JellyfinError.quickConnectExpired
+        }
+    }
+
+    // MARK: iCloud
+
+    /// What to share with other devices: this device's account, or what
+    /// another device shared before.
+    var currentSuggestion: JellyfinServerSuggestion? {
+        if let account {
+            return JellyfinServerSuggestion(
+                serverAddress: account.serverURL.absoluteString,
+                serverName: account.serverName,
+                userName: account.userName
+            )
+        }
+        return suggestion
+    }
+
+    func applySuggestion(_ suggestion: JellyfinServerSuggestion?) {
+        self.suggestion = suggestion
     }
 
     func signOut() async {
@@ -125,7 +209,33 @@ final class JellyfinConnection {
     }
 }
 
+/// A Quick Connect sign-in waiting for approval.
+struct JellyfinQuickConnectRequest: Equatable {
+    let serverURL: URL
+    let code: String
+    let secret: String
+}
+
 private extension JellyfinConnection {
+    func finishSignIn(
+        _ result: JellyfinAuthenticationResult,
+        serverURL: URL,
+        serverName: String?,
+        fallbackName: String
+    ) async {
+        tokenStorage.setToken(result.accessToken, for: tokenAccount)
+        token = result.accessToken
+        account = JellyfinAccount(
+            serverURL: serverURL,
+            serverName: serverName,
+            userID: result.user.id,
+            userName: result.user.name ?? fallbackName
+        )
+        persistAccount()
+        accountChangeHandler?()
+        await refreshLibraries()
+    }
+
     var accountKey: String {
         profile.defaultsKey("jellyfin.account")
     }

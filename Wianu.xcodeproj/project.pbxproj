@@ -7,6 +7,17 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		EBACBB64430D1D379A2C1F71 /* JellyfinQuickConnect.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42C059A1849E66E1A9D64E6D /* JellyfinQuickConnect.swift */; };
+		DA57BA5C588675C2EADA746F /* JellyfinQuickConnect.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42C059A1849E66E1A9D64E6D /* JellyfinQuickConnect.swift */; };
+		A9EBF6C407F541947943E259 /* SyncAndScheduleTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2442ABE6B86CB8B728597DB /* SyncAndScheduleTests.swift */; };
+		389A1C16306666EF653635C0 /* ProfileSettingsSnapshot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4317118DF4DE6054205589EB /* ProfileSettingsSnapshot.swift */; };
+		99EB0BF71CD72C2DD1744F2A /* ProfileSettingsSnapshot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4317118DF4DE6054205589EB /* ProfileSettingsSnapshot.swift */; };
+		352505C6B157CFE50AF2083C /* ShowSchedule.swift in Sources */ = {isa = PBXBuildFile; fileRef = 312BFF92DAEF59C91953BC45 /* ShowSchedule.swift */; };
+		73CDB18FD7E2CEC3FED14A04 /* ExpiringCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8248BBAAA07E9C45FF27208 /* ExpiringCache.swift */; };
+		2552BFC5924E812E10C3E9C1 /* ShowSchedule.swift in Sources */ = {isa = PBXBuildFile; fileRef = 312BFF92DAEF59C91953BC45 /* ShowSchedule.swift */; };
+		7A4D3761CAC11F16D180769B /* ExpiringCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8248BBAAA07E9C45FF27208 /* ExpiringCache.swift */; };
+		D2F9CADE45445A664CF9D9A3 /* ProfileSettingsCloudSync.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2E085F3D89442A27DDEDECB /* ProfileSettingsCloudSync.swift */; };
+		15E1385BE05EAB53BD4A443C /* ProfileSettingsCloudSync.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2E085F3D89442A27DDEDECB /* ProfileSettingsCloudSync.swift */; };
 		526F9931A507F4CA3BD6F4F7 /* EpisodesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46B425588A3D11C57E476916 /* EpisodesTests.swift */; };
 		07C9901D5307BA4589AA6BB5 /* MobileEpisodesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23339BA2B33F6076B1C8474A /* MobileEpisodesView.swift */; };
 		9A4CA711A32D783DFE7696D0 /* TitleLinksModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 630ACDA6D0BA4E98EAE7EFE9 /* TitleLinksModel.swift */; };
@@ -160,6 +171,12 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		42C059A1849E66E1A9D64E6D /* JellyfinQuickConnect.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JellyfinQuickConnect.swift; sourceTree = "<group>"; };
+		F2442ABE6B86CB8B728597DB /* SyncAndScheduleTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyncAndScheduleTests.swift; sourceTree = "<group>"; };
+		4317118DF4DE6054205589EB /* ProfileSettingsSnapshot.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileSettingsSnapshot.swift; sourceTree = "<group>"; };
+		312BFF92DAEF59C91953BC45 /* ShowSchedule.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowSchedule.swift; sourceTree = "<group>"; };
+		A8248BBAAA07E9C45FF27208 /* ExpiringCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpiringCache.swift; sourceTree = "<group>"; };
+		F2E085F3D89442A27DDEDECB /* ProfileSettingsCloudSync.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileSettingsCloudSync.swift; sourceTree = "<group>"; };
 		46B425588A3D11C57E476916 /* EpisodesTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EpisodesTests.swift; sourceTree = "<group>"; };
 		D073CD80B7463B6270431C3A /* Secrets.example.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Secrets.example.xcconfig; sourceTree = "<group>"; };
 		A423F2D90FE098A5745FEF19 /* Stream.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Stream.xcconfig; sourceTree = "<group>"; };
@@ -341,6 +358,8 @@
 		3EAF23C5E121D0C594B8E98D /* Cloud */ = {
 			isa = PBXGroup;
 			children = (
+				4317118DF4DE6054205589EB /* ProfileSettingsSnapshot.swift */,
+				F2E085F3D89442A27DDEDECB /* ProfileSettingsCloudSync.swift */,
 				34D6C88550569D277B23FA98 /* WatchlistCloudSync.swift */,
 			);
 			path = Cloud;
@@ -357,6 +376,7 @@
 		3AE995591A336ED8FC9C20C9 /* Services */ = {
 			isa = PBXGroup;
 			children = (
+				312BFF92DAEF59C91953BC45 /* ShowSchedule.swift */,
 				630ACDA6D0BA4E98EAE7EFE9 /* TitleLinksModel.swift */,
 				6ADF28FB7A097F03781B34FA /* StreamingAvailabilityClient.swift */,
 				C9099A310CBFBC730DB52631 /* TitleLinks.swift */,
@@ -380,6 +400,7 @@
 		9414F66542D60F5575775B78 /* Jellyfin */ = {
 			isa = PBXGroup;
 			children = (
+				42C059A1849E66E1A9D64E6D /* JellyfinQuickConnect.swift */,
 				4B33F5A9F98AA7136A4CF342 /* JellyfinPlayback.swift */,
 				47FA40E44BE4752586A4DC51 /* JellyfinTokenStorage.swift */,
 				A5DD1DAE0ADC934232E4A6C1 /* JellyfinSettingsView.swift */,
@@ -587,6 +608,7 @@
 		D1B9725F3015341900B64B10 /* Persistence */ = {
 			isa = PBXGroup;
 			children = (
+				A8248BBAAA07E9C45FF27208 /* ExpiringCache.swift */,
 				D1B9725E3015341900B64B10 /* JSONFileStore.swift */,
 			);
 			path = Persistence;
@@ -648,6 +670,7 @@
 		D1C100043020000000000104 /* Tests */ = {
 			isa = PBXGroup;
 			children = (
+				F2442ABE6B86CB8B728597DB /* SyncAndScheduleTests.swift */,
 				46B425588A3D11C57E476916 /* EpisodesTests.swift */,
 				AB31F2417B0A0550C0B8F9D8 /* WatchlistSyncTests.swift */,
 				387F40465E921FDCA64F8768 /* ServicesTests.swift */,
@@ -816,6 +839,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EBACBB64430D1D379A2C1F71 /* JellyfinQuickConnect.swift in Sources */,
+				389A1C16306666EF653635C0 /* ProfileSettingsSnapshot.swift in Sources */,
+				352505C6B157CFE50AF2083C /* ShowSchedule.swift in Sources */,
+				73CDB18FD7E2CEC3FED14A04 /* ExpiringCache.swift in Sources */,
+				D2F9CADE45445A664CF9D9A3 /* ProfileSettingsCloudSync.swift in Sources */,
 				07C9901D5307BA4589AA6BB5 /* MobileEpisodesView.swift in Sources */,
 				9A4CA711A32D783DFE7696D0 /* TitleLinksModel.swift in Sources */,
 				02358798ED3D6EDB824FCDE3 /* StreamingAvailabilityClient.swift in Sources */,
@@ -859,6 +887,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DA57BA5C588675C2EADA746F /* JellyfinQuickConnect.swift in Sources */,
+				99EB0BF71CD72C2DD1744F2A /* ProfileSettingsSnapshot.swift in Sources */,
+				2552BFC5924E812E10C3E9C1 /* ShowSchedule.swift in Sources */,
+				7A4D3761CAC11F16D180769B /* ExpiringCache.swift in Sources */,
+				15E1385BE05EAB53BD4A443C /* ProfileSettingsCloudSync.swift in Sources */,
 				6FCED792642F8279987E818E /* TitleLinksModel.swift in Sources */,
 				6606A862DE6AD5E6FAC70A9F /* StreamingAvailabilityClient.swift in Sources */,
 				3239009973D5E5FF4E093BE5 /* EpisodePickUpView.swift in Sources */,
@@ -949,6 +982,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A9EBF6C407F541947943E259 /* SyncAndScheduleTests.swift in Sources */,
 				526F9931A507F4CA3BD6F4F7 /* EpisodesTests.swift in Sources */,
 				1A47C132CAE281544DB9184D /* WatchlistSyncTests.swift in Sources */,
 				7CF8AD48FB855957F49FBAEF /* ServicesTests.swift in Sources */,

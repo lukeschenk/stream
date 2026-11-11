@@ -30,7 +30,13 @@ struct MobileMediaView: View {
             actions
 
             if media.mediaType == .tv {
-                MobilePickUpSection(model: model, media: media, links: links, open: openEpisode)
+                MobilePickUpSection(
+                    model: model,
+                    media: media,
+                    links: links,
+                    schedule: model.schedules.schedule(for: media),
+                    open: openEpisode
+                )
             }
 
             if !hasLoadedAvailability {
@@ -46,7 +52,13 @@ struct MobileMediaView: View {
         }
         .navigationTitle(media.title)
         .task { await loadAvailability() }
-        .task { await model.titleLinks.load(for: media, region: region) }
+        .task {
+            // The schedule says whether a new episode has come out since the
+            // links were saved.
+            await model.schedules.load(for: media)
+            let staleBefore = model.schedules.schedule(for: media)?.linksStaleBefore()
+            await model.titleLinks.load(for: media, region: region, staleBefore: staleBefore)
+        }
         .task(id: model.jellyfin.account) { await findInLibrary() }
         .alert(
             "Open \(unopenedService?.name ?? "the App")",

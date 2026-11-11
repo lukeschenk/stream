@@ -9,16 +9,35 @@ struct JellyfinSettingsView: View {
     @State private var password = ""
     @State private var isWorking = false
     @State private var errorMessage: String?
+    @State private var quickConnect: JellyfinQuickConnectRequest?
+    @State private var quickConnectTask: Task<Void, Never>?
+    @State private var approvalCode = ""
+    @State private var approvalMessage: String?
 
     var body: some View {
         Form {
             if let account = connection.account {
                 signedIn(account)
+                approveDevice
             } else {
                 signInForm
+                codeSignIn
             }
         }
         .formStyle(.grouped)
+        .onAppear(perform: fillInSuggestion)
+        .onChange(of: connection.suggestion) { fillInSuggestion() }
+        .onDisappear { cancelQuickConnect() }
+    }
+
+    private func fillInSuggestion() {
+        guard let suggestion = connection.suggestion else { return }
+        if serverAddress.isEmpty {
+            serverAddress = suggestion.serverAddress
+        }
+        if username.isEmpty {
+            username = suggestion.userName
+        }
     }
 
     private func signedIn(_ account: JellyfinAccount) -> some View {
@@ -81,6 +100,100 @@ struct JellyfinSettingsView: View {
                 #endif
                 .disabled(!canSignIn)
             }
+        }
+    }
+
+    // MARK: Quick Connect
+
+    @ViewBuilder
+    private var codeSignIn: some View {
+        Section {
+            if let quickConnect {
+                VStack(alignment: .leading, spacing: 8) {
+                    Text(quickConnect.code)
+                        .font(.system(.largeTitle, design: .monospaced).weight(.semibold))
+                    #if !os(tvOS)
+                        .textSelection(.enabled)
+                    #endif
+                    Text("Waiting for approval…")
+                        .foregroundStyle(.secondary)
+                }
+                Button("Cancel", role: .cancel) { cancelQuickConnect() }
+            } else {
+                Button("Sign In with a Code") { startQuickConnect() }
+                    .disabled(isWorking || JellyfinClient.serverURL(from: serverAddress) == nil)
+            }
+        } header: {
+            Text("Sign In with a Code")
+        } footer: {
+            Text(
+                "No password needed. Approve the code in Stream on a device that’s signed in "
+                    + "(Settings → Jellyfin), or in Jellyfin under your profile → Quick Connect."
+            )
+            .font(.callout)
+            .foregroundStyle(.secondary)
+        }
+    }
+
+    @ViewBuilder
+    private var approveDevice: some View {
+        Section {
+            TextField("Code", text: $approvalCode, prompt: Text("123456"))
+            Button("Approve") {
+                Task { await approve() }
+            }
+            .disabled(isWorking || approvalCode.filter(\.isNumber).count < 6)
+
+            if let approvalMessage {
+                Text(approvalMessage)
+                    .foregroundStyle(.secondary)
+            }
+        } header: {
+            Text("Approve a Device")
+        } footer: {
+            Text("On your Apple TV or another device, choose Sign In with a Code, then enter the code here.")
+                .font(.callout)
+                .foregroundStyle(.secondary)
+        }
+    }
+
+    private func startQuickConnect() {
+        errorMessage = nil
+        isWorking = true
+        quickConnectTask = Task {
+            defer {
+                isWorking = false
+                quickConnect = nil
+            }
+            do {
+                let request = try await connection.beginQuickConnect(serverAddress: serverAddress)
+                quickConnect = request
+                try await connection.completeQuickConnect(request)
+            } catch is CancellationError {
+                return
+            } catch {
+                errorMessage = error.localizedDescription
+            }
+        }
+    }
+
+    private func cancelQuickConnect() {
+        quickConnectTask?.cancel()
+        quickConnectTask = nil
+        quickConnect = nil
+    }
+
+    private func approve() async {
+        isWorking = true
+        approvalMessage = nil
+        defer { isWorking = false }
+
+        do {
+            try await connection.approveQuickConnect(code: approvalCode)
+            approvalMessage = "Approved. The other device is signing in."
+            approvalCode = ""
+        } catch {
+            approvalMessage = error.localizedDescription
         }
     }
 

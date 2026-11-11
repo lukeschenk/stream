@@ -5,6 +5,7 @@ struct MobileRootView: View {
     let profiles: MobileProfileController
 
     @State private var playing: JellyfinItem?
+    @Environment(\.scenePhase) private var scenePhase
 
     private var model: MobileModel {
         profiles.model
@@ -55,6 +56,12 @@ struct MobileRootView: View {
         }
         .fullScreenCover(item: $playing) { item in
             MobilePlayerView(connection: model.jellyfin, item: item)
+        }
+        // Pick up services and the Jellyfin server set on other devices.
+        .onChange(of: scenePhase) { _, phase in
+            if phase == .active {
+                Task { await model.settingsSync?.refresh() }
+            }
         }
     }
 }

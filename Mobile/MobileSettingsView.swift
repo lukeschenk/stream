@@ -40,7 +40,7 @@ struct MobileSettingsView: View {
 
             Section {
                 Toggle(
-                    "Sync Watchlist with iCloud",
+                    "Sync with iCloud",
                     isOn: Binding(
                         get: { model.isSyncingWithICloud },
                         set: { model.setICloudSyncEnabled($0) }
@@ -50,7 +50,8 @@ struct MobileSettingsView: View {
             } footer: {
                 Text(
                     model.canSyncWithICloud
-                        ? "Shares this profile’s watchlist with your other devices."
+                        ? "Shares this profile’s watchlist, streaming services and Jellyfin server with your "
+                        + "other devices. Each device signs in to Jellyfin once."
                         : "Needs the iCloud capability and the StreamCloudKitContainer setting in this build."
                 )
             }

@@ -18,7 +18,9 @@ struct TMDBAvailabilityView: View {
         // Direct links to the title, so services open on it rather than a
         // search.
         .task(id: "\(media.mediaType.rawValue)/\(media.id)/\(search.selectedRegion)") {
-            await model.titleLinks.load(for: media, region: search.selectedRegion)
+            await model.showSchedules.load(for: media)
+            let staleBefore = model.showSchedules.schedule(for: media)?.linksStaleBefore()
+            await model.titleLinks.load(for: media, region: search.selectedRegion, staleBefore: staleBefore)
         }
     }
 

@@ -54,7 +54,7 @@ private struct ICloudSettingsView: View {
     var body: some View {
         Form {
             Toggle(
-                "Sync Watchlist with iCloud",
+                "Sync with iCloud",
                 isOn: Binding(
                     get: { model.isSyncingWithICloud },
                     set: { model.setICloudSyncEnabled($0) }
@@ -64,8 +64,8 @@ private struct ICloudSettingsView: View {
 
             Text(
                 model.canSyncWithICloud
-                    ? "Keeps the \(model.profile.displayName) profile’s watchlist the same on every "
-                    + "device signed in to your iCloud account."
+                    ? "Keeps the \(model.profile.displayName) profile’s watchlist, streaming services and "
+                    + "Jellyfin server the same on every device signed in to your iCloud account."
                     : "This build doesn’t have the iCloud capability. Add iCloud with CloudKit under "
                     + "Signing & Capabilities in Xcode to turn on sync."
             )

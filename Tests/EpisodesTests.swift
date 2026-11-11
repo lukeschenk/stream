@@ -245,10 +245,12 @@ struct TitleLinksModelTests {
         )
 
         cache.store(TitleLinks(appleTV: URL(string: "https://tv.apple.com")), for: "k", lifetime: .oneDay)
-        #expect(cache.links(for: "k") != nil)
+        #expect(cache.value(for: "k") != nil)
 
         now.addTimeInterval(TitleLinksCache.Lifetime.oneDay.rawValue + 1)
-        #expect(cache.links(for: "k") == nil)
+        #expect(cache.value(for: "k") == nil)
+        // The old answer is kept as a fallback.
+        #expect(cache.fallback(for: "k") != nil)
     }
 }
 

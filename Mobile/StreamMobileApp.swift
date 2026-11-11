@@ -62,7 +62,9 @@ final class MobileModel {
     let search: TMDBSearchModel
     let availability: ServiceAvailabilityModel
     let titleLinks = TitleLinksModel()
+    let schedules = ShowScheduleModel()
     private(set) var watchlistSync: WatchlistCloudSync?
+    private(set) var settingsSync: ProfileSettingsCloudSync?
 
     @ObservationIgnored
     private let userDefaults: UserDefaults
@@ -82,8 +84,13 @@ final class MobileModel {
         availability = ServiceAvailabilityModel(client: client)
 
         if isICloudSyncPreferred {
-            watchlistSync = WatchlistCloudSync(store: watchlist, profile: profile)
+            startICloudSync()
         }
+    }
+
+    private func startICloudSync() {
+        watchlistSync = WatchlistCloudSync(store: watchlist, profile: profile)
+        settingsSync = ProfileSettingsCloudSync(sites: services, jellyfin: jellyfin, profile: profile)
     }
 
     // MARK: Services
@@ -169,10 +176,12 @@ final class MobileModel {
         userDefaults.set(enabled, forKey: iCloudSyncKey)
 
         if enabled, watchlistSync == nil {
-            watchlistSync = WatchlistCloudSync(store: watchlist, profile: profile)
+            startICloudSync()
         } else if !enabled {
             watchlistSync?.stop()
             watchlistSync = nil
+            settingsSync?.stop()
+            settingsSync = nil
         }
     }
 }

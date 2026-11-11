@@ -34,7 +34,14 @@ This is a personal fork of [timwehrle/wianu](https://github.com/timwehrle/wianu)
   to the server. Needs Jellyfin 10.9 or later.
 - **Service setup and filtering** — pick your services from TMDB's list for your
   region; search can show only titles included with them.
-- **iCloud watchlist** — CloudKit sync between the Mac, iPhone, iPad and Apple TV.
+- **iCloud sync** — each profile's watchlist, streaming services and Jellyfin
+  server stay the same on the Mac, iPhone, iPad and Apple TV. Jellyfin sign-ins
+  stay on each device; the Apple TV can sign in with a code approved from
+  another device (Jellyfin Quick Connect).
+- **Title and episode links** — services open on the title or episode rather
+  than a search, using Wikidata and, with a key, Streaming Availability. Stream
+  remembers the last episode you opened for each show.
+- **Release days** — when a show's next episode comes out, from Trakt.
 - **Stream Mobile** — an iPhone, iPad and Apple TV app: Jellyfin playback, the
   watchlist, search, and where to watch, opening each service's app.
 
@@ -46,7 +53,10 @@ This is a personal fork of [timwehrle/wianu](https://github.com/timwehrle/wianu)
    using one container (for example `iCloud.com.lukeschenk.stream`). The Mac app
    detects it automatically. For Stream Mobile, also put the container ID in
    `StreamCloudKitContainer` in `Mobile/Info.plist`.
-3. Run the **Wianu** scheme for the Mac or **Stream Mobile** for iPhone, iPad
+3. Optional: copy `Config/Secrets.example.xcconfig` to `Config/Secrets.xcconfig`
+   (which git ignores) and add a Streaming Availability key for episode links
+   and a Trakt Client ID for release days.
+4. Run the **Wianu** scheme for the Mac or **Stream Mobile** for iPhone, iPad
    and Apple TV.
 
 Automatic updates and usage analytics are switched off in this fork so it never

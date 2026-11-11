@@ -10,6 +10,11 @@ struct EpisodePickUpView: View {
         VStack(alignment: .leading, spacing: 10) {
             Text("Episodes").font(.headline)
 
+            if let summary = model.showSchedules.schedule(for: media)?.summary() {
+                Label(summary, systemImage: "calendar")
+                    .foregroundStyle(.secondary)
+            }
+
             if let progress = model.progress(for: media) {
                 pickUp(progress)
             } else if let first = links.episodes.first(where: model.canOpen) {

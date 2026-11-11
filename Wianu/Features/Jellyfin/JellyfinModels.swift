@@ -279,6 +279,27 @@ nonisolated struct JellyfinAuthenticationResult: Decodable, Sendable {
     }
 }
 
+/// A device waiting to be approved with Jellyfin's Quick Connect.
+nonisolated struct JellyfinQuickConnectState: Decodable, Sendable {
+    let authenticated: Bool
+    let secret: String
+    let code: String
+
+    enum CodingKeys: String, CodingKey {
+        case authenticated = "Authenticated"
+        case secret = "Secret"
+        case code = "Code"
+    }
+}
+
+/// The server and user another device signed in with, shared through
+/// iCloud so this device only has to sign in.
+nonisolated struct JellyfinServerSuggestion: Codable, Equatable, Sendable {
+    var serverAddress: String
+    var serverName: String?
+    var userName: String
+}
+
 // MARK: - Playback
 
 nonisolated enum JellyfinPlayMethod: String, Codable, Sendable {
