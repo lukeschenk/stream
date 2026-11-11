@@ -407,7 +407,7 @@ nonisolated struct JellyfinClient: Sendable {
 
 // MARK: - Playback
 
-extension JellyfinClient {
+nonisolated extension JellyfinClient {
     func playbackSource(
         itemID: String,
         userID: String,
@@ -493,7 +493,7 @@ extension JellyfinClient {
 
 // MARK: - Helpers
 
-extension JellyfinClient {
+nonisolated extension JellyfinClient {
     private static let listFields = [
         URLQueryItem(name: "fields", value: "Overview,PrimaryImageAspectRatio"),
         URLQueryItem(name: "enableUserData", value: "true"),

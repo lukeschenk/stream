@@ -1,0 +1,6 @@
+// Build settings shared by the Mac app and Stream Mobile.
+//
+// Private keys live in Secrets.xcconfig next to this file, which git ignores.
+// Copy Secrets.example.xcconfig to Secrets.xcconfig and fill it in. Without
+// it, Stream still builds and falls back to Wikidata for title links.
+#include? "Secrets.xcconfig"

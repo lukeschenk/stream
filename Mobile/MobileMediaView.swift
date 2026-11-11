@@ -29,6 +29,10 @@ struct MobileMediaView: View {
 
             actions
 
+            if media.mediaType == .tv {
+                MobilePickUpSection(model: model, media: media, links: links, open: openEpisode)
+            }
+
             if !hasLoadedAvailability {
                 ProgressView()
                     .frame(maxWidth: .infinity)
@@ -216,6 +220,20 @@ struct MobileMediaView: View {
             platform: platform
         )
         open(candidates, fallingBackTo: service)
+    }
+
+    private func openEpisode(_ episode: TitleEpisode) {
+        guard let service = episode.service(preferring: model.myServices) else { return }
+
+        model.recordEpisode(episode, of: media)
+        let urls = ServiceLauncher.candidates(
+            for: episode,
+            service: service,
+            title: media.title,
+            links: links,
+            platform: .current
+        )
+        open(urls, fallingBackTo: service)
     }
 
     /// Tries each link in turn; an app that doesn't claim a link refuses it.

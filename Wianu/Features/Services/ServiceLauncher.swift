@@ -22,6 +22,28 @@ enum ServiceLauncher {
         case touch
         /// Apple TV: no browser, so only links an installed app claims work.
         case appleTV
+
+        static var current: Platform {
+            #if os(tvOS)
+                .appleTV
+            #else
+                .touch
+            #endif
+        }
+    }
+
+    /// The episode's own link first, then the ways to reach the show.
+    static func candidates(
+        for episode: TitleEpisode,
+        service: StreamingService,
+        title: String,
+        links: TitleLinks?,
+        platform: Platform
+    ) -> [URL] {
+        var seen = Set<URL>()
+        return ([episode.links[service.id]].compactMap { $0 }
+            + candidates(for: service, title: title, links: links, platform: platform))
+            .filter { seen.insert($0).inserted }
     }
 
     /// Links to try in order until one opens.

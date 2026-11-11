@@ -2,3 +2,6 @@
 DerivedData/
 *.xcuserstate
 xcuserdata/
+
+# Private keys (see Config/Secrets.example.xcconfig)
+Config/Secrets.xcconfig

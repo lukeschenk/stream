@@ -436,7 +436,7 @@ extension AppModel {
         navigate(to: destination(for: selection))
     }
 
-    private func navigate(to url: URL?) {
+    func navigate(to url: URL?) {
         navigationRequest = url.map(NavigationRequest.init(url:))
     }
 

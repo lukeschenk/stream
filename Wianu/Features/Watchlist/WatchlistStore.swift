@@ -110,6 +110,53 @@ final class WatchlistStore {
         return item
     }
 
+    /// The watchlist entry for a TMDB title, if there is one.
+    func item(for media: TMDBMediaResult) -> WatchlistItem? {
+        items.first {
+            $0.tmdbID == media.id && ($0.tmdbMediaType ?? .movie) == media.mediaType
+        }
+    }
+
+    /// Shows with an episode in progress, most recent first.
+    var showsInProgress: [WatchlistItem] {
+        items
+            .filter { $0.progress != nil }
+            .sorted { ($0.progress?.updatedAt ?? .distantPast) > ($1.progress?.updatedAt ?? .distantPast) }
+    }
+
+    /// Remembers the episode just opened, adding the show to the watchlist
+    /// if it isn't there yet.
+    func recordEpisode(season: Int, episode: Int, title: String?, of media: TMDBMediaResult, at date: Date = Date()) {
+        let progress = EpisodeProgress(season: season, episode: episode, episodeTitle: title, updatedAt: date)
+
+        if let existing = item(for: media), let index = items.firstIndex(where: { $0.id == existing.id }) {
+            items[index].progress = progress
+            persist()
+            return
+        }
+
+        var item = WatchlistItem(
+            title: media.title,
+            year: media.year.flatMap(Int.init),
+            url: nil,
+            addedAt: date,
+            sourceOrder: items.count,
+            source: .custom,
+            tmdbID: media.id,
+            tmdbMetadata: media,
+            tmdbMediaType: media.mediaType
+        )
+        item.progress = progress
+        items.append(item)
+        persist()
+    }
+
+    func clearProgress(id: WatchlistItem.ID) {
+        guard let index = items.firstIndex(where: { $0.id == id }), items[index].progress != nil else { return }
+        items[index].progress = nil
+        persist()
+    }
+
     func associate(id: WatchlistItem.ID, with media: TMDBMediaResult?) {
         guard let index = items.firstIndex(where: { $0.id == id }) else { return }
         items[index].tmdbID = media?.id

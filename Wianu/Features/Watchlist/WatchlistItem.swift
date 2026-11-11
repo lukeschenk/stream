@@ -1,5 +1,18 @@
 import Foundation
 
+/// The episode of a show last opened from Stream.
+nonisolated struct EpisodeProgress: Codable, Hashable, Sendable {
+    var season: Int
+    var episode: Int
+    var episodeTitle: String?
+    var updatedAt: Date
+
+    /// "S2 · E5"
+    var label: String {
+        "S\(season) · E\(episode)"
+    }
+}
+
 nonisolated struct WatchlistItem: Identifiable, Codable, Hashable, Sendable {
     enum Source: String, Codable, Hashable, Sendable {
         case custom
@@ -9,6 +22,8 @@ nonisolated struct WatchlistItem: Identifiable, Codable, Hashable, Sendable {
     var tmdbID: Int?
     var tmdbMediaType: TMDBMediaType?
     var tmdbMetadata: TMDBMediaResult?
+    /// For shows: where to pick up.
+    var progress: EpisodeProgress?
     let id: UUID
     private(set) var title: String
     private(set) var year: Int?
@@ -77,7 +92,7 @@ nonisolated struct WatchlistItem: Identifiable, Codable, Hashable, Sendable {
     }
 
     private enum CodingKeys: String, CodingKey {
-        case tmdbID, tmdbMetadata, tmdbMediaType
+        case tmdbID, tmdbMetadata, tmdbMediaType, progress
         case id, title, year, url, letterboxdURL, addedAt, sourceOrder, source
     }
 
@@ -86,6 +101,7 @@ nonisolated struct WatchlistItem: Identifiable, Codable, Hashable, Sendable {
         tmdbID = try values.decodeIfPresent(Int.self, forKey: .tmdbID)
         tmdbMetadata = try values.decodeIfPresent(TMDBMediaResult.self, forKey: .tmdbMetadata)
         tmdbMediaType = try values.decodeIfPresent(TMDBMediaType.self, forKey: .tmdbMediaType)
+        progress = try values.decodeIfPresent(EpisodeProgress.self, forKey: .progress)
         id = try values.decode(UUID.self, forKey: .id)
         title = try values.decode(String.self, forKey: .title)
         year = try values.decodeIfPresent(Int.self, forKey: .year)
@@ -102,6 +118,7 @@ nonisolated struct WatchlistItem: Identifiable, Codable, Hashable, Sendable {
         try values.encodeIfPresent(tmdbMediaType, forKey: .tmdbMediaType)
         try values.encodeIfPresent(tmdbID, forKey: .tmdbID)
         try values.encodeIfPresent(tmdbMetadata, forKey: .tmdbMetadata)
+        try values.encodeIfPresent(progress, forKey: .progress)
         try values.encode(id, forKey: .id)
         try values.encode(title, forKey: .title)
         try values.encodeIfPresent(year, forKey: .year)

@@ -13,6 +13,10 @@
 	</dict>
 	<key>NSLocalNetworkUsageDescription</key>
 	<string>Wianu connects to your Jellyfin server on your local network.</string>
+	<key>StreamingAvailabilityAPIKey</key>
+	<string>$(STREAMING_AVAILABILITY_API_KEY)</string>
+	<key>TraktClientID</key>
+	<string>$(TRAKT_CLIENT_ID)</string>
 	<key>SUEnableAutomaticChecks</key>
 	<false/>
 	<key>SUEnableInstallerLauncherService</key>

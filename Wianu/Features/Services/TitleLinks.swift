@@ -1,19 +1,83 @@
 import Foundation
-import Observation
 
 /// Direct links to one title inside streaming services, so a service opens
 /// on that movie or show instead of its home page.
-nonisolated struct TitleLinks: Equatable, Sendable {
+nonisolated struct TitleLinks: Codable, Equatable, Sendable {
     /// Keyed by `StreamingService.id`.
     var serviceLinks: [String: URL] = [:]
     /// The title's page in Apple's TV app, which lists where to watch and
     /// hands off to the service's app.
     var appleTV: URL?
+    /// For shows: each season's episodes with their own links.
+    var seasons: [TitleSeason] = []
 
     static let empty = TitleLinks()
 
     func url(for service: StreamingService) -> URL? {
         serviceLinks[service.id]
+    }
+
+    /// Fills gaps in these links from another source.
+    func merging(_ other: TitleLinks) -> TitleLinks {
+        var merged = self
+        merged.serviceLinks.merge(other.serviceLinks) { mine, _ in mine }
+        merged.appleTV = appleTV ?? other.appleTV
+        if merged.seasons.isEmpty {
+            merged.seasons = other.seasons
+        }
+        return merged
+    }
+
+    var episodes: [TitleEpisode] {
+        seasons.flatMap(\.episodes)
+    }
+
+    func episode(season: Int, number: Int) -> TitleEpisode? {
+        seasons.first { $0.number == season }?.episodes.first { $0.number == number }
+    }
+
+    /// The episode after this one, moving into the next season when needed.
+    func episode(after episode: TitleEpisode) -> TitleEpisode? {
+        let all = episodes
+        guard let index = all.firstIndex(where: { $0.id == episode.id }) else { return nil }
+        let next = all.index(after: index)
+        return next < all.endIndex ? all[next] : nil
+    }
+}
+
+nonisolated struct TitleSeason: Codable, Equatable, Sendable, Identifiable {
+    let number: Int
+    let title: String
+    let episodes: [TitleEpisode]
+
+    var id: Int {
+        number
+    }
+}
+
+nonisolated struct TitleEpisode: Codable, Equatable, Sendable, Identifiable {
+    let season: Int
+    let number: Int
+    let title: String
+    let overview: String?
+    /// Links that open this episode, keyed by `StreamingService.id`.
+    let links: [String: URL]
+
+    var id: String {
+        "S\(season)E\(number)"
+    }
+
+    /// "S2 · E5"
+    var label: String {
+        "S\(season) · E\(number)"
+    }
+
+    /// The service to open the episode in: one of `preferred` when possible.
+    func service(preferring preferred: [StreamingService]) -> StreamingService? {
+        if let mine = preferred.first(where: { links[$0.id] != nil }) {
+            return mine
+        }
+        return StreamingServiceCatalog.services.first { links[$0.id] != nil }
     }
 }
 
@@ -225,44 +289,5 @@ nonisolated struct WikidataClient: Sendable {
         }
 
         return try WikidataTitleLinks.links(fromSPARQLResults: data, media: media, region: region)
-    }
-}
-
-/// Fetches and remembers title links for the session.
-@MainActor
-@Observable
-final class TitleLinksModel {
-    private(set) var links: [String: TitleLinks] = [:]
-
-    @ObservationIgnored
-    private let client: WikidataClient
-
-    init(client: WikidataClient = WikidataClient()) {
-        self.client = client
-    }
-
-    static func key(for media: TMDBMediaResult, region: String) -> String {
-        "\(region.uppercased())/\(media.mediaType.rawValue)/\(media.id)"
-    }
-
-    /// Known links for the title, or `nil` while they haven't been looked up.
-    func links(for media: TMDBMediaResult, region: String) -> TitleLinks? {
-        links[Self.key(for: media, region: region)]
-    }
-
-    func load(for media: TMDBMediaResult, region: String) async {
-        let key = Self.key(for: media, region: region)
-        guard links[key] == nil else { return }
-
-        do {
-            links[key] = try await client.titleLinks(for: media, region: region)
-        } catch {
-            // Leave cancelled lookups unrecorded so the next visit tries again.
-            if Task.isCancelled || (error as? URLError)?.code == .cancelled || error is CancellationError {
-                return
-            }
-            // Without links, services fall back to search or their home page.
-            links[key] = .empty
-        }
     }
 }

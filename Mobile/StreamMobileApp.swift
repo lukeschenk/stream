@@ -118,9 +118,24 @@ final class MobileModel {
     // MARK: Watchlist
 
     func watchlistItem(for media: TMDBMediaResult) -> WatchlistItem? {
-        watchlist.items.first {
-            $0.tmdbID == media.id && ($0.tmdbMediaType ?? .movie) == media.mediaType
+        watchlist.item(for: media)
+    }
+
+    // MARK: Episodes
+
+    /// This profile's services, in the order they were added.
+    var myServices: [StreamingService] {
+        services.sites.compactMap {
+            StreamingServiceCatalog.service(forProviderName: $0.tmdbProvider?.name ?? $0.name)
         }
+    }
+
+    func progress(for media: TMDBMediaResult) -> EpisodeProgress? {
+        watchlist.item(for: media)?.progress
+    }
+
+    func recordEpisode(_ episode: TitleEpisode, of media: TMDBMediaResult) {
+        watchlist.recordEpisode(season: episode.season, episode: episode.number, title: episode.title, of: media)
     }
 
     func toggleWatchlist(_ media: TMDBMediaResult) {

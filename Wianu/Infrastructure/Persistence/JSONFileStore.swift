@@ -16,6 +16,18 @@ struct JSONFileStore<Value: Codable> {
     let folderName: String
     var baseDirectory: URL?
 
+    /// Apple TV apps may only keep files in Caches, which the system can
+    /// clear; iCloud restores what matters there.
+    #if os(tvOS)
+        static var defaultDirectory: FileManager.SearchPathDirectory {
+            .cachesDirectory
+        }
+    #else
+        static var defaultDirectory: FileManager.SearchPathDirectory {
+            .applicationSupportDirectory
+        }
+    #endif
+
     private var fileURL: URL {
         get throws {
             let applicationSupportURL: URL
@@ -23,7 +35,7 @@ struct JSONFileStore<Value: Codable> {
             if let baseDirectory {
                 applicationSupportURL = baseDirectory
             } else if let defaultDirectory = FileManager.default.urls(
-                for: .applicationSupportDirectory,
+                for: Self.defaultDirectory,
                 in: .userDomainMask
             ).first {
                 applicationSupportURL = defaultDirectory

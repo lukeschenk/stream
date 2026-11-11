@@ -7,6 +7,14 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		526F9931A507F4CA3BD6F4F7 /* EpisodesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46B425588A3D11C57E476916 /* EpisodesTests.swift */; };
+		07C9901D5307BA4589AA6BB5 /* MobileEpisodesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23339BA2B33F6076B1C8474A /* MobileEpisodesView.swift */; };
+		9A4CA711A32D783DFE7696D0 /* TitleLinksModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 630ACDA6D0BA4E98EAE7EFE9 /* TitleLinksModel.swift */; };
+		02358798ED3D6EDB824FCDE3 /* StreamingAvailabilityClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6ADF28FB7A097F03781B34FA /* StreamingAvailabilityClient.swift */; };
+		6FCED792642F8279987E818E /* TitleLinksModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 630ACDA6D0BA4E98EAE7EFE9 /* TitleLinksModel.swift */; };
+		6606A862DE6AD5E6FAC70A9F /* StreamingAvailabilityClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6ADF28FB7A097F03781B34FA /* StreamingAvailabilityClient.swift */; };
+		3239009973D5E5FF4E093BE5 /* EpisodePickUpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1205EDD2E1386375B47D89A4 /* EpisodePickUpView.swift */; };
+		9F4C51D64FDA510017ED61C7 /* AppModel+Episodes.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE8E8EABC60163A0EC480029 /* AppModel+Episodes.swift */; };
 		9684851D29365CF9D9964255 /* TitleLinks.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9099A310CBFBC730DB52631 /* TitleLinks.swift */; };
 		ABFF3651665EDFEE6020B95F /* TitleLinks.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9099A310CBFBC730DB52631 /* TitleLinks.swift */; };
 		85C5EE82F8F95DC96F10BF4B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D1B972673015341900B64B10 /* Assets.xcassets */; };
@@ -152,6 +160,14 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		46B425588A3D11C57E476916 /* EpisodesTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EpisodesTests.swift; sourceTree = "<group>"; };
+		D073CD80B7463B6270431C3A /* Secrets.example.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Secrets.example.xcconfig; sourceTree = "<group>"; };
+		A423F2D90FE098A5745FEF19 /* Stream.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Stream.xcconfig; sourceTree = "<group>"; };
+		23339BA2B33F6076B1C8474A /* MobileEpisodesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MobileEpisodesView.swift; sourceTree = "<group>"; };
+		630ACDA6D0BA4E98EAE7EFE9 /* TitleLinksModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TitleLinksModel.swift; sourceTree = "<group>"; };
+		6ADF28FB7A097F03781B34FA /* StreamingAvailabilityClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StreamingAvailabilityClient.swift; sourceTree = "<group>"; };
+		1205EDD2E1386375B47D89A4 /* EpisodePickUpView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EpisodePickUpView.swift; sourceTree = "<group>"; };
+		AE8E8EABC60163A0EC480029 /* AppModel+Episodes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppModel+Episodes.swift; sourceTree = "<group>"; };
 		C9099A310CBFBC730DB52631 /* TitleLinks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TitleLinks.swift; sourceTree = "<group>"; };
 		D267871E24FA73A27D36E3B1 /* Stream Mobile.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Stream Mobile.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		A6212F151F68E74F0EDC21A3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -296,9 +312,19 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		2ECBA4B3A0C84C99B90C4006 /* Config */ = {
+			isa = PBXGroup;
+			children = (
+				A423F2D90FE098A5745FEF19 /* Stream.xcconfig */,
+				D073CD80B7463B6270431C3A /* Secrets.example.xcconfig */,
+			);
+			path = Config;
+			sourceTree = "<group>";
+		};
 		251BDA54EB5C6464C6190A5C /* Mobile */ = {
 			isa = PBXGroup;
 			children = (
+				23339BA2B33F6076B1C8474A /* MobileEpisodesView.swift */,
 				C14D9DF5D74931AD4DE17D33 /* StreamMobileApp.swift */,
 				216AF52C81D7CFA1282BB58D /* MobileRootView.swift */,
 				33EABF5389ABCEE7CF018A1A /* MobileComponents.swift */,
@@ -331,6 +357,8 @@
 		3AE995591A336ED8FC9C20C9 /* Services */ = {
 			isa = PBXGroup;
 			children = (
+				630ACDA6D0BA4E98EAE7EFE9 /* TitleLinksModel.swift */,
+				6ADF28FB7A097F03781B34FA /* StreamingAvailabilityClient.swift */,
 				C9099A310CBFBC730DB52631 /* TitleLinks.swift */,
 				B79BE722F6D78193F2D9F9E2 /* ServiceLauncher.swift */,
 				ECE5757DDBA9C5466F1D028A /* StreamingServiceCatalog.swift */,
@@ -421,6 +449,7 @@
 		D143389A3013E5B800BA847C = {
 			isa = PBXGroup;
 			children = (
+				2ECBA4B3A0C84C99B90C4006 /* Config */,
 				251BDA54EB5C6464C6190A5C /* Mobile */,
 				D145FFF8301BB60300983295 /* .swiftformat */,
 				D135CED83038A772001AB3C0 /* .swiftlint.yml */,
@@ -457,6 +486,7 @@
 		D1B972443015341900B64B10 /* App */ = {
 			isa = PBXGroup;
 			children = (
+				AE8E8EABC60163A0EC480029 /* AppModel+Episodes.swift */,
 				D1B972413015341900B64B10 /* AppModel.swift */,
 				D1B972423015341900B64B10 /* ContentView.swift */,
 				AB0000010000000000000002 /* HomeView.swift */,
@@ -618,6 +648,7 @@
 		D1C100043020000000000104 /* Tests */ = {
 			isa = PBXGroup;
 			children = (
+				46B425588A3D11C57E476916 /* EpisodesTests.swift */,
 				AB31F2417B0A0550C0B8F9D8 /* WatchlistSyncTests.swift */,
 				387F40465E921FDCA64F8768 /* ServicesTests.swift */,
 				88FA7DD04D67D77B5FD79163 /* JellyfinClientTests.swift */,
@@ -641,6 +672,7 @@
 		D1E100033030000000000003 /* CommandPalette */ = {
 			isa = PBXGroup;
 			children = (
+				1205EDD2E1386375B47D89A4 /* EpisodePickUpView.swift */,
 				D1E100023030000000000002 /* CommandPaletteCommand.swift */,
 				D1B973013015341900B64B10 /* CommandPaletteView.swift */,
 				D1E400033030000000000003 /* TMDBAvailabilityView.swift */,
@@ -784,6 +816,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				07C9901D5307BA4589AA6BB5 /* MobileEpisodesView.swift in Sources */,
+				9A4CA711A32D783DFE7696D0 /* TitleLinksModel.swift in Sources */,
+				02358798ED3D6EDB824FCDE3 /* StreamingAvailabilityClient.swift in Sources */,
 				9684851D29365CF9D9964255 /* TitleLinks.swift in Sources */,
 				834353CDD25627B73E410508 /* StreamMobileApp.swift in Sources */,
 				A217B8DA5FAE6BEC2082086D /* MobileRootView.swift in Sources */,
@@ -824,6 +859,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6FCED792642F8279987E818E /* TitleLinksModel.swift in Sources */,
+				6606A862DE6AD5E6FAC70A9F /* StreamingAvailabilityClient.swift in Sources */,
+				3239009973D5E5FF4E093BE5 /* EpisodePickUpView.swift in Sources */,
+				9F4C51D64FDA510017ED61C7 /* AppModel+Episodes.swift in Sources */,
 				ABFF3651665EDFEE6020B95F /* TitleLinks.swift in Sources */,
 				3A2DB40FECFF6EF72A82CFC9 /* ServiceLauncher.swift in Sources */,
 				8118E96A8AD476826D354766 /* JellyfinPlayback.swift in Sources */,
@@ -910,6 +949,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				526F9931A507F4CA3BD6F4F7 /* EpisodesTests.swift in Sources */,
 				1A47C132CAE281544DB9184D /* WatchlistSyncTests.swift in Sources */,
 				7CF8AD48FB855957F49FBAEF /* ServicesTests.swift in Sources */,
 				09E07C9A76B0DB5F539FC54C /* JellyfinClientTests.swift in Sources */,
@@ -942,6 +982,7 @@
 /* Begin XCBuildConfiguration section */
 		CE7C0C3CD98BC8C822FF63C6 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = A423F2D90FE098A5745FEF19 /* Stream.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
@@ -983,6 +1024,7 @@
 		};
 		4EFD7ABB1E086C4F546A9C4F /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = A423F2D90FE098A5745FEF19 /* Stream.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
@@ -1142,6 +1184,7 @@
 		};
 		D14338AF3013E5B800BA847C /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = A423F2D90FE098A5745FEF19 /* Stream.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = WianuLogo;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -1192,6 +1235,7 @@
 		};
 		D14338B03013E5B800BA847C /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = A423F2D90FE098A5745FEF19 /* Stream.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = WianuLogo;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;

@@ -106,6 +106,13 @@ struct TMDBAvailabilityView: View {
                     .font(.caption)
                     .foregroundStyle(.secondary)
 
+                if media.mediaType == .tv,
+                   let links = model.titleLinks.links(for: media, region: search.selectedRegion),
+                   !links.seasons.isEmpty
+                {
+                    EpisodePickUpView(model: model, media: media, links: links)
+                }
+
                 ForEach(TMDBOfferType.allCases) { type in
                     if !availability[type].isEmpty {
                         providerGroup(

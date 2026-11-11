@@ -22,6 +22,7 @@ struct MobileHomeView: View {
                 if !resume.isEmpty {
                     jellyfinShelf("Continue Watching", items: resume)
                 }
+                upNextShelf
                 if !nextUp.isEmpty {
                     jellyfinShelf("Next Up", items: nextUp)
                 }
@@ -52,6 +53,34 @@ struct MobileHomeView: View {
                         aspectRatio: 16 / 9,
                         width: MobileLayout.landscapeWidth
                     )
+                }
+            }
+        }
+    }
+
+    /// Streaming shows with an episode opened from Stream.
+    @ViewBuilder
+    private var upNextShelf: some View {
+        let shows = model.watchlist.showsInProgress.filter { $0.tmdbMetadata != nil }
+        if !shows.isEmpty {
+            MobileShelf(title: "Pick Up Where You Left Off") {
+                ForEach(shows) { item in
+                    if let media = item.tmdbMetadata {
+                        NavigationLink(value: MobileRoute.media(media)) {
+                            VStack(alignment: .leading, spacing: 6) {
+                                MobileMediaCard(
+                                    media: media,
+                                    posterURL: model.search.imageConfiguration?.posterURL(path: media.posterPath)
+                                )
+                                if let progress = item.progress {
+                                    Text("Last: \(progress.label)")
+                                        .font(.caption.weight(.medium))
+                                        .foregroundStyle(Color.accentColor)
+                                }
+                            }
+                        }
+                        .cardButtonStyle()
+                    }
                 }
             }
         }
