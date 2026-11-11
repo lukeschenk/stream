@@ -1,14 +1,25 @@
 import AVFoundation
 import Foundation
+import Observation
 
 /// Plays one Jellyfin item and reports progress to the server.
 @MainActor
+@Observable
 final class JellyfinPlayback {
+    @ObservationIgnored
     let player = AVPlayer()
+    /// The item's subtitles, by Jellyfin stream index.
+    private(set) var subtitles: [JellyfinSubtitleTrack] = []
+    private(set) var selectedSubtitle: Int?
+    private(set) var isSwitchingSubtitles = false
 
+    @ObservationIgnored
     private let client: JellyfinClient
+    @ObservationIgnored
     private let item: JellyfinItem
+    @ObservationIgnored
     private let userID: String
+    @ObservationIgnored
     private var source: JellyfinPlaybackSource?
 
     static let progressInterval: Duration = .seconds(10)
@@ -20,8 +31,44 @@ final class JellyfinPlayback {
     }
 
     func prepare() async throws {
-        let source = try await client.playbackSource(itemID: item.id, userID: userID)
+        let resumeAt = item.resumePositionSeconds
+        try await load(startingAt: resumeAt > 5 && !item.isPlayed ? resumeAt : nil)
+    }
+
+    /// Reloads the stream with a different subtitle, or none, keeping the
+    /// position and whether it was playing.
+    func selectSubtitle(_ index: Int?) async {
+        guard index != selectedSubtitle, !isSwitchingSubtitles else { return }
+        let position = player.currentTime().seconds
+        let wasPlaying = player.timeControlStatus != .paused
+        let previous = selectedSubtitle
+
+        isSwitchingSubtitles = true
+        defer { isSwitchingSubtitles = false }
+
+        selectedSubtitle = index
+        do {
+            try await load(startingAt: position.isFinite ? position : nil)
+        } catch {
+            selectedSubtitle = previous
+            try? await load(startingAt: position.isFinite ? position : nil)
+        }
+        if wasPlaying {
+            player.play()
+        }
+        try? await client.reportPlaybackStarted(report())
+    }
+
+    private func load(startingAt position: Double?) async throws {
+        let source = try await client.playbackSource(
+            itemID: item.id,
+            userID: userID,
+            subtitleStreamIndex: selectedSubtitle
+        )
         self.source = source
+        if subtitles.isEmpty {
+            subtitles = source.subtitles
+        }
 
         let playerItem = AVPlayerItem(url: source.url)
         player.replaceCurrentItem(with: playerItem)
@@ -34,10 +81,11 @@ final class JellyfinPlayback {
             throw playerItem.error ?? JellyfinError.noPlayableSource
         }
 
-        let resumeAt = item.resumePositionSeconds
-        if resumeAt > 5, !item.isPlayed {
+        await playerItem.showSubtitles(selectedSubtitle != nil)
+
+        if let position {
             _ = await player.seek(
-                to: CMTime(seconds: resumeAt, preferredTimescale: 600),
+                to: CMTime(seconds: position, preferredTimescale: 600),
                 toleranceBefore: .zero,
                 toleranceAfter: .zero
             )

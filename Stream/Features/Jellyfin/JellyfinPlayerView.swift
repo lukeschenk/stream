@@ -29,6 +29,13 @@ struct JellyfinPlayerView: View {
         }
         .navigationTitle(item.displayTitle)
         .navigationSubtitle(item.subtitle ?? "")
+        .toolbar {
+            if let playback, !playback.subtitles.isEmpty {
+                ToolbarItem {
+                    JellyfinSubtitleMenu(playback: playback)
+                }
+            }
+        }
         // Cancelled when the view goes away, which stops playback and tells
         // Jellyfin where to resume next time.
         .task { await run() }

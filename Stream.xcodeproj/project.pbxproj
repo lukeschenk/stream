@@ -158,6 +158,18 @@
 		F67A6582CA852E0AA63617D8 /* JellyfinSeriesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 523BE2B21C92EBB39B4F0D3A /* JellyfinSeriesView.swift */; };
 		F8B9151D306D915F449DAD8A /* MobileLibraryViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CFD1FF44861CBD27E7F725D /* MobileLibraryViews.swift */; };
 		FEFDE252D1C4F4EAEE9C9552 /* JellyfinClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C8000F1E0FF392E091FDB39 /* JellyfinClient.swift */; };
+		24334BB8FC512260DC43262B /* TraktAuth.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0715063231725B81D048E0A0 /* TraktAuth.swift */; };
+		7F177FC84A955055AC65039A /* TraktAuth.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0715063231725B81D048E0A0 /* TraktAuth.swift */; };
+		9FC82BA98DE203E6BB114613 /* TraktConnection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CD67596173B551AD5E6C378 /* TraktConnection.swift */; };
+		257D4905C524B61738E7B287 /* TraktConnection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CD67596173B551AD5E6C378 /* TraktConnection.swift */; };
+		A6E0EFD40330D5CD1B867F87 /* TraktHistory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89A47198057FBC11CA957425 /* TraktHistory.swift */; };
+		1532BFC812916DA0D60C821C /* TraktHistory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89A47198057FBC11CA957425 /* TraktHistory.swift */; };
+		EEB1FBE9E26E4E8B595F526C /* TraktSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A4E260EBBF3ADD7F164880F /* TraktSettingsView.swift */; };
+		15B07E2EB223728BD9191F3B /* TraktSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A4E260EBBF3ADD7F164880F /* TraktSettingsView.swift */; };
+		AE314F1CAAC492C983F5B7D2 /* TraktTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8F6A1276A3EA830DCFBBCDB /* TraktTests.swift */; };
+		70E326607E0EE6CC4E17D9C8 /* JellyfinSubtitles.swift in Sources */ = {isa = PBXBuildFile; fileRef = 827824A918D1146C4DBADB16 /* JellyfinSubtitles.swift */; };
+		FB17A79B1A725EAEC1979F02 /* JellyfinSubtitles.swift in Sources */ = {isa = PBXBuildFile; fileRef = 827824A918D1146C4DBADB16 /* JellyfinSubtitles.swift */; };
+		AAB05014E9E8A2493A7E4876 /* StreamLogo.icon in Resources */ = {isa = PBXBuildFile; fileRef = D10EF48D3015F2800070703E /* StreamLogo.icon */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -308,6 +320,12 @@
 		F39C616C5A98BDB046546184 /* LetterboxdMatcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LetterboxdMatcher.swift; sourceTree = "<group>"; };
 		F4ABD7CF583F976CCA50316E /* LetterboxdImportReviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LetterboxdImportReviewView.swift; sourceTree = "<group>"; };
 		FEEE2083FFB3FEC63C350382 /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
+		0715063231725B81D048E0A0 /* TraktAuth.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TraktAuth.swift; sourceTree = "<group>"; };
+		2CD67596173B551AD5E6C378 /* TraktConnection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TraktConnection.swift; sourceTree = "<group>"; };
+		89A47198057FBC11CA957425 /* TraktHistory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TraktHistory.swift; sourceTree = "<group>"; };
+		7A4E260EBBF3ADD7F164880F /* TraktSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TraktSettingsView.swift; sourceTree = "<group>"; };
+		F8F6A1276A3EA830DCFBBCDB /* TraktTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TraktTests.swift; sourceTree = "<group>"; };
+		827824A918D1146C4DBADB16 /* JellyfinSubtitles.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JellyfinSubtitles.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -400,6 +418,7 @@
 			children = (
 				42C059A1849E66E1A9D64E6D /* JellyfinQuickConnect.swift */,
 				4B33F5A9F98AA7136A4CF342 /* JellyfinPlayback.swift */,
+				827824A918D1146C4DBADB16 /* JellyfinSubtitles.swift */,
 				47FA40E44BE4752586A4DC51 /* JellyfinTokenStorage.swift */,
 				A5DD1DAE0ADC934232E4A6C1 /* JellyfinSettingsView.swift */,
 				523BE2B21C92EBB39B4F0D3A /* JellyfinSeriesView.swift */,
@@ -582,6 +601,7 @@
 		D1B9725D3015341900B64B10 /* Features */ = {
 			isa = PBXGroup;
 			children = (
+				18B3CB361638CF103882621E /* Trakt */,
 				EE7C85688D75CF814F914864 /* Onboarding */,
 				3AE995591A336ED8FC9C20C9 /* Services */,
 				CC892AAAB21013A5549488DA /* Profiles */,
@@ -662,6 +682,7 @@
 		D1C100043020000000000104 /* Tests */ = {
 			isa = PBXGroup;
 			children = (
+				F8F6A1276A3EA830DCFBBCDB /* TraktTests.swift */,
 				F2442ABE6B86CB8B728597DB /* SyncAndScheduleTests.swift */,
 				46B425588A3D11C57E476916 /* EpisodesTests.swift */,
 				AB31F2417B0A0550C0B8F9D8 /* WatchlistSyncTests.swift */,
@@ -710,6 +731,17 @@
 				FEEE2083FFB3FEC63C350382 /* OnboardingView.swift */,
 			);
 			path = Onboarding;
+			sourceTree = "<group>";
+		};
+		18B3CB361638CF103882621E /* Trakt */ = {
+			isa = PBXGroup;
+			children = (
+				0715063231725B81D048E0A0 /* TraktAuth.swift */,
+				2CD67596173B551AD5E6C378 /* TraktConnection.swift */,
+				89A47198057FBC11CA957425 /* TraktHistory.swift */,
+				7A4E260EBBF3ADD7F164880F /* TraktSettingsView.swift */,
+			);
+			path = Trakt;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -819,6 +851,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AAB05014E9E8A2493A7E4876 /* StreamLogo.icon in Resources */,
 				85C5EE82F8F95DC96F10BF4B /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -839,6 +872,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FB17A79B1A725EAEC1979F02 /* JellyfinSubtitles.swift in Sources */,
+				7F177FC84A955055AC65039A /* TraktAuth.swift in Sources */,
+				257D4905C524B61738E7B287 /* TraktConnection.swift in Sources */,
+				1532BFC812916DA0D60C821C /* TraktHistory.swift in Sources */,
+				15B07E2EB223728BD9191F3B /* TraktSettingsView.swift in Sources */,
 				EBACBB64430D1D379A2C1F71 /* JellyfinQuickConnect.swift in Sources */,
 				389A1C16306666EF653635C0 /* ProfileSettingsSnapshot.swift in Sources */,
 				352505C6B157CFE50AF2083C /* ShowSchedule.swift in Sources */,
@@ -887,6 +925,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				70E326607E0EE6CC4E17D9C8 /* JellyfinSubtitles.swift in Sources */,
+				24334BB8FC512260DC43262B /* TraktAuth.swift in Sources */,
+				9FC82BA98DE203E6BB114613 /* TraktConnection.swift in Sources */,
+				A6E0EFD40330D5CD1B867F87 /* TraktHistory.swift in Sources */,
+				EEB1FBE9E26E4E8B595F526C /* TraktSettingsView.swift in Sources */,
 				DA57BA5C588675C2EADA746F /* JellyfinQuickConnect.swift in Sources */,
 				99EB0BF71CD72C2DD1744F2A /* ProfileSettingsSnapshot.swift in Sources */,
 				2552BFC5924E812E10C3E9C1 /* ShowSchedule.swift in Sources */,
@@ -982,6 +1025,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AE314F1CAAC492C983F5B7D2 /* TraktTests.swift in Sources */,
 				A9EBF6C407F541947943E259 /* SyncAndScheduleTests.swift in Sources */,
 				526F9931A507F4CA3BD6F4F7 /* EpisodesTests.swift in Sources */,
 				1A47C132CAE281544DB9184D /* WatchlistSyncTests.swift in Sources */,
@@ -1019,9 +1063,12 @@
 			baseConfigurationReference = A423F2D90FE098A5745FEF19 /* Stream.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_APPICON_NAME = StreamLogo;
+				"ASSETCATALOG_COMPILER_APPICON_NAME[sdk=appletv*]" = StreamLogoTV;
+				CODE_SIGN_ENTITLEMENTS = Mobile/StreamMobile.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = UT5X82CQEF;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Mobile/Info.plist;
@@ -1061,9 +1108,12 @@
 			baseConfigurationReference = A423F2D90FE098A5745FEF19 /* Stream.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_APPICON_NAME = StreamLogo;
+				"ASSETCATALOG_COMPILER_APPICON_NAME[sdk=appletv*]" = StreamLogoTV;
+				CODE_SIGN_ENTITLEMENTS = Mobile/StreamMobile.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = UT5X82CQEF;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Mobile/Info.plist;

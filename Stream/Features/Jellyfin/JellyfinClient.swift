@@ -399,7 +399,8 @@ nonisolated extension JellyfinClient {
     func playbackSource(
         itemID: String,
         userID: String,
-        profile: JellyfinDeviceProfile = .avPlayer
+        profile: JellyfinDeviceProfile = .avPlayer,
+        subtitleStreamIndex: Int? = nil
     ) async throws -> JellyfinPlaybackSource {
         let response: JellyfinPlaybackInfoResponse = try await send(
             path: "Items/\(itemID)/PlaybackInfo",
@@ -408,7 +409,10 @@ nonisolated extension JellyfinClient {
             body: JellyfinPlaybackInfoRequest(
                 userID: userID,
                 maxStreamingBitrate: profile.maxStreamingBitrate,
-                deviceProfile: profile
+                deviceProfile: profile,
+                subtitleStreamIndex: subtitleStreamIndex,
+                enableDirectPlay: subtitleStreamIndex == nil,
+                enableDirectStream: subtitleStreamIndex == nil
             )
         )
 
@@ -416,11 +420,13 @@ nonisolated extension JellyfinClient {
               let source = response.mediaSources.first
         else { throw JellyfinError.noPlayableSource }
 
-        return try playbackSource(
+        var playback = try playbackSource(
             itemID: itemID,
             mediaSource: source,
             playSessionID: response.playSessionID
         )
+        playback.subtitles = JellyfinSubtitleTrack.tracks(in: source.mediaStreams)
+        return playback
     }
 
     func playbackSource(

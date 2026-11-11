@@ -36,15 +36,17 @@ This is a personal fork of [timwehrle/wianu](https://github.com/timwehrle/wianu)
   Apple's player supports them, and the server converts the rest; resume
   points sync with the server. Sign in with a password, or with a Quick
   Connect code approved from a device that's already signed in (handy on Apple
-  TV). Needs Jellyfin 10.9 or later.
+  TV). Choose subtitles from the player; Jellyfin adds the one you pick to the
+  stream. Needs Jellyfin 10.9 or later.
 - **Service setup** — a first-run setup picks your services from TMDB's list
   for your region, and search can show only titles included with them.
 - **Title and episode links** — services open on the title or episode rather
   than a search, using Wikidata and, with a key, the Streaming Availability
   API.
 - **Pick up where you left off** — for shows, Stream remembers the last
-  episode you opened from it and offers the next one. It can't see what you
-  watched directly in a service's own app.
+  episode you opened from it and offers the next one. Sign in to Trakt to also
+  bring in what you watched elsewhere: the latest episode of each show becomes
+  where to pick up, and shows watched in the last month join the watchlist.
 - **Release days** — when a show's next episode comes out, or its weekly slot,
   from Trakt.
 - **iCloud sync** — optional. Each profile's watchlist, services and Jellyfin
@@ -56,19 +58,20 @@ This is a personal fork of [timwehrle/wianu](https://github.com/timwehrle/wianu)
 
 ### Status
 
-A work in progress. The Mac app builds in Xcode and the unit tests pass. The
-iPhone, iPad and Apple TV app hasn't been built in Xcode yet, so expect a few
-compile fixes on its first build.
+A work in progress. The Mac, iPhone, iPad and Apple TV apps build in Xcode,
+the unit tests pass, and the iPhone app runs in the simulator. Not yet tried:
+a signed build with iCloud, Trakt sign-in through to a synced history,
+subtitles against a real server, and real devices.
 [CLAUDE.md](CLAUDE.md) has the code conventions, layout and what's next.
 
 ### Setting up a build
 
 1. In Xcode, choose your team under Signing & Capabilities for the **Stream**
    and **Stream Mobile** targets.
-2. For iCloud sync, add the iCloud capability with CloudKit to both targets,
-   using one container (for example `iCloud.com.lukeschenk.stream`). The Mac app
-   detects it automatically. For Stream Mobile, also put the container ID in
-   `StreamCloudKitContainer` in `Mobile/Info.plist`.
+2. iCloud sync is set up for the container `iCloud.com.lukeschenk.stream` (the
+   entitlements files and `STREAM_CLOUDKIT_CONTAINER` in
+   `Config/Stream.xcconfig`). The first signed build registers it with your
+   Apple developer account. Builds without code signing leave iCloud off.
 3. Optional: copy `Config/Secrets.example.xcconfig` to `Config/Secrets.xcconfig`
    and add your API keys (see below). Git ignores that file, so keys never
    reach this public repo.
@@ -82,7 +85,7 @@ Both are optional; Stream builds and runs without them.
 | Setting | Get it from | What it adds |
 | :- | :- | :- |
 | `STREAMING_AVAILABILITY_API_KEY` | [Movie of the Night](https://www.movieofthenight.com/about/api) | Episode links and more services. The free plan allows 1,000 lookups a month; answers are saved on each device (movies for 30 days, shows for a week or until a new episode airs). Without it, Wikidata supplies title links only. |
-| `TRAKT_CLIENT_ID` | [Trakt API apps](https://trakt.tv/oauth/applications) | Release days. Only the Client ID is used. A planned Trakt sign-in will use the redirect URI `com.lukeschenk.stream://trakt`. |
+| `TRAKT_CLIENT_ID` | [Trakt API apps](https://trakt.tv/oauth/applications) | Release days, and Trakt sign-in for your watch history. Only the Client ID is used; sign-in uses PKCE, so there's no client secret. Set the app's redirect URI to `com.lukeschenk.stream://trakt`. |
 
 Automatic updates and usage analytics are switched off in this fork so it never
 installs upstream builds or reports to the upstream analytics server.
@@ -206,6 +209,9 @@ In this fork:
   release days come from Trakt. These lookups send the title's TMDB ID (and
   your region, for Streaming Availability), not your viewing history.
 - Jellyfin playback talks only to your own server.
+- With Trakt signed in, Stream reads your watched shows from Trakt; it never
+  writes to your Trakt history. Trakt sign-ins are stored in each device's
+  Keychain and aren't synced.
 
 ## License
 

@@ -212,6 +212,47 @@ struct JellyfinClientTests {
         #expect(transcoding["Container"] as? String == "mp4")
     }
 
+    @Test func `a chosen subtitle asks for an HLS stream that carries it`() async throws {
+        let session = JellyfinFixtureSession([
+            "/Items/movie-1/PlaybackInfo": (
+                200,
+                #"{"MediaSources":[{"Id":"source-1","SupportsDirectPlay":false,"#
+                    + #""TranscodingUrl":"/videos/movie-1/master.m3u8?ApiKey=token-123","MediaStreams":["#
+                    + #"{"Index":0,"Type":"Video"},{"Index":2,"Type":"Subtitle","DisplayTitle":"English - SRT"},"#
+                    + #"{"Index":3,"Type":"Subtitle","Language":"fra"}]}]}"#
+            )
+        ])
+
+        let source = try await client(session).playbackSource(
+            itemID: "movie-1",
+            userID: "user-1",
+            subtitleStreamIndex: 2
+        )
+        #expect(source.subtitles.map(\.index) == [2, 3])
+        #expect(source.subtitles.first?.title == "English - SRT")
+
+        let body = try #require(await session.lastRequest()?.httpBody)
+        let json = try #require(JSONSerialization.jsonObject(with: body) as? [String: Any])
+        #expect(json["SubtitleStreamIndex"] as? Int == 2)
+        #expect(json["EnableDirectPlay"] as? Bool == false)
+        #expect(json["EnableDirectStream"] as? Bool == false)
+    }
+
+    @Test func `without a subtitle, direct play stays on`() async throws {
+        let session = JellyfinFixtureSession([
+            "/Items/movie-1/PlaybackInfo": (
+                200,
+                #"{"MediaSources":[{"Id":"source-1","SupportsDirectPlay":true}]}"#
+            )
+        ])
+        _ = try await client(session).playbackSource(itemID: "movie-1", userID: "user-1")
+
+        let body = try #require(await session.lastRequest()?.httpBody)
+        let json = try #require(JSONSerialization.jsonObject(with: body) as? [String: Any])
+        #expect(json["SubtitleStreamIndex"] == nil)
+        #expect(json["EnableDirectPlay"] as? Bool == true)
+    }
+
     @Test func `episodes describe themselves`() throws {
         let item = try JSONDecoder().decode(JellyfinItem.self, from: Data(JellyfinFixtures.episode.utf8))
         #expect(item.kind == .episode)

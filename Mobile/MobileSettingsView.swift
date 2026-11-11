@@ -36,6 +36,16 @@ struct MobileSettingsView: View {
                         value: model.jellyfin.account?.serverName ?? (model.jellyfin.isSignedIn ? "Connected" : "Off")
                     )
                 }
+
+                NavigationLink {
+                    TraktSettingsView(connection: model.trakt, watchlist: model.watchlist)
+                        .navigationTitle("Trakt")
+                } label: {
+                    LabeledContent(
+                        "Trakt",
+                        value: model.trakt.username ?? (model.trakt.isSignedIn ? "Connected" : "Off")
+                    )
+                }
             }
 
             Section {

@@ -15,6 +15,7 @@ final class AppModel {
     let watchlistStore: WatchlistStore
     let mediaIdentification: MediaIdentificationCoordinator
     let jellyfin: JellyfinConnection
+    let trakt: TraktConnection
     let serviceAvailability: ServiceAvailabilityModel
     let titleLinks = TitleLinksModel()
     let showSchedules = ShowScheduleModel()
@@ -52,6 +53,7 @@ final class AppModel {
             fileStore: JSONFileStore(fileName: "letterboxd-watchlist.json", folderName: folder)
         )
         jellyfin = JellyfinConnection(profile: profile)
+        trakt = TraktConnection(profile: profile)
         userDefaults = .standard
         let analytics = AnalyticsClient(userDefaults: userDefaults)
         self.analytics = analytics
@@ -71,6 +73,7 @@ final class AppModel {
         if userDefaults.object(forKey: profile.defaultsKey(WatchlistCloudSync.preferenceKey)) as? Bool ?? true {
             startICloudSync()
         }
+        Task { await trakt.syncHistory(into: watchlistStore) }
         analytics.track(.appLaunched)
     }
 
@@ -85,6 +88,12 @@ final class AppModel {
         jellyfin: JellyfinConnection? = nil
     ) {
         self.profile = profile
+        trakt = TraktConnection(
+            profile: profile,
+            userDefaults: userDefaults,
+            tokenStorage: EphemeralTokenStorage(),
+            clientID: nil
+        )
         self.jellyfin = jellyfin ?? JellyfinConnection(
             profile: profile,
             userDefaults: userDefaults,

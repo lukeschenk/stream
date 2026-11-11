@@ -14,10 +14,11 @@
 	<key>TraktClientID</key>
 	<string>$(TRAKT_CLIENT_ID)</string>
 	<key>StreamCloudKitContainer</key>
-	<string></string>
+	<string>$(STREAM_CLOUDKIT_CONTAINER)</string>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>audio</string>
+		<string>remote-notification</string>
 	</array>
 </dict>
 </plist>

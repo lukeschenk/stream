@@ -61,6 +61,7 @@ struct MobileRootView: View {
         .onChange(of: scenePhase) { _, phase in
             if phase == .active {
                 Task { await model.settingsSync?.refresh() }
+                Task { await model.trakt.syncHistory(into: model.watchlist) }
             }
         }
     }
@@ -79,7 +80,7 @@ struct MobilePlayerView: View {
             Color.black.ignoresSafeArea()
 
             if let playback {
-                PlayerViewController(player: playback.player)
+                PlayerViewController(playback: playback)
                     .ignoresSafeArea()
             } else if let errorMessage {
                 VStack(spacing: 20) {
@@ -108,6 +109,16 @@ struct MobilePlayerView: View {
             }
             .accessibilityLabel("Close")
             .padding()
+        }
+        .overlay(alignment: .topTrailing) {
+            if let playback, !playback.subtitles.isEmpty {
+                JellyfinSubtitleMenu(playback: playback)
+                    .labelStyle(.iconOnly)
+                    .font(.headline)
+                    .padding(12)
+                    .background(.ultraThinMaterial, in: Circle())
+                    .padding()
+            }
         }
         #endif
         // Cancelled when the player closes, which stops playback and tells
@@ -141,7 +152,11 @@ struct MobilePlayerView: View {
 }
 
 private struct PlayerViewController: UIViewControllerRepresentable {
-    let player: AVPlayer
+    let playback: JellyfinPlayback
+
+    private var player: AVPlayer {
+        playback.player
+    }
 
     func makeUIViewController(context _: Context) -> AVPlayerViewController {
         let controller = AVPlayerViewController()
@@ -157,5 +172,29 @@ private struct PlayerViewController: UIViewControllerRepresentable {
         if controller.player !== player {
             controller.player = player
         }
+        #if os(tvOS)
+            controller.transportBarCustomMenuItems = subtitleMenu.map { [$0] } ?? []
+        #endif
     }
+
+    #if os(tvOS)
+        /// Jellyfin's subtitles, chosen from the player's transport bar.
+        private var subtitleMenu: UIMenu? {
+            guard !playback.subtitles.isEmpty else { return nil }
+            let playback = playback
+            let choices = [(index: Int?.none, title: "Off")]
+                + playback.subtitles.map { (index: Int?.some($0.index), title: $0.title) }
+            let actions = choices.map { choice in
+                UIAction(title: choice.title, state: playback.selectedSubtitle == choice.index ? .on : .off) { _ in
+                    Task { await playback.selectSubtitle(choice.index) }
+                }
+            }
+            return UIMenu(
+                title: "Subtitles",
+                image: UIImage(systemName: "captions.bubble"),
+                options: .singleSelection,
+                children: actions
+            )
+        }
+    #endif
 }

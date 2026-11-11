@@ -315,6 +315,7 @@ nonisolated struct JellyfinPlaybackSource: Hashable, Sendable {
     let mediaSourceID: String
     let playSessionID: String?
     let playMethod: JellyfinPlayMethod
+    var subtitles: [JellyfinSubtitleTrack] = []
 }
 
 nonisolated struct JellyfinMediaSource: Decodable, Sendable {
@@ -324,6 +325,7 @@ nonisolated struct JellyfinMediaSource: Decodable, Sendable {
     let supportsDirectStream: Bool?
     let supportsTranscoding: Bool?
     let transcodingURL: String?
+    var mediaStreams: [JellyfinMediaStream]?
 
     enum CodingKeys: String, CodingKey {
         case id = "Id"
@@ -332,6 +334,7 @@ nonisolated struct JellyfinMediaSource: Decodable, Sendable {
         case supportsDirectStream = "SupportsDirectStream"
         case supportsTranscoding = "SupportsTranscoding"
         case transcodingURL = "TranscodingUrl"
+        case mediaStreams = "MediaStreams"
     }
 }
 
@@ -351,8 +354,11 @@ nonisolated struct JellyfinPlaybackInfoRequest: Encodable, Sendable {
     let userID: String
     let maxStreamingBitrate: Int
     let deviceProfile: JellyfinDeviceProfile
-    let enableDirectPlay = true
-    let enableDirectStream = true
+    /// A chosen subtitle turns off direct play so Jellyfin can add it to
+    /// an HLS stream, which AVPlayer can show.
+    var subtitleStreamIndex: Int?
+    var enableDirectPlay = true
+    var enableDirectStream = true
     let enableTranscoding = true
     let allowVideoStreamCopy = true
     let allowAudioStreamCopy = true
@@ -362,6 +368,7 @@ nonisolated struct JellyfinPlaybackInfoRequest: Encodable, Sendable {
         case userID = "UserId"
         case maxStreamingBitrate = "MaxStreamingBitrate"
         case deviceProfile = "DeviceProfile"
+        case subtitleStreamIndex = "SubtitleStreamIndex"
         case enableDirectPlay = "EnableDirectPlay"
         case enableDirectStream = "EnableDirectStream"
         case enableTranscoding = "EnableTranscoding"

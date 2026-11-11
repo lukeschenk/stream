@@ -156,7 +156,12 @@ nonisolated struct TraktClient: Sendable {
     }
 
     /// `nil` for Trakt's "204 No Content", which means there's nothing to show.
-    private func get<Response: Decodable>(_ path: String, query: [String: String]) async throws -> Response? {
+    /// Pass `accessToken` for a signed-in user's data.
+    func get<Response: Decodable>(
+        _ path: String,
+        query: [String: String],
+        accessToken: String? = nil
+    ) async throws -> Response? {
         var components = URLComponents(url: Self.baseURL.appending(path: path), resolvingAgainstBaseURL: false)!
         components.queryItems = query.sorted { $0.key < $1.key }.map { URLQueryItem(name: $0.key, value: $0.value) }
 
@@ -166,6 +171,9 @@ nonisolated struct TraktClient: Sendable {
         request.setValue("2", forHTTPHeaderField: "trakt-api-version")
         request.setValue(clientID, forHTTPHeaderField: "trakt-api-key")
         request.setValue(WikidataClient.userAgent, forHTTPHeaderField: "User-Agent")
+        if let accessToken {
+            request.setValue("Bearer \(accessToken)", forHTTPHeaderField: "Authorization")
+        }
 
         let (data, response) = try await session.data(for: request)
         guard let http = response as? HTTPURLResponse else {

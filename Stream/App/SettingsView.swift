@@ -13,6 +13,10 @@ struct SettingsView: View {
                 .frame(width: 560, height: 360)
                 .tabItem { Label("Jellyfin", systemImage: "server.rack") }
 
+            TraktSettingsView(connection: model.trakt, watchlist: model.watchlistStore)
+                .frame(width: 560, height: 320)
+                .tabItem { Label("Trakt", systemImage: "checkmark.circle") }
+
             ICloudSettingsView(model: model)
                 .frame(width: 560, height: 240)
                 .tabItem { Label("iCloud", systemImage: "icloud") }

@@ -19,11 +19,11 @@
           "fill": "automatic",
           "glass": false,
           "hidden": false,
-          "image-name": "W.svg",
-          "name": "W",
+          "image-name": "Play.svg",
+          "name": "Play",
           "position": {
-            "scale": 2.25,
-            "translation-in-points": [0, 0]
+            "scale": 2.0,
+            "translation-in-points": [12, 0]
           }
         }
       ],

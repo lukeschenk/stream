@@ -58,6 +58,7 @@ final class MobileModel {
     let services: SiteStore
     let watchlist: WatchlistStore
     let jellyfin: JellyfinConnection
+    let trakt: TraktConnection
     let tmdbClient: TMDBClient
     let search: TMDBSearchModel
     let availability: ServiceAvailabilityModel
@@ -78,6 +79,7 @@ final class MobileModel {
             fileStore: JSONFileStore(fileName: "letterboxd-watchlist.json", folderName: folder)
         )
         jellyfin = JellyfinConnection(profile: profile, userDefaults: userDefaults)
+        trakt = TraktConnection(profile: profile, userDefaults: userDefaults)
         let client = TMDBClient()
         tmdbClient = client
         search = TMDBSearchModel(client: client, userDefaults: userDefaults)
@@ -86,6 +88,7 @@ final class MobileModel {
         if isICloudSyncPreferred {
             startICloudSync()
         }
+        Task { await trakt.syncHistory(into: watchlist) }
     }
 
     private func startICloudSync() {
